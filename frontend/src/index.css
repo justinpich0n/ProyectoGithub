@@ -1,0 +1,15 @@
+/* Estilos comunes de la interfaz de BizzStock. */
+:root {
+  font-family: system-ui, sans-serif;
+  line-height: 1.5;
+  color: #1f2937;
+  background: #f8fafc;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+h1 { line-height: 1.2; }
+a:focus-visible { outline: 3px solid #fbbf24; outline-offset: 5px; }

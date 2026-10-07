@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "openai.chatgpt",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "humao.rest-client",
+    "usernamehw.errorlens"
+  ]
+}

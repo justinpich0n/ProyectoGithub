@@ -19,7 +19,7 @@ La petición actual establece implementar por etapas, aunque el alcance original
 - Historial con filtros y comprobantes imprimibles.
 - Copias de seguridad y restauración.
 
-Estas capacidades son alcance, no funcionalidades ya implementadas. La etapa actual incluye Express, un pool de conexiones con `mysql2` y la ruta `/api/health`, que comprueba la conexión mediante `SELECT 1`. La base local `bizzstock` utiliza `utf8mb4` y aún tiene cero tablas. Los módulos del negocio y el frontend quedan pendientes.
+Estas capacidades son alcance, no funcionalidades ya implementadas. La etapa actual incluye Express, un pool de conexiones con `mysql2` y la ruta `/api/health`, que comprueba la conexión mediante `SELECT 1`. La base local `bizzstock` utiliza `utf8mb4` y aún tiene cero tablas. Los módulos del negocio quedan pendientes. El frontend actual incorpora navegación entre Inicio, Usuarios y Productos, con páginas informativas sin CRUD.
 
 ## Inconsistencias y criterio de interpretación
 
@@ -55,7 +55,13 @@ No bloquean la ruta HTTP actual. Resolver al comenzar el módulo correspondiente
 6. **Respaldo:** decidir destino, frecuencia, conservación y quién puede restaurar; definir qué ocurre con datos actuales antes de implementar restauración.
 7. **Rendimiento:** se citan 3.000 productos, dos segundos y un usuario concurrente en una descripción desplazada. Acordar equipo, operaciones y concurrencia para poder medirlo.
 
-## Cierre de la etapa técnica actual
+## Actualización de la revisión en Mac
+
+El 6 de octubre de 2026 se comprobó la base vacía y la conexión con MySQL 8.4.11. Se completó la navegación React de la guía. El diagnóstico, las diferencias técnicas y la validación se registran en [seguimiento-guia.md](seguimiento-guia.md).
+
+La guía no resuelve las inconsistencias funcionales de la tabla anterior. Sus interpretaciones siguen siendo propuestas, no decisiones validadas ni funciones implementadas. Las dudas siguen abiertas y no afectan las tres páginas informativas actuales.
+
+## Cierre de la preparación previa del backend
 
 Se completó la conexión local a MySQL y la preparación de la base vacía `bizzstock`. Las instrucciones para instalar dependencias, configurar el archivo privado `.env`, crear la base e iniciar y verificar el backend están en [backend/README.md](../backend/README.md).
 

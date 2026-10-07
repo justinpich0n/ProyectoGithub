@@ -1,10 +1,51 @@
-﻿# Backend de BizzStock: conexión local a MySQL
+# Backend de BizzStock: conexión local a MySQL
 
-Servidor de BizzStock para la papelería y variedades Arte y Belleza. Esta etapa prepara Express y su conexión a MySQL; todavía no incorpora tablas del negocio, autenticación ni frontend React.
+Servidor de BizzStock para la papelería y variedades Arte y Belleza. Esta etapa prepara Express y su conexión a MySQL; todavía no incorpora tablas del negocio ni autenticación. El frontend React está en `../frontend/`.
 
 Se sigue la [guía técnica del profesor](https://github.com/borissalleg/practica-node) con Express, `mysql2`, `dotenv`, `cors` y `nodemon`. Las consultas usan un pool: un conjunto limitado de conexiones que se reutilizan.
 
-## Estado de esta revisión
+## Entorno actual: Mac, verificado el 6 de octubre de 2026
+
+Se comprobó MySQL 8.4.11 escuchando en 127.0.0.1:3306, base `bizzstock` con `utf8mb4` y colación `utf8mb4_unicode_ci`, cero tablas y cuenta distinta de root con permisos sobre `bizzstock`.
+
+`backend/.env` existe, está ignorado por Git y no está versionado. No se modificaron sus credenciales. La plantilla `.env.example` es solo un ejemplo.
+
+En esta Mac, la instalación existente tiene un servicio local de MySQL. Si después de reiniciar no responde, se puede iniciar ese servicio ya configurado con:
+
+```sh
+launchctl kickstart "gui/$(id -u)/local.bizzstock.mysql"
+```
+
+Ese identificador pertenece a esta instalación; en otro equipo debe verificarse el servicio correspondiente. No hay que instalar Wamp en macOS.
+
+Desde `backend/`:
+
+```sh
+npm ci
+# Solo si no existe .env; después completar los valores localmente:
+[ -e .env ] || cp .env.example .env
+npm run dev
+```
+
+En otra terminal, también desde `backend/`:
+
+```sh
+npm run lint
+npm test
+curl -i http://127.0.0.1:3000/api/health
+git check-ignore -v .env
+git ls-files -- .env
+```
+
+Lint y prueba automatizada pasaron. El arranque con `npm start` confirmó `SELECT 1`; la petición real devolvió HTTP 200 y `baseDeDatos: "conectada"`. No se crearon tablas ni se cambiaron cuentas durante esta revisión.
+
+El usuario SQL de esta Mac ya tiene permisos sobre la base, tal como requiere la preparación de la guía. La aplicación conserva el pool y el manejo de estado existentes; [seguimiento-guia.md](../docs/seguimiento-guia.md) explica sus diferencias con el ejemplo.
+
+## Registro histórico: preparación anterior en Windows
+
+El resto de las instrucciones de preparación que mencionan Wamp y PowerShell describe el entorno anterior. No representa los servicios actuales de esta Mac. Se conserva como referencia para ese entorno.
+
+### Estado de aquella revisión
 
 La configuración de Wamp identifica los siguientes servicios:
 

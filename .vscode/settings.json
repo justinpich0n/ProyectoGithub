@@ -1,0 +1,9 @@
+{
+  "eslint.workingDirectories": [{ "directory": "./backend", "changeProcessCWD": true }],
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}

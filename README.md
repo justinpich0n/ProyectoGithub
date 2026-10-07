@@ -2,27 +2,52 @@
 
 Sistema web en desarrollo para la papelería y variedades Arte y Belleza.
 
-## Estado actual
+## Estado comprobado
 
-- Backend con Node.js y Express, conectado a MySQL mediante un pool de `mysql2`.
-- Base local `bizzstock` preparada con `utf8mb4`, todavía sin tablas.
-- `GET /api/health` ejecuta `SELECT 1`: responde HTTP 200 si la consulta funciona y HTTP 503 si falla o la conexión está deshabilitada.
-- Prueba aislada de la ruta para comprobar éxito, fallo y recuperación sin modificar MySQL.
+- Backend Node.js y Express con `mysql2`, dotenv y CORS.
+- MySQL local: base `bizzstock`, `utf8mb4`, sin tablas de negocio; cuenta con permisos sobre esa base.
+- `GET /api/health` consulta MySQL con `SELECT 1`: devuelve 200 si funciona o 503 si falla o está deshabilitado.
+- Frontend React con Vite y React Router: Inicio (`/`), Usuarios (`/usuarios`) y Productos (`/productos`). Las páginas son informativas.
+- No hay autenticación, CRUD ni conexión de estas páginas a endpoints de negocio.
 
-Las funciones de usuarios y permisos, productos, inventario, caja, ventas, pagos, clientes, crédito, comprobantes y respaldos están pendientes. Todavía no hay frontend.
+## Ejecutar en la Mac
 
-## Ejecutar el proyecto
+Desde la carpeta BizzStock, abrir dos terminales. MySQL debe estar iniciado y `backend/.env` configurado; ver [backend/README.md](backend/README.md).
 
-Consulta [las instrucciones del backend](backend/README.md) para instalar dependencias, iniciar MySQL, configurar `.env`, crear la base vacía e iniciar Express.
+Terminal 1:
 
-Se verificó localmente con Node.js 24.14.1, npm 11.11.0 y MySQL 9.1.0 de Wamp. El repositorio incluye `package-lock.json`; `npm ci` permite instalar las versiones registradas desde `backend/`.
+```sh
+cd backend
+npm ci
+npm run dev
+```
 
-La configuración privada, las dependencias instaladas y los respaldos locales no forman parte del repositorio. `.env.example` es una plantilla con valores de ejemplo. La base se prepara en cada entorno siguiendo las instrucciones; no se suben datos de MySQL a GitHub.
+Terminal 2:
 
-## Documentación
+```sh
+cd frontend
+npm ci
+npm run dev -- --host 127.0.0.1 --strictPort
+```
 
-- [Preparación y comprobación del backend](backend/README.md).
-- [Alcance funcional e inconsistencias de requisitos](docs/requisitos-bizzstock.md).
+Abrir http://127.0.0.1:5173 y comprobar http://127.0.0.1:3000/api/health. `npm ci` se usa al preparar la copia o actualizar dependencias; no hace falta ejecutarlo en cada arranque. Para detener cada servidor, pulsar Ctrl+C en su terminal.
+
+## Comprobaciones
+
+Desde `backend/`: `npm run lint` y `npm test`.
+Desde `frontend/`: `npm run lint` y `npm run build`.
+
+Verificación del 6 de octubre de 2026: Node.js 24.21.0, npm 11.19.0 y MySQL 8.4.11; comandos anteriores correctos y endpoint real HTTP 200. Se comprobó en navegador la navegación y la recarga directa de Productos, sin errores ni advertencias de consola.
+
+## Documentación y alcance
+
+- [Seguimiento de la guía y diagnóstico inicial](docs/seguimiento-guia.md).
+- [Requisitos funcionales y dudas pendientes](docs/requisitos-bizzstock.md).
+- [Preparación del backend](backend/README.md).
+- [Frontend](frontend/README.md).
+- [Guion para la sustentación](EXPOSICION.md).
 - [Guía técnica de referencia](https://github.com/borissalleg/practica-node).
 
-La página HTML genérica inicial se retiró porque no formaba parte del backend ni del futuro frontend de BizzStock.
+Las funciones de usuarios y permisos, productos, inventario, caja, ventas, pagos, clientes, crédito, comprobantes y respaldos se conservan como alcance futuro. La guía sitúa Sequelize, migraciones y CRUD en sus próximos pasos; no se implementaron en esta etapa.
+
+`.env`, dependencias instaladas, compilaciones y respaldos locales quedan fuera de Git. `.env.example` contiene solo ejemplos. Los datos de MySQL se preparan en cada equipo y no se publican.

@@ -1,0 +1,5 @@
+### Comprobar Express y su conexión a MySQL
+# Pulsa Send Request encima de GET con el backend en ejecución.
+# Resultado esperado: HTTP 200 y baseDeDatos: "conectada".
+GET http://127.0.0.1:3000/api/health
+Accept: application/json
