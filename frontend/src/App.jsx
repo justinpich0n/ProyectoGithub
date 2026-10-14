@@ -10,11 +10,22 @@ function App() {
     <BrowserRouter>
       <Navbar />
       <main>
+        <header className="topbar">
+          <span>Papelería & variedades</span>
+          <span className="stage">
+            <i />
+            Proyecto en desarrollo
+          </span>
+        </header>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/usuarios" element={<Usuarios />} />
           <Route path="/productos" element={<Productos />} />
         </Routes>
+        <footer className="page-footer">
+          <span>BizzStock · Arte y Belleza</span>
+          <span>Hecho para el día a día de tu negocio.</span>
+        </footer>
       </main>
     </BrowserRouter>
   );

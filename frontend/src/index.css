@@ -1,15 +1,33 @@
-/* Estilos comunes de la interfaz de BizzStock. */
+/* Identidad visual y estilos compartidos de BizzStock. */
 :root {
-  font-family: system-ui, sans-serif;
-  line-height: 1.5;
-  color: #1f2937;
-  background: #f8fafc;
+  font-family: 'Avenir Next', system-ui, sans-serif;
+  color: #203c35;
+  background: #f7f8f2;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
 }
-
-* { box-sizing: border-box; }
-body { margin: 0; min-width: 320px; }
-h1 { line-height: 1.2; }
-a:focus-visible { outline: 3px solid #fbbf24; outline-offset: 5px; }
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  min-width: 320px;
+}
+a {
+  color: inherit;
+}
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+a:focus-visible {
+  outline: 3px solid #a85229;
+  outline-offset: 5px;
+}
+::selection {
+  background: #d8e8b9;
+}
