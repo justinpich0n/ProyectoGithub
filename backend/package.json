@@ -8,13 +8,15 @@
     "start": "node server.js",
     "dev": "nodemon server.js",
     "lint": "eslint .",
-    "test": "node --test test/health.test.js"
+    "test": "node --test test/health.test.js",
+    "test:integration": "node test/crud.integration.js"
   },
   "dependencies": {
     "cors": "^2.8.6",
     "dotenv": "^18.0.5",
     "express": "^5.2.1",
-    "mysql2": "^3.24.5"
+    "mysql2": "^3.24.5",
+    "sequelize": "^6.37.8"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

@@ -62,7 +62,7 @@ export default function Home() {
               <br />
               detrás del negocio.
             </h2>
-            <p>Un lugar para conocer los roles de tu equipo.</p>
+            <p>Registra y consulta los usuarios de tu equipo.</p>
             <span className="card-action">Explorar usuarios →</span>
           </div>
         </Link>
@@ -74,8 +74,8 @@ export default function Home() {
         <div>
           <h3>Estamos construyendo lo que sigue.</h3>
           <p>
-            Ya puedes recorrer las secciones. La gestión de productos, las
-            ventas y el acceso de usuarios se incorporarán por etapas.
+            Ya puedes crear, consultar, editar y eliminar usuarios y productos.
+            Las ventas, el inventario y el inicio de sesión siguen pendientes.
           </p>
         </div>
         <span className="small-tag">Etapa inicial</span>

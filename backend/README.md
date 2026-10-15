@@ -1,10 +1,27 @@
 # Backend de BizzStock: conexión local a MySQL
 
-Servidor de BizzStock para la papelería y variedades Arte y Belleza. Esta etapa prepara Express y su conexión a MySQL; todavía no incorpora tablas del negocio ni autenticación. El frontend React está en `../frontend/`.
+Servidor de BizzStock para la papelería y variedades Arte y Belleza. La etapa actual incorpora el CRUD de Usuarios y Productos con Sequelize. No incluye autenticación. El frontend React está en `../frontend/`.
 
 Se sigue la [guía técnica del profesor](https://github.com/borissalleg/practica-node) con Express, `mysql2`, `dotenv`, `cors` y `nodemon`. Las consultas usan un pool: un conjunto limitado de conexiones que se reutilizan.
 
-## Entorno actual: Mac, verificado el 6 de octubre de 2026
+## Actualización del 15 de octubre de 2026
+
+La guía del profesor añadió las partes 3 y 4 el 13 de octubre (`d2ad193`). Se incorporaron `src/config/database.js`, modelos, controladores y rutas. El servidor autentica Sequelize y ejecuta `sync()` sin `force` ni `alter`: crea tablas faltantes y conserva las existentes. Si hay un esquema incompatible, debe revisarse; `sync()` no sustituye las migraciones.
+
+- `usuarios`: id, nombre, email único, createdAt y updatedAt.
+- `productos`: id, nombre, precio DECIMAL(10,2), descripcion opcional, usuarioId, createdAt y updatedAt.
+- Un usuario tiene varios productos. Eliminarlo elimina sus productos en cascada, según la práctica.
+- Para ambos recursos: GET/POST `/api/usuarios` o `/api/productos`; GET/PUT/DELETE sobre la misma ruta seguida de `/:id`.
+- PUT recibe los campos obligatorios completos. Precio omitido usa 0; descripción omitida usa null. El precio admite de 0 a 99999999.99 y hasta dos decimales.
+- Respuestas: 201 creación; 200 consulta/edición/borrado; 400 datos inválidos; 404 registro inexistente; 409 correo duplicado; 503 servicio no disponible. Los errores no exponen consultas SQL ni credenciales.
+
+Se conserva el pool mysql2 para `/api/health` y Sequelize administra su propio pool para CRUD. Ambos se cierran al detener el servidor. `DB_ENABLED=false` deshabilita ambos y devuelve 503. Si el arranque no consigue preparar tablas, las rutas CRUD siguen en 503 hasta corregir la configuración y reiniciar; health sigue comprobando MySQL en cada petición.
+
+Con el servidor local iniciado, `npm run test:integration` prueba el CRUD real con registros ficticios identificados por un correo único y elimina solo esos registros. `npm test` conserva la prueba de salud con base simulada; no modifica MySQL.
+
+La auditoría npm detectó cinco avisos: tres altos en la cadena de nodemon/chokidar/braces (desarrollo) y dos moderados en Sequelize/uuid. El frontend no reportó vulnerabilidades. No se aplicó `audit fix --force`: proponía retroceder versiones principales. Los avisos siguen pendientes de una actualización compatible; el servidor permanece ligado a 127.0.0.1.
+
+## Preparación de la Mac: registro del 6 de octubre de 2026
 
 Se comprobó MySQL 8.4.11 escuchando en 127.0.0.1:3306, base `bizzstock` con `utf8mb4` y colación `utf8mb4_unicode_ci`, cero tablas y cuenta distinta de root con permisos sobre `bizzstock`.
 

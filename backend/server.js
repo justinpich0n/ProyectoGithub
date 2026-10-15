@@ -2,6 +2,8 @@ const path = require('node:path');
 require('dotenv').config({ path: path.join(__dirname, '.env'), quiet: true });
 const { crearPool, verificarConexion } = require('./src/db');
 const app = require('./src/app');
+const crearSequelize = require('./src/config/database');
+const crearModelos = require('./src/models');
 
 async function iniciarServidor() {
   const port = Number(process.env.PORT || 3000);
@@ -11,6 +13,7 @@ async function iniciarServidor() {
 
   const pool = crearPool();
   app.locals.pool = pool;
+  const sequelize = pool ? crearSequelize() : null;
 
   if (!pool) {
     console.log('Modo de prueba HTTP: MySQL está deshabilitado.');
@@ -18,9 +21,16 @@ async function iniciarServidor() {
     try {
       await verificarConexion(pool);
       console.log('MySQL respondió correctamente a SELECT 1.');
+      const modelos = crearModelos(sequelize);
+      await sequelize.authenticate();
+      await sequelize.sync(); // Sin force ni alter: conserva las tablas existentes.
+      app.locals.modelos = modelos;
+      console.log('Modelos de Usuarios y Productos preparados.');
     } catch {
       // HTTP sigue disponible para informar del fallo y volver a comprobar.
-      console.error('MySQL no está disponible. /api/health responderá 503 hasta recuperar la conexión.');
+      console.error(
+        'No se pudo preparar MySQL o sus tablas. Comprueba /api/health y reinicia para habilitar el CRUD.',
+      );
     }
   }
 
@@ -28,16 +38,20 @@ async function iniciarServidor() {
     console.log(`BizzStock: http://127.0.0.1:${port}/api/health`);
   });
   server.on('error', async () => {
-    console.error('No se pudo abrir el puerto HTTP. Comprueba si está ocupado.');
+    console.error(
+      'No se pudo abrir el puerto HTTP. Comprueba si está ocupado.',
+    );
     process.exitCode = 1;
     await cerrarPool();
   });
 
   async function cerrarPool() {
     try {
-      if (pool) await pool.end();
+      await Promise.all([pool?.end(), sequelize?.close()]);
     } catch {
-      console.error('No se pudo completar el cierre de las conexiones a MySQL.');
+      console.error(
+        'No se pudo completar el cierre de las conexiones a MySQL.',
+      );
       process.exitCode = 1;
     }
   }
@@ -47,7 +61,9 @@ async function iniciarServidor() {
     if (cerrando) return;
     cerrando = true;
     console.log('Cerrando el servidor HTTP y el pool de MySQL.');
-    server.close(() => { void cerrarPool(); });
+    server.close(() => {
+      void cerrarPool();
+    });
   }
   process.on('SIGINT', detener);
   process.on('SIGTERM', detener);

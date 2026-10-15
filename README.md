@@ -4,11 +4,11 @@ Sistema web en desarrollo para la papelería y variedades Arte y Belleza.
 
 ## Estado comprobado
 
-- Backend Node.js y Express con `mysql2`, dotenv y CORS.
-- MySQL local: base `bizzstock`, `utf8mb4`, sin tablas de negocio; cuenta con permisos sobre esa base.
+- Backend Node.js y Express con Sequelize, `mysql2`, dotenv y CORS.
+- MySQL local: base `bizzstock`, `utf8mb4`, tablas `usuarios` y `productos` relacionadas; cuenta con permisos sobre esa base.
 - `GET /api/health` consulta MySQL con `SELECT 1`: devuelve 200 si funciona o 503 si falla o está deshabilitado.
-- Frontend React con Vite y React Router: Inicio (`/`), Usuarios (`/usuarios`) y Productos (`/productos`). Las páginas son informativas.
-- No hay autenticación, CRUD ni conexión de estas páginas a endpoints de negocio.
+- Frontend React con Vite y React Router: Inicio (`/`), Usuarios (`/usuarios`) y Productos (`/productos`). Usuarios y Productos tienen formularios y tablas conectados mediante axios.
+- CRUD de Usuarios y Productos: crear, listar, consultar por ID, editar y eliminar. Todavía no hay autenticación, permisos, ventas ni control de existencias.
 
 ## Ejecutar en la Mac
 
@@ -34,7 +34,7 @@ Abrir http://127.0.0.1:5173 y comprobar http://127.0.0.1:3000/api/health. `npm c
 
 ## Comprobaciones
 
-Desde `backend/`: `npm run lint` y `npm test`.
+Desde `backend/`: `npm run lint` y `npm test`. Con el backend local iniciado: `npm run test:integration` crea datos ficticios, verifica el CRUD y elimina solo sus propios registros.
 Desde `frontend/`: `npm run lint` y `npm run build`.
 
 Verificación del 6 de octubre de 2026: Node.js 24.21.0, npm 11.19.0 y MySQL 8.4.11; comandos anteriores correctos y endpoint real HTTP 200. Se comprobó en navegador la navegación y la recarga directa de Productos, sin errores ni advertencias de consola.
@@ -48,6 +48,8 @@ Verificación del 6 de octubre de 2026: Node.js 24.21.0, npm 11.19.0 y MySQL 8.4
 - [Guion para la sustentación](EXPOSICION.md).
 - [Guía técnica de referencia](https://github.com/borissalleg/practica-node).
 
-Las funciones de usuarios y permisos, productos, inventario, caja, ventas, pagos, clientes, crédito, comprobantes y respaldos se conservan como alcance futuro. La guía sitúa Sequelize, migraciones y CRUD en sus próximos pasos; no se implementaron en esta etapa.
+Actualización del 15 de octubre de 2026: implementadas las partes 3 y 4 de la guía del profesor, commit `d2ad193` del 13 de octubre. Sequelize crea las tablas con `sync()` sin `force` ni `alter`. Al eliminar un usuario se eliminan sus productos asociados, como indica la práctica; la interfaz pide confirmación. Esta regla deberá validarse para el inventario definitivo.
+
+Permisos, inventario, caja, ventas, pagos, clientes, crédito, comprobantes, respaldos y migraciones siguen pendientes. El sistema se ejecuta en la Mac como práctica local, con datos ficticios.
 
 `.env`, dependencias instaladas, compilaciones y respaldos locales quedan fuera de Git. `.env.example` contiene solo ejemplos. Los datos de MySQL se preparan en cada equipo y no se publican.

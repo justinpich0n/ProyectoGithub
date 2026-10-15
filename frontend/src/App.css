@@ -1,4 +1,4 @@
-/* Navegación y composición de las tres páginas informativas. */
+/* Navegación y composición de BizzStock. */
 .navbar {
   position: fixed;
   inset: 0 auto 0 0;
@@ -653,5 +653,165 @@ main {
   }
   .feature-card:hover {
     transform: none;
+  }
+}
+
+/* Formularios y tablas del CRUD en la identidad visual de BizzStock. */
+.crud-page .page-heading h1 {
+  font-size: clamp(2.2rem, 4vw, 3.7rem);
+}
+.crud-panel {
+  background: #fff;
+  border: 1px solid #dce5dd;
+  border-radius: 22px;
+  padding: 26px;
+  margin-bottom: 24px;
+  min-width: 0;
+}
+.crud-panel .section-title {
+  margin: 0 0 22px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.crud-fields {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+.crud-fields label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  min-width: 0;
+}
+.crud-fields input,
+.crud-fields select,
+.crud-fields textarea {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  font: inherit;
+  font-weight: 400;
+  color: #203c35;
+  padding: 12px 14px;
+  border: 1px solid #b9cbbf;
+  border-radius: 10px;
+  background: #fcfdf9;
+}
+.crud-fields textarea {
+  resize: vertical;
+}
+.full-field {
+  grid-column: 1 / -1;
+}
+.crud-page button {
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 10px 15px;
+  border: 1px solid #c4d4c8;
+  border-radius: 9px;
+  background: #f5f8f2;
+  color: #23483d;
+}
+.crud-page button.crud-primary {
+  background: #244f3f;
+  color: white;
+  border-color: #244f3f;
+}
+.crud-page button.crud-danger {
+  color: #983b31;
+  background: #fff6f3;
+  border-color: #e9c7bf;
+}
+.crud-page button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.crud-page :is(button, input, select, textarea, .table-scroll):focus-visible {
+  outline: 3px solid #ba9148;
+  outline-offset: 3px;
+}
+.crud-actions,
+.row-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.crud-note {
+  font-size: 14px;
+  color: #586d63;
+  line-height: 1.6;
+}
+.crud-note a {
+  color: #244f3f;
+  text-decoration: underline;
+}
+.crud-error,
+.crud-success {
+  padding: 15px 18px;
+  border-radius: 12px;
+  line-height: 1.5;
+}
+.crud-error {
+  background: #fff0eb;
+  color: #8b3025;
+  border: 1px solid #e8b5a7;
+}
+.crud-success {
+  background: #e7f3e6;
+  color: #245337;
+}
+.table-scroll {
+  overflow-x: auto;
+}
+.crud-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 14px;
+  text-align: left;
+}
+.crud-table th {
+  color: #5a7065;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: #f6f8f2;
+}
+.crud-table th,
+.crud-table td {
+  padding: 15px 12px;
+  border-bottom: 1px solid #e5ebe3;
+  vertical-align: middle;
+}
+.crud-table td {
+  max-width: 240px;
+  overflow-wrap: anywhere;
+}
+.crud-table .price-cell {
+  white-space: nowrap;
+}
+.row-actions {
+  flex-wrap: nowrap;
+}
+.row-actions button {
+  white-space: nowrap;
+}
+@media (max-width: 720px) {
+  .crud-panel {
+    padding: 18px;
+    border-radius: 16px;
+  }
+  .crud-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .crud-table {
+    min-width: 550px;
   }
 }

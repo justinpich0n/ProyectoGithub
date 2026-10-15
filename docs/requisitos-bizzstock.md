@@ -19,7 +19,9 @@ La petición actual establece implementar por etapas, aunque el alcance original
 - Historial con filtros y comprobantes imprimibles.
 - Copias de seguridad y restauración.
 
-Estas capacidades son alcance, no funcionalidades ya implementadas. La etapa actual incluye Express, un pool de conexiones con `mysql2` y la ruta `/api/health`, que comprueba la conexión mediante `SELECT 1`. La base local `bizzstock` utiliza `utf8mb4` y aún tiene cero tablas. Los módulos del negocio quedan pendientes. El frontend actual incorpora navegación entre Inicio, Usuarios y Productos, con páginas informativas sin CRUD.
+El 15 de octubre de 2026 se implementaron las partes 3 y 4 de la guía: CRUD básico de usuarios (nombre y correo) y productos (nombre, precio, descripción y usuario asociado), con Sequelize y axios. Se conserva `/api/health`. MySQL contiene ahora `usuarios` y `productos`; los demás módulos siguen pendientes. El CRUD no implementa autenticación, permisos ni existencias.
+
+La guía exige borrar productos en cascada al eliminar su usuario. Se implementa esa relación para la práctica local, con confirmación visible. **Duda pendiente para el negocio:** confirmar si deben conservarse productos e historial al retirar un empleado. No se da por resuelta la política definitiva de bajas del inventario.
 
 ## Inconsistencias y criterio de interpretación
 
@@ -59,10 +61,10 @@ No bloquean la ruta HTTP actual. Resolver al comenzar el módulo correspondiente
 
 El 6 de octubre de 2026 se comprobó la base vacía y la conexión con MySQL 8.4.11. Se completó la navegación React de la guía. El diagnóstico, las diferencias técnicas y la validación se registran en [seguimiento-guia.md](seguimiento-guia.md).
 
-La guía no resuelve las inconsistencias funcionales de la tabla anterior. Sus interpretaciones siguen siendo propuestas, no decisiones validadas ni funciones implementadas. Las dudas siguen abiertas y no afectan las tres páginas informativas actuales.
+La guía no resuelve las inconsistencias funcionales de la tabla anterior. Sus interpretaciones siguen siendo propuestas, no decisiones validadas ni funciones implementadas. Las dudas siguen abiertas para los módulos correspondientes; el CRUD básico no las resuelve.
 
-## Cierre de la preparación previa del backend
+## Registro histórico: cierre de la preparación previa del backend
 
 Se completó la conexión local a MySQL y la preparación de la base vacía `bizzstock`. Las instrucciones para instalar dependencias, configurar el archivo privado `.env`, crear la base e iniciar y verificar el backend están en [backend/README.md](../backend/README.md).
 
-El archivo `.env.example` contiene únicamente valores de ejemplo. Las credenciales locales y los respaldos privados no forman parte del repositorio. Esta etapa no implementa nuevas rutas, tablas ni funcionalidades del negocio; las dudas anteriores se resolverán cuando se retome cada módulo.
+El archivo `.env.example` contiene únicamente valores de ejemplo. Las credenciales locales y los respaldos privados no forman parte del repositorio. Aquella preparación inicial no implementó nuevas rutas ni tablas; las dudas anteriores se resolverán cuando se retome cada módulo.
