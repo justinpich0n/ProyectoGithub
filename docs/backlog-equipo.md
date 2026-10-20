@@ -6,7 +6,7 @@ Revisión: 15 de octubre de 2026. Base de implementación: commit `da8cd57`.
 
 ## Criterio de reparto
 
-Por indicación de Justin, todo lo terminado se atribuye a Justin y el trabajo pendiente se distribuye entre Justin, Diryan y Yulian: cuatro tarjetas abiertas para cada integrante. El número de tarjetas no representa igual esfuerzo; ventas e integración requieren colaboración. Los responsables se muestran por nombre en títulos y descripciones mientras se confirman las cuentas de GitHub. No se inventan fechas ni se asigna un sprint sin acordarlo.
+Por indicación de Justin, todo lo terminado se atribuye a Justin y el trabajo pendiente se distribuye entre Justin, Diryan y Yulian: cuatro tarjetas abiertas para cada integrante. El número de tarjetas no representa igual esfuerzo; ventas e integración requieren colaboración. Cuentas confirmadas el 20 de octubre: Yulian = [yuliandavid144-collab](https://github.com/yuliandavid144-collab), Diryan = [DiryanS](https://github.com/DiryanS). Se registraron en las descripciones de sus ocho tareas. GitHub todavía no permite asignarlas en Assignees: no son colaboradores ni tienen invitaciones pendientes; falta gestionar acceso y aceptación. No se inventan fechas ni se asigna un sprint sin acordarlo.
 
 Las etiquetas RF de las tarjetas agrupan requisitos del PPI: no reemplazan los identificadores REQ/CU originales. Los requisitos contradictorios conservan sus dudas. La planificación no amplía la implementación autorizada por la guía.
 
@@ -18,7 +18,7 @@ Las etiquetas RF de las tarjetas agrupan requisitos del PPI: no reemplazan los i
 | [#2 TEC-02 · Navegación React de Inicio, Usuarios y Productos](https://github.com/justinpich0n/ProyectoGithub/issues/2) | Justin | Hechas | Navegación React y diseño existentes completos para esta etapa. Formularios CRUD registrados en tarjeta técnica separada; no equivalen a autenticación. |
 | [#3 DOC-01 · Documentar ejecución y sustentación en Mac](https://github.com/justinpich0n/ProyectoGithub/issues/3) | Justin | Hechas | README, instrucciones de Mac, exposición y seguimiento actualizados con partes 3 y 4 en da8cd57. |
 | [#4 ORG-01 · Organizar el backlog de BizzStock](https://github.com/justinpich0n/ProyectoGithub/issues/4) | Justin | Hechas | Tablero existente con 16 tarjetas originales y cuatro estados. Reparto del 15 de octubre documentado; coordinación pendiente en #5. |
-| [#5 ORG-02 · Acordar responsables y revisión de pull requests](https://github.com/justinpich0n/ProyectoGithub/issues/5) | Justin | Por hacer | Parcial: responsables por nombre ya definidos. Faltan usuarios GitHub de Diryan y Yulian, asociarlos al campo Assignees y acordar revisores de pull requests. No inventar cuentas ni fechas. |
+| [#5 ORG-02 · Acordar responsables y revisión de pull requests](https://github.com/justinpich0n/ProyectoGithub/issues/5) | Justin | Por hacer | Parcial: responsables por nombre ya definidos. Cuentas confirmadas; falta gestionar acceso, asociarlas al campo Assignees y acordar revisores de pull requests. No inventar cuentas ni fechas. |
 | [#6 RF-01 · Inicio de sesión y permisos](https://github.com/justinpich0n/ProyectoGithub/issues/6) | Diryan | Bloqueadas | Sin implementar. El CRUD de usuarios solo contiene nombre/correo: no hay autenticación ni roles. Primero acordar matriz de permisos. |
 | [#7 RF-02 · Gestionar productos, costos y precios](https://github.com/justinpich0n/ProyectoGithub/issues/7) | Diryan | Por hacer | Parcial: Justin completó alta, consulta, edición y precio básico mediante CRUD (da8cd57). Diryan asume lo restante: búsqueda, costo y validaciones funcionales acordadas. Resolver borrado/cascada y relación producto-usuario para uso definitivo. No cerrar el requisito completo. |
 | [#8 RF-03 · Controlar existencias y alertas de inventario](https://github.com/justinpich0n/ProyectoGithub/issues/8) | Diryan | Por hacer | Sin implementar: el modelo Producto no incluye existencias ni mínimo. Acordar alerta y coordinar descuento atómico con ventas #10; depende de #7. |
@@ -34,7 +34,7 @@ Las etiquetas RF de las tarjetas agrupan requisitos del PPI: no reemplazan los i
 
 ## Orden de coordinación
 
-1. Justin reúne cuentas y acuerda revisión de ramas y pull requests (#5); cada integrante concreta con el equipo las dudas de sus tarjetas antes de implementar.
+1. Justin coordina acceso de las cuentas confirmadas y acuerda revisión de ramas y pull requests (#5); cada integrante concreta con el equipo las dudas de sus tarjetas antes de implementar.
 2. Diryan define acceso y completa productos/inventario; Yulian define caja y clientes. Justin concreta ventas, pagos y los criterios de pruebas en coordinación con ambos.
 3. Integrar ventas con caja, stock y pagos; después crédito e historial/comprobantes con Yulian. Respaldos/restauración con Diryan y validación de rendimiento/usabilidad con Justin requieren criterios y entorno acordados.
 4. Pasar a Haciendo solo cuando exista trabajo activo; pasar a Hechas cuando se cumplan todos los criterios y se adjunte evidencia. Los avances parciales de productos e interfaz no cierran el requisito completo.
@@ -43,4 +43,4 @@ Las etiquetas RF de las tarjetas agrupan requisitos del PPI: no reemplazan los i
 
 Se inspeccionaron modelos, rutas, controladores y formularios React. Se repitió satisfactoriamente la integración CRUD contra MySQL local con datos ficticios y limpieza de los registros de la prueba. La evidencia visual y los resultados de lint/build previos están en el seguimiento técnico. No se modificó el código funcional ni se implementaron módulos pendientes durante este reparto.
 
-Resultado esperado del tablero: 17 tarjetas, cinco Hechas atribuidas a Justin, seis Por hacer y seis Bloqueadas. Ninguna Haciendo porque la asignación no implica inicio del desarrollo. Las cuentas para Assignees y revisores continúan pendientes en #5.
+Resultado esperado del tablero: 17 tarjetas, cinco Hechas atribuidas a Justin, seis Por hacer y seis Bloqueadas. Ninguna Haciendo porque la asignación no implica inicio del desarrollo. Las cuentas están confirmadas. El acceso, la asignación efectiva en Assignees y los revisores continúan pendientes en #5.
