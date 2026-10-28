@@ -6,7 +6,7 @@ Revisión: 15 de octubre de 2026. Base de implementación: commit `da8cd57`.
 
 ## Criterio de reparto
 
-Por indicación de Justin, todo lo terminado se atribuye a Justin y el trabajo pendiente se distribuye entre Justin, Diryan y Yulian: cuatro tarjetas abiertas para cada integrante. El número de tarjetas no representa igual esfuerzo; ventas e integración requieren colaboración. Cuentas confirmadas el 20 de octubre: Yulian = [yuliandavid144-collab](https://github.com/yuliandavid144-collab), Diryan = [DiryanS](https://github.com/DiryanS). Se registraron en las descripciones de sus ocho tareas. Yulian aceptó la invitación y quedó asignado en Assignees a #9, #12, #13 y #14, verificado el 20 de octubre. Diryan también aceptó y quedó asignado en Assignees a #6, #7, #8 y #15, verificado el 20 de octubre. Ambos compañeros tienen acceso y sus cuatro tareas asignadas. No se inventan fechas ni se asigna un sprint sin acordarlo.
+Por indicación de Justin, todo lo terminado se atribuye a Justin y el trabajo pendiente se distribuye entre Justin, Diryan y Yulian: El reparto inicial dejó cuatro tarjetas abiertas por integrante; ORG-02 se completa al acordar a Justin como revisor el 28 de octubre. El número de tarjetas no representa igual esfuerzo; ventas e integración requieren colaboración. Cuentas confirmadas el 20 de octubre: Yulian = [yuliandavid144-collab](https://github.com/yuliandavid144-collab), Diryan = [DiryanS](https://github.com/DiryanS). Se registraron en las descripciones de sus ocho tareas. Yulian aceptó la invitación y quedó asignado en Assignees a #9, #12, #13 y #14, verificado el 20 de octubre. Diryan también aceptó y quedó asignado en Assignees a #6, #7, #8 y #15, verificado el 20 de octubre. Ambos compañeros tienen acceso y sus cuatro tareas asignadas. No se inventan fechas ni se asigna un sprint sin acordarlo.
 
 Las etiquetas RF de las tarjetas agrupan requisitos del PPI: no reemplazan los identificadores REQ/CU originales. Los requisitos contradictorios conservan sus dudas. La planificación no amplía la implementación autorizada por la guía.
 
@@ -18,7 +18,7 @@ Las etiquetas RF de las tarjetas agrupan requisitos del PPI: no reemplazan los i
 | [#2 TEC-02 · Navegación React de Inicio, Usuarios y Productos](https://github.com/justinpich0n/ProyectoGithub/issues/2) | Justin | Hechas | Navegación React y diseño existentes completos para esta etapa. Formularios CRUD registrados en tarjeta técnica separada; no equivalen a autenticación. |
 | [#3 DOC-01 · Documentar ejecución y sustentación en Mac](https://github.com/justinpich0n/ProyectoGithub/issues/3) | Justin | Hechas | README, instrucciones de Mac, exposición y seguimiento actualizados con partes 3 y 4 en da8cd57. |
 | [#4 ORG-01 · Organizar el backlog de BizzStock](https://github.com/justinpich0n/ProyectoGithub/issues/4) | Justin | Hechas | Tablero existente con 16 tarjetas originales y cuatro estados. Reparto del 15 de octubre documentado; coordinación pendiente en #5. |
-| [#5 ORG-02 · Acordar responsables y revisión de pull requests](https://github.com/justinpich0n/ProyectoGithub/issues/5) | Justin | Por hacer | Parcial: responsables por nombre ya definidos. Cuentas confirmadas; Yulian y Diryan ya tienen sus tareas asignadas oficialmente. Falta acordar revisores de pull requests. No inventar cuentas ni fechas. |
+| [#5 ORG-02 · Acordar responsables y revisión de pull requests](https://github.com/justinpich0n/ProyectoGithub/issues/5) | Justin | Hechas | Cuentas y asignaciones verificadas. Justin revisa e integra las PR de Yulian y Diryan. Sus cambios propios pueden integrarse sin PR con autoría, pruebas y evidencia en la issue. Acuerdo documentado el 28 de octubre. |
 | [#6 RF-01 · Inicio de sesión y permisos](https://github.com/justinpich0n/ProyectoGithub/issues/6) | Diryan | Bloqueadas | Sin implementar. El CRUD de usuarios solo contiene nombre/correo: no hay autenticación ni roles. Primero acordar matriz de permisos. |
 | [#7 RF-02 · Gestionar productos, costos y precios](https://github.com/justinpich0n/ProyectoGithub/issues/7) | Diryan | Por hacer | Parcial: Justin completó alta, consulta, edición y precio básico mediante CRUD (da8cd57). Diryan asume lo restante: búsqueda, costo y validaciones funcionales acordadas. Resolver borrado/cascada y relación producto-usuario para uso definitivo. No cerrar el requisito completo. |
 | [#8 RF-03 · Controlar existencias y alertas de inventario](https://github.com/justinpich0n/ProyectoGithub/issues/8) | Diryan | Por hacer | Sin implementar: el modelo Producto no incluye existencias ni mínimo. Acordar alerta y coordinar descuento atómico con ventas #10; depende de #7. |
@@ -34,7 +34,7 @@ Las etiquetas RF de las tarjetas agrupan requisitos del PPI: no reemplazan los i
 
 ## Orden de coordinación
 
-1. Justin coordina acceso de las cuentas confirmadas y acuerda revisión de ramas y pull requests (#5); cada integrante concreta con el equipo las dudas de sus tarjetas antes de implementar.
+1. Justin ya coordinó acceso y revisión de ramas y pull requests (#5); cada integrante concreta con el equipo las dudas de sus tarjetas antes de implementar.
 2. Diryan define acceso y completa productos/inventario; Yulian define caja y clientes. Justin concreta ventas, pagos y los criterios de pruebas en coordinación con ambos.
 3. Integrar ventas con caja, stock y pagos; después crédito e historial/comprobantes con Yulian. Respaldos/restauración con Diryan y validación de rendimiento/usabilidad con Justin requieren criterios y entorno acordados.
 4. Pasar a Haciendo solo cuando exista trabajo activo; pasar a Hechas cuando se cumplan todos los criterios y se adjunte evidencia. Los avances parciales de productos e interfaz no cierran el requisito completo.
@@ -43,8 +43,12 @@ Las etiquetas RF de las tarjetas agrupan requisitos del PPI: no reemplazan los i
 
 Se inspeccionaron modelos, rutas, controladores y formularios React. Se repitió satisfactoriamente la integración CRUD contra MySQL local con datos ficticios y limpieza de los registros de la prueba. La evidencia visual y los resultados de lint/build previos están en el seguimiento técnico. No se modificó el código funcional ni se implementaron módulos pendientes durante este reparto.
 
-Resultado esperado del tablero: 17 tarjetas, cinco Hechas atribuidas a Justin, seis Por hacer y seis Bloqueadas. Ninguna Haciendo porque la asignación no implica inicio del desarrollo. Las cuentas están confirmadas. Las ocho tareas de Yulian y Diryan tienen sus cuentas en Assignees. El acuerdo de revisores continúa pendiente en #5.
+Resultado esperado del tablero: 17 tarjetas, seis Hechas atribuidas a Justin, cinco Por hacer y seis Bloqueadas tras cerrar ORG-02. Ninguna Haciendo porque la asignación no implica inicio del desarrollo. Las cuentas están confirmadas. Las ocho tareas de Yulian y Diryan tienen sus cuentas en Assignees. El acuerdo de revisión queda registrado y completado en #5 el 28 de octubre: Justin revisa las entregas de sus compañeros.
 
 ## Ramas de las entregas terminadas
 
 El 28 de octubre de 2026 se crearon ramas retrospectivas con el prefijo justin/ para identificar las etapas ya integradas en master. Véase el [mapa de ramas y commits](ramas-y-trazabilidad.md). No implica que esas entregas se desarrollaran originalmente en ramas ni cambia los estados funcionales. La documentación de esta regularización se revisa desde justin/docs-trazabilidad-requisitos.
+
+## Flujo confirmado el 28 de octubre
+
+Yulian y Diryan entregan por rama y pull request hacia master; Justin revisa y decide la integración. Los cambios propios de Justin pueden integrarse sin PR, documentando autoría, rama, commits y pruebas en su tarjeta. El [acuerdo completo](ramas-y-trazabilidad.md) distingue esta norma de una protección automática de GitHub, que no se ha configurado en esta actualización.

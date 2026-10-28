@@ -27,15 +27,29 @@ La rama justin/docs-trazabilidad-requisitos parte del master vigente y añade es
 
 Si el profesor exige evaluar una PR que contenga el código de los requisitos ya integrados, debe acordarse con él una comparación histórica entre commits o una rama base de revisión. No se debe retroceder master ni presentar la documentación como si fuera esa entrega de código.
 
-## Flujo para las próximas entregas
+## Acuerdo del profesor para las próximas entregas
 
-1. Con la copia de trabajo limpia, actualizar master con git pull --ff-only.
-2. Crear una rama desde master antes de editar; por ejemplo justin/rf-05-ventas, diryan/rf-03-inventario o yulian/rf-07-clientes.
-3. Implementar solo la tarea acordada, comprobar el resultado y hacer commits descriptivos con la identidad correcta del integrante.
-4. Publicar la rama y abrir una pull request hacia master con enlace a la issue, alcance y pruebas.
-5. Otro integrante revisa los archivos y verifica el comportamiento. Si el profesor debe evaluar la PR abierta, conservarla abierta hasta su indicación.
-6. Integrar cuando corresponda y actualizar el estado de la tarea según criterios y evidencia.
+Confirmado por Justin el 28 de octubre de 2026. Justin (justinpich0n) coordina el repositorio y revisa las entregas de Yulian (yuliandavid144-collab) y Diryan (DiryanS).
+
+### Entregas de Yulian y Diryan
+
+1. Cada integrante clona el repositorio una sola vez en su computadora. Después actualiza su copia de master con git pull --ff-only antes de comenzar, con su trabajo previo guardado.
+2. Crea una rama antes de editar, con su nombre y requisito: yulian/rf-07-clientes o diryan/rf-03-inventario.
+3. Implementa y prueba el requisito; guarda commits con su propia identidad de Git. Publica su rama y abre una pull request hacia master, enlazando la issue y describiendo cambios y pruebas. No sube directamente a master.
+4. Solicita revisión a Justin. Justin comprueba archivos, requisito y funcionamiento. Puede aprobar, pedir cambios o cerrar la propuesta sin integrarla; una solicitud de cambios permite corregir la misma PR.
+5. Approve registra la aprobación; Merge integra el código. Justin integra cuando corresponde. Si el profesor necesita evaluar la PR abierta, se deja abierta hasta su indicación.
+6. La tarjeta pasa a Haciendo al iniciar el trabajo; mientras se revisa conserva ese estado y enlaza la PR. Solo pasa a Hechas al cumplir criterios, pruebas e integración. Si hay un impedimento real, se documenta en Bloqueadas.
+
+### Entregas propias de Justin
+
+Por el acuerdo comunicado, sus cambios propios no requieren pull request. Para conservar la identificación por requisito, Justin trabaja en una rama con prefijo justin/, prueba y guarda commits descriptivos con su identidad, registra la rama, commits y evidencia en la issue y puede integrar su trabajo a master sin PR. El tablero se actualiza según el resultado verificado. No debe presentarse un cambio de otra persona como propio para evitar la revisión.
+
+### Estado de la aplicación del acuerdo
+
+Las cuentas y las ocho asignaciones de Yulian y Diryan están comprobadas. Justin es el revisor acordado. La tarjeta ORG-02 registra este acuerdo. La PR #18 es un borrador de documentación opcional de Justin y permanece abierto para revisión.
+
+El flujo está documentado como norma del equipo. En la consulta del 28 de octubre, la protección clásica de master devolvió 404; no se ha configurado aquí una restricción automática que impida a colaboradores subir directamente. Documentar el acuerdo y asignar tareas no equivale a proteger la rama.
 
 ## Sustentación
 
-El trabajo inicial se subió directamente a master. Ahora cada etapa terminada tiene una referencia con el nombre de Justin y el commit que permite consultarla. Se conserva el historial real. Las siguientes entregas se harán primero en una rama por responsable y requisito, y se integrarán mediante pull request y revisión.
+El trabajo inicial lo realizó Justin y se integró directamente en master. Sus etapas terminadas tienen ramas retrospectivas y commits verificables. En adelante, Yulian y Diryan trabajan en ramas y entregan mediante pull request; Justin revisa y decide su integración. Los cambios propios de Justin pueden integrarse sin PR, pero deben tener autoría, pruebas y vínculo a su tarea. El tablero refleja el estado real y no solo la existencia de una rama.
