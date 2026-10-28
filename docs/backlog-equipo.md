@@ -90,4 +90,3 @@ Justin: justinpich0n; Diryan: DiryanS; Yulian: yuliandavid144-collab. Las 19 iss
 **Motivo:** CU20 desarrolla generar un respaldo, pero no explica el flujo de restauración manual exigido por RNF-05. No están acordados destino, acceso, conservación ni tratamiento de los datos existentes durante la restauración. No hay aún un entorno aislado de recuperación definido.
 
 **Para desbloquear:** Diryan documenta y acuerda el procedimiento de exportación y restauración, permisos, destino, conservación y manejo de errores. Define una base de prueba aislada y criterios para comprobar la recuperación desde un archivo válido sin sobrescribir los datos de trabajo.
-
