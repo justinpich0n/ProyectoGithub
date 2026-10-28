@@ -48,7 +48,11 @@ Por el acuerdo comunicado, sus cambios propios no requieren pull request. Para c
 
 Las cuentas y las ocho asignaciones de Yulian y Diryan están comprobadas. Justin es el revisor acordado. La tarjeta ORG-02 registra este acuerdo. La PR #18 es un borrador de documentación opcional de Justin y permanece abierto para revisión.
 
-El flujo está documentado como norma del equipo. En la consulta del 28 de octubre, la protección clásica de master devolvió 404; no se ha configurado aquí una restricción automática que impida a colaboradores subir directamente. Documentar el acuerdo y asignar tareas no equivale a proteger la rama.
+El 28 de octubre se activó el [ruleset de master](https://github.com/justinpich0n/ProyectoGithub/rules/26082885). Solo el rol administrador puede actualizar master, incluida la integración de PR; el único administrador verificado es Justin (justinpich0n). Yulian y Diryan conservan escritura en sus ramas, pero no pueden subir directamente ni fusionar a master. Se exige PR con una aprobación, se descartan aprobaciones cuando cambian los commits y se exige resolver los hilos de revisión. También se restringen borrado y force push para quienes no tienen excepción.
+
+El administrador tiene excepción Always para permitir a Justin integrar y publicar sus propios cambios sin PR conforme al acuerdo. Por ello Justin debe registrar explícitamente su revisión de las entregas de compañeros antes de integrar. La regla no identifica personas por el nombre escrito en un commit: se basa en permisos de la cuenta autenticada. Si se añaden otros administradores, también tendrán esa excepción y deberá revisarse el acuerdo.
+
+Cada entrega debe mostrar la cuenta GitHub del autor de la PR, rama, issue, commits y pruebas. Cada integrante configura su propio nombre y correo de Git, preferiblemente el correo noreply de su cuenta si desea privacidad. El nombre de autor de un commit puede configurarse y no constituye por sí solo una identidad verificada ni firma criptográfica. No compartir cuentas ni atribuirse cambios de otro. Justin usa Approve para aprobar, Request changes para pedir correcciones o Close pull request para denegar sin integrar; la decisión queda en el historial de la PR.
 
 ## Sustentación
 

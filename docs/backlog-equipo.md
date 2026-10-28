@@ -51,4 +51,6 @@ El 28 de octubre de 2026 se crearon ramas retrospectivas con el prefijo justin/ 
 
 ## Flujo confirmado el 28 de octubre
 
-Yulian y Diryan entregan por rama y pull request hacia master; Justin revisa y decide la integración. Los cambios propios de Justin pueden integrarse sin PR, documentando autoría, rama, commits y pruebas en su tarjeta. El [acuerdo completo](ramas-y-trazabilidad.md) distingue esta norma de una protección automática de GitHub, que no se ha configurado en esta actualización.
+Yulian y Diryan entregan por rama y pull request hacia master; Justin revisa y decide la integración. Los cambios propios de Justin pueden integrarse sin PR, documentando autoría, rama, commits y pruebas en su tarjeta. El [acuerdo completo](ramas-y-trazabilidad.md) documenta el ruleset activo de master: únicamente Justin, como único administrador actual, integra o publica directamente. Yulian y Diryan entregan por PR identificada con su cuenta, commits, issue y pruebas. Las aprobaciones se invalidan ante cambios nuevos.
+
+Protección técnica verificada el 28 de octubre: [ruleset 26082885](https://github.com/justinpich0n/ProyectoGithub/rules/26082885), activo y aplicado a refs/heads/master. El administrador tiene excepción para sus cambios propios.
