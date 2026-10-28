@@ -72,3 +72,7 @@ El archivo `.env.example` contiene únicamente valores de ejemplo. Las credencia
 ## Cotejo de la fuente actualizada
 
 Se verificaron las 14 fichas REQ-01 a REQ-14 y los 20 casos de uso. Véase la [matriz con evidencias de código](contraste-funcional-2026-10-28.md). REQ-02 y REQ-13 presentan avances parciales; ningún requisito funcional de negocio se certifica completo de extremo a extremo. La guía técnica CRUD sí está completada. Persisten descripciones desplazadas y REQ-15 citado sin ficha. Los criterios adicionales de búsqueda, cliente, precio/costo, apertura y comprobantes se reflejan en el backlog sin implementar funciones nuevas.
+
+## Backlog por ficha original
+
+La revision del 28 de octubre cubre 14 REQ y 5 RNF individualmente. El [backlog vigente](backlog-equipo.md) sustituye las agrupaciones RF anteriores y distingue cumplimiento de flujo de trabajo. RNF-01 y RNF-03 siguen sin verificar, RNF-02 parcial, RNF-04 y RNF-05 pendientes. Las tareas tecnicas se conservan como soporte y no se cuentan como requisitos nuevos.

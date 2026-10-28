@@ -12,43 +12,36 @@ El CRUD técnico de usuarios y productos está implementado y probado, pero no c
 
 | Ficha | Propósito del título | Estado | Evidencia y criterio pendiente |
 | --- | --- | --- | --- |
-| REQ-01 | Apertura de caja | Pendiente | No existe AperturaCaja ni monto/fecha/hora/usuario o saldo final diario. CU5 permite base cero y prohíbe segunda apertura diaria; falta definir la unidad de apertura. #9. |
-| REQ-02 | Inventario y alta de productos | Parcial | CRUD real y formularios disponibles, pero faltan cantidad y precio de compra. CU17 exige administrador y nombre/cantidad/costo/venta; no hay autorización. CU12 menciona duplicados y no hay criterio de unicidad de producto. #7, avance técnico #17. |
-| REQ-03 | Búsqueda de productos por nombre | Pendiente | GET lista todos o busca por ID; no hay búsqueda parcial por nombre, índice explícito de nombre ni autocompletado dinámico. CU4/CU19 requieren coincidencias y manejo de resultados vacíos/error. #7. |
-| REQ-04 | Monto recibido y cambio | Pendiente | No hay pagos ni total de venta. Debe calcular recibido menos total y rechazar insuficiencia; CU3 contempla pago exacto. #11. |
-| REQ-05 | Método de pago | Pendiente | No hay Venta ni Pago. La ficha exige atributo obligatorio en Venta, CU16 registra una tabla Pago y CU2 describe un alta de producto: decisión de modelo y corrección del flujo pendientes. #11. |
-| REQ-06 | Historial de ventas | Pendiente | No hay ventas ni filtros parametrizados por fechas/producto. Título dice del día; descripción permite rango. CU11 repite precondición como poscondición. #14. |
-| REQ-07 | Factura/comprobante | Pendiente | Sin visualización/impresión de identificador, fecha/hora, productos/cantidades/precio/subtotal, total y método. CU1 abarca venta, pago y stock; solapa CU15. #14. |
-| REQ-08 | Crear clientes | Pendiente | No existe Cliente con nombre completo, teléfono y dirección, consulta y edición. Usuario con correo no cumple esto. CU10 trata campos faltantes, duplicados y validación telefónica. #12. |
-| REQ-09 | Modificar clientes | Pendiente y contradictorio | CU9 confirma edición; la descripción de la ficha corresponde a crédito con cliente, saldo y estado de deuda. #12 y duda de #13. |
-| REQ-10 | Ventas a crédito y saldos | Pendiente y contradictorio | CU8 trata deuda, autorización ante vencimiento y abono inicial. La descripción de la ficha corresponde a descuento de stock en transacción atómica. #13 y duda de #8/#10. |
-| REQ-11 | Actualizar stock al vender | Pendiente y contradictorio | CU14 trata existencias; descripción exige precio de compra al crear. No hay stock ni costo. #8 y duda de #7. |
-| REQ-12 | Precio costo | Pendiente y contradictorio | Sin costo. CU7 contempla confirmación de costo cero y carga masiva; descripción de la ficha exige precio de venta obligatorio y editable. Precio por API puede omitirse y queda cero, por lo que tampoco se acredita literalmente ese campo requerido. #7. |
-| REQ-13 | Definir y actualizar precio de venta | Parcial y contradictorio | Precio DECIMAL con edición y validación numérica comprobados. Falta advertencia de venta menor al costo de CU6. La descripción de la ficha corresponde a stock mínimo y alerta; esa parte no existe. CU18 también mezcla edición general. #7/#8. |
-| REQ-14 | Ventana de bajo stock | Pendiente y contradictorio | No hay mínimos ni alertas. Título 50×60 px, descripción desplazada en REQ-13 20×50 o ajustable. CU13 exige retirar alertas al reponer y listar varios productos. Descripción de REQ-14 exige máximo dos segundos hasta 3000 productos/un usuario; no medido. #8 y #16. |
+| REQ-01 | Apertura de caja | Pendiente | No existe AperturaCaja ni monto/fecha/hora/usuario o saldo final diario. CU5 permite base cero y prohíbe segunda apertura diaria; falta definir la unidad de apertura. Issue vigente #9. |
+| REQ-02 | Inventario y alta de productos | Parcial | CRUD real y formularios disponibles, pero faltan cantidad y precio de compra. CU17 exige administrador y nombre/cantidad/costo/venta; no hay autorización. CU12 menciona duplicados y no hay criterio de unicidad de producto. Issue vigente #7. |
+| REQ-03 | Búsqueda de productos por nombre | Pendiente | GET lista todos o busca por ID; no hay búsqueda parcial por nombre, índice explícito de nombre ni autocompletado dinámico. CU4/CU19 requieren coincidencias y manejo de resultados vacíos/error. Issue vigente #19. |
+| REQ-04 | Monto recibido y cambio | Pendiente | No hay pagos ni total de venta. Debe calcular recibido menos total y rechazar insuficiencia; CU3 contempla pago exacto. Issue vigente #20. |
+| REQ-05 | Método de pago | Pendiente | No hay Venta ni Pago. La ficha exige atributo obligatorio en Venta, CU16 registra una tabla Pago y CU2 describe un alta de producto: decisión de modelo y corrección del flujo pendientes. Issue vigente #11. |
+| REQ-06 | Historial de ventas | Pendiente | No hay ventas ni filtros parametrizados por fechas/producto. Título dice del día; descripción permite rango. CU11 repite precondición como poscondición. Issue vigente #14. |
+| REQ-07 | Factura/comprobante | Pendiente | Sin visualización/impresión de identificador, fecha/hora, productos/cantidades/precio/subtotal, total y método. CU1 abarca venta, pago y stock; solapa CU15. Issue vigente #21. |
+| REQ-08 | Crear clientes | Pendiente | No existe Cliente con nombre completo, teléfono y dirección, consulta y edición. Usuario con correo no cumple esto. CU10 trata campos faltantes, duplicados y validación telefónica. Issue vigente #12. |
+| REQ-09 | Modificar clientes | Pendiente y contradictorio | CU9 confirma edición; la descripción de la ficha corresponde a crédito con cliente, saldo y estado de deuda. Issue vigente #22. |
+| REQ-10 | Ventas a crédito y saldos | Pendiente y contradictorio | CU8 trata deuda, autorización ante vencimiento y abono inicial. La descripción de la ficha corresponde a descuento de stock en transacción atómica. Issue vigente #13. |
+| REQ-11 | Actualizar stock al vender | Pendiente y contradictorio | CU14 trata existencias; descripción exige precio de compra al crear. No hay stock ni costo. Issue vigente #8. |
+| REQ-12 | Precio costo | Pendiente y contradictorio | Sin costo. CU7 contempla confirmación de costo cero y carga masiva; descripción de la ficha exige precio de venta obligatorio y editable. Precio por API puede omitirse y queda cero, por lo que tampoco se acredita literalmente ese campo requerido. Issue vigente #23. |
+| REQ-13 | Definir y actualizar precio de venta | Parcial y contradictorio | Precio DECIMAL con edición y validación numérica comprobados. Falta advertencia de venta menor al costo de CU6. La descripción de la ficha corresponde a stock mínimo y alerta; esa parte no existe. CU18 también mezcla edición general. Issue vigente #24. |
+| REQ-14 | Ventana de bajo stock | Pendiente y contradictorio | No hay mínimos ni alertas. Título 50×60 px, descripción desplazada en REQ-13 20×50 o ajustable. CU13 exige retirar alertas al reponer y listar varios productos. Descripción de REQ-14 exige máximo dos segundos hasta 3000 productos/un usuario; no medido. Issue vigente #25. |
 
 Inicio de sesión y roles aparecen en alcance y precondiciones, sin una ficha funcional independiente entre estas 14. Se mantienen pendientes en #6. CU15 referencia REQ-15, ausente en las fichas: no se contabiliza como una ficha funcional existente; la venta se conserva pendiente en #10. Respaldo/restauración figura como RNF-05, con CU20 de respaldo, y sigue pendiente en #15.
 
-Las etiquetas RF-01 a RF-10 del tablero agrupan requisitos; no sustituyen REQ-01 a REQ-14. Las propuestas de interpretación no son correcciones aprobadas del PPI.
+Las antiguas etiquetas RF-01 a RF-10 agrupaban requisitos; ahora cada REQ y RNF tiene tarjeta individual con su ID original. Las propuestas de interpretación no son correcciones aprobadas del PPI.
 
-## Matriz de evidencia y pendientes
+## Cotejo de las cinco fichas no funcionales
 
-| Área funcional del contraste conservado | Referencias conservadas | Resultado en código | Evidencia o brecha | Backlog |
-| --- | --- | --- | --- | --- |
-| Inicio de sesión y permisos | Alcance y precondiciones CU5/CU15/CU17/CU20; matriz pendiente | Pendiente | Usuario solo tiene id, nombre, email y fechas. No hay credencial, sesión, rol ni autorización de rutas. | #6, Diryan, abierta |
-| Registrar, consultar y editar productos | REQ-02, CU17, CU18 | Parcial | Rutas GET/POST/PUT/DELETE y formularios React existentes. Campos: nombre, precio, descripción y usuarioId. Faltan búsqueda específica y costo para el alcance documentado. Autenticación previa del CU tampoco se cumple. | #7, Diryan, abierta; parte técnica #17, Justin, cerrada |
-| Costo de producto | REQ-12, CU7 | Pendiente | No existe campo costo, formulario ni operación de costos. La carga masiva mencionada debe aclararse antes de añadirla. | #7, Diryan, abierta |
-| Precio de venta | REQ-13, CU6 | Parcial | Campo precio DECIMAL y creación/edición comprobadas. Se aceptan valores desde cero y precio omitido por API queda en cero: no puede certificarse aceptación de esa regla sin el PPI vigente. Faltan permisos y revisión del alcance específico del CU. | #7, Diryan, abierta; avance de Justin en #17 |
-| Existencias y descuento al confirmar venta | REQ-11, CU14 | Pendiente | Producto no tiene stock; no hay venta ni transacción venta/pago/inventario. | #8, Diryan; coordinación #10, Justin |
-| Mínimos y alertas | REQ-14, CU13 | Pendiente | Sin stock mínimo ni alertas. Regla de menor o igual y tamaño de iconos siguen como propuesta pendiente de validación. | #8, Diryan, abierta |
-| Apertura de caja | CU5 | Pendiente | No hay modelo, rutas o interfaz de caja. Resolver unidad de apertura, cierre y turnos. Referencia confirmada: REQ-01. | #9, Yulian, abierta |
-| Registrar y confirmar ventas | CU15, REQ-15 citado sin ficha recuperada | Pendiente y especificación incompleta | No existen venta, detalle ni confirmación. Resolver ficha faltante y solapamiento con factura. | #10, Justin, abierta |
-| Medios de pago y cambio | REQ-05, CU2 | Pendiente | Sin pagos ni cálculo de cambio. El flujo conservado de CU2 describe productos y requiere corrección acordada. | #11, Justin, abierta |
-| Registrar, consultar y editar clientes | REQ-08/CU10 para crear, consultar y editar; REQ-09/CU9 para edición | Pendiente | No existe Cliente. Registrar un Usuario con nombre/correo no cumple gestión de clientes. Corregir descripción mezclada con crédito. | #12, Yulian, abierta |
-| Crédito, saldos y abonos | REQ-10, CU8 | Pendiente | Sin crédito, saldo o abonos. Resolver vencimiento, límites, permisos y aplicación de pagos. | #13, Yulian, abierta |
-| Historial | REQ-06, CU11 | Pendiente | Sin ventas o filtros de historial. Resolver día frente a rango/consulta por producto. | #14, Yulian, abierta |
-| Factura o comprobante imprimible | REQ-07, CU1; solapamiento CU15 | Pendiente | Sin generación o impresión. Confirmar formato, alcance y denominación; no asumir facturación electrónica. | #14, Yulian, abierta |
-| Respaldo y restauración | NEC-19, RNF-05, CU20 | Pendiente; clasificación original no funcional | Sin operaciones de respaldo/restauración. CU20 conservado desarrolla solo respaldo; faltan reglas de restauración. | #15, Diryan, abierta |
+| Ficha original | Propiedad exigida | Estado | Evidencia y validacion pendiente |
+| --- | --- | --- | --- |
+| RNF-01 | Operaciones en maximo dos segundos | Sin verificar | No hay medicion reproducible bajo condiciones definidas. El texto de la ficha describe usabilidad y la descripcion de REQ-14 indica 3000 productos/un usuario: conservar la contradiccion y acordar protocolo de medicion. |
+| RNF-02 | Interfaz intuitiva | Parcial | Navegacion, etiquetas, formularios, estilos y errores implementados por Justin. Falta prueba de usuarios con tareas y criterios observables; ventas aun no existe. |
+| RNF-03 | Gestion de 3000 productos sin degradacion perceptible | Sin verificar | No se ejecuto una prueba con ese volumen ni se acreditaron consultas optimizadas/indexacion de busqueda. Definir degradacion, medir consulta/alta/edicion y registrar entorno y resultados con datos ficticios. |
+| RNF-04 | Integracion con impresoras termicas | Pendiente | Sin conexion USB/red ni envio de datos compatible. Identificar impresora y protocolo, ESC/POS si aplica, y comprobar recibo real; no basta imprimir el navegador. |
+| RNF-05 | Copia completa y restauracion manual | Pendiente | No existe funcion de exportar y restaurar archivo valido. Definir permisos, destino, errores y restauracion aislada. CU20 desarrolla solo respaldo. |
+
+El [backlog vigente](backlog-equipo.md) contiene exactamente 19 filas con IDs originales y enlaces a sus issues: 14 pendientes, 3 parciales y 2 sin verificar. La implementacion del CRUD es soporte tecnico y no una ficha funcional adicional. Los numeros de issue de las antiguas agrupaciones no equivalen a numeros REQ. La matriz vigente reemplaza ese agrupamiento.
 
 ## Entregas terminadas que pueden demostrarse
 

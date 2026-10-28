@@ -1,56 +1,54 @@
-# Backlog y reparto del equipo
+# Backlog de requisitos del PPI
 
-Revisión: 15 de octubre de 2026. Base de implementación: commit `da8cd57`.
+Revision: 28 de octubre de 2026. Fuente: PPI_INGENIERIA_DE_SOFTWARE_ArchivoActualizado.docx, secciones 2.1 y 2.2. El backlog de producto se compone exactamente de 14 fichas funcionales y 5 no funcionales. No se agregan faltantes tecnicos como si fueran requisitos del PPI.
 
-[Tablero GitHub](https://github.com/users/justinpich0n/projects/1) · [Requisitos y dudas](requisitos-bizzstock.md) · [Evidencias técnicas](seguimiento-guia.md).
+[Vista Requisitos PPI](https://github.com/users/justinpich0n/projects/1/views/1) filtrada y guardada con label:ppi. Las issues con etiqueta soporte conservan el trabajo tecnico y organizativo, y no se cuentan dentro de las 19 fichas. Los avances terminados siguen atribuidos a Justin. Los responsables que aparecen abajo asumen lo pendiente o su validacion; el reparto conserva los modulos y separa las fichas que antes estaban agrupadas.
 
-## Criterio de reparto
+## Estados de cumplimiento
 
-Por indicación de Justin, todo lo terminado se atribuye a Justin y el trabajo pendiente se distribuye entre Justin, Diryan y Yulian: El reparto inicial dejó cuatro tarjetas abiertas por integrante; ORG-02 se completa al acordar a Justin como revisor el 28 de octubre. El número de tarjetas no representa igual esfuerzo; ventas e integración requieren colaboración. Cuentas confirmadas el 20 de octubre: Yulian = [yuliandavid144-collab](https://github.com/yuliandavid144-collab), Diryan = [DiryanS](https://github.com/DiryanS). Se registraron en las descripciones de sus ocho tareas. Yulian aceptó la invitación y quedó asignado en Assignees a #9, #12, #13 y #14, verificado el 20 de octubre. Diryan también aceptó y quedó asignado en Assignees a #6, #7, #8 y #15, verificado el 20 de octubre. Ambos compañeros tienen acceso y sus cuatro tareas asignadas. No se inventan fechas ni se asigna un sprint sin acordarlo.
+- Pendiente: funcion o capacidad ausente.
+- Parcial: existe evidencia de una parte, pero no cumple todos los criterios.
+- Sin verificar: falta una prueba adecuada; no se afirma que falle ni que cumpla.
+- Completo: todos los criterios acordados comprobados. Actualmente ninguna ficha del PPI esta en este estado.
 
-Las etiquetas RF de las tarjetas agrupan requisitos del PPI: no reemplazan los identificadores REQ/CU originales. Los requisitos contradictorios conservan sus dudas. La planificación no amplía la implementación autorizada por la guía.
+La columna del tablero representa el flujo del trabajo (Por hacer, Haciendo, Hechas o Bloqueadas), mientras las etiquetas estado:pendiente, estado:parcial y estado:sin-verificar representan cumplimiento. Por hacer no elimina el avance parcial. No se marca Haciendo solo por asignar una tarjeta.
 
-## Estado comprobado y responsabilidades
+## Las 19 fichas del PPI
 
-| Tarjeta | Responsable | Estado | Análisis y siguiente paso |
-| --- | --- | --- | --- |
-| [#1 TEC-01 · Preparar y verificar backend con MySQL](https://github.com/justinpich0n/ProyectoGithub/issues/1) | Justin | Hechas | Backend Express/MySQL y health comprobados. La referencia a cero tablas describe el diagnóstico histórico; actualmente existen usuarios y productos (da8cd57). |
-| [#2 TEC-02 · Navegación React de Inicio, Usuarios y Productos](https://github.com/justinpich0n/ProyectoGithub/issues/2) | Justin | Hechas | Navegación React y diseño existentes completos para esta etapa. Formularios CRUD registrados en tarjeta técnica separada; no equivalen a autenticación. |
-| [#3 DOC-01 · Documentar ejecución y sustentación en Mac](https://github.com/justinpich0n/ProyectoGithub/issues/3) | Justin | Hechas | README, instrucciones de Mac, exposición y seguimiento actualizados con partes 3 y 4 en da8cd57. |
-| [#4 ORG-01 · Organizar el backlog de BizzStock](https://github.com/justinpich0n/ProyectoGithub/issues/4) | Justin | Hechas | Tablero existente con 16 tarjetas originales y cuatro estados. Reparto del 15 de octubre documentado; coordinación pendiente en #5. |
-| [#5 ORG-02 · Acordar responsables y revisión de pull requests](https://github.com/justinpich0n/ProyectoGithub/issues/5) | Justin | Hechas | Cuentas y asignaciones verificadas. Justin revisa e integra las PR de Yulian y Diryan. Sus cambios propios pueden integrarse sin PR con autoría, pruebas y evidencia en la issue. Acuerdo documentado el 28 de octubre. |
-| [#6 RF-01 · Inicio de sesión y permisos](https://github.com/justinpich0n/ProyectoGithub/issues/6) | Diryan | Bloqueadas | Sin implementar. El CRUD de usuarios solo contiene nombre/correo: no hay autenticación ni roles. Primero acordar matriz de permisos. |
-| [#7 RF-02 · Gestionar productos, costos y precios](https://github.com/justinpich0n/ProyectoGithub/issues/7) | Diryan | Por hacer | Parcial: Justin completó alta, consulta, edición y precio básico mediante CRUD (da8cd57). Diryan asume lo restante: búsqueda, costo y validaciones funcionales acordadas. Resolver borrado/cascada y relación producto-usuario para uso definitivo. No cerrar el requisito completo. |
-| [#8 RF-03 · Controlar existencias y alertas de inventario](https://github.com/justinpich0n/ProyectoGithub/issues/8) | Diryan | Por hacer | Sin implementar: el modelo Producto no incluye existencias ni mínimo. Acordar alerta y coordinar descuento atómico con ventas #10; depende de #7. |
-| [#9 RF-04 · Apertura y reglas de caja](https://github.com/justinpich0n/ProyectoGithub/issues/9) | Yulian | Bloqueadas | Sin implementar. Resolver apertura por negocio/caja/usuario, cierre y turnos; coordinar permisos con #6. |
-| [#10 RF-05 · Registrar y confirmar ventas](https://github.com/justinpich0n/ProyectoGithub/issues/10) | Justin | Bloqueadas | Sin implementar. Formalizar REQ-15 y separar confirmación de comprobante; depende de inventario #8, caja #9 y pagos #11. Justin coordina contrato de integración con ambos compañeros. |
-| [#11 RF-06 · Registrar pagos y calcular cambio](https://github.com/justinpich0n/ProyectoGithub/issues/11) | Justin | Por hacer | Sin implementar. Corregir flujo CU2 y acordar medios; coordinar confirmación y cambio con #10. Crédito #13 no es un medio de pago. |
-| [#12 RF-07 · Registrar, consultar y editar clientes](https://github.com/justinpich0n/ProyectoGithub/issues/12) | Yulian | Por hacer | Sin implementar. Usuarios no equivale a clientes. Corregir REQ-09 y acordar permisos con #6; base para crédito #13. |
-| [#13 RF-08 · Gestionar crédito, saldos y abonos](https://github.com/justinpich0n/ProyectoGithub/issues/13) | Yulian | Bloqueadas | Sin implementar. Depende de clientes #12, ventas #10 y reglas de abonos/límites/vencimiento pendientes de acordar. |
-| [#14 RF-09 · Consultar historial y emitir comprobantes](https://github.com/justinpich0n/ProyectoGithub/issues/14) | Yulian | Bloqueadas | Sin implementar. Depende de ventas #10; acordar filtros, formato y diferencia comprobante/factura. No asumir facturación electrónica. |
-| [#15 RF-10 · Copias de seguridad y restauración](https://github.com/justinpich0n/ProyectoGithub/issues/15) | Diryan | Bloqueadas | Sin implementar. Acordar destino, retención, permisos y restauración. Prueba futura en entorno aislado; no sobrescribir datos existentes. |
-| [#16 RNF-01 · Precisar rendimiento y usabilidad](https://github.com/justinpich0n/ProyectoGithub/issues/16) | Justin | Por hacer | Parcial en interfaz: Justin realizó navegación, diseño y formularios React. No hay evidencia de cumplimiento global de usabilidad ni medición de rendimiento bajo carga. Acordar criterios RNF-01/RNF-02 antes de medir; lint/build no demuestran esos requisitos. |
-| [#17 TEC-03 · CRUD Sequelize y formularios React](https://github.com/justinpich0n/ProyectoGithub/issues/17) | Justin | Hechas | Partes 3 y 4 completas. Prueba real de CRUD repetida y aprobada el 15 de octubre; commit da8cd57. |
+| Codigo original | Requisito por titulo | Cumplimiento | Responsable | Issue | Columna |
+| --- | --- | --- | --- | --- | --- |
+| REQ-01 | El sistema debe permitir el registro de apertura de caja con el ingreso del monto de base inicial. | Pendiente | Yulian | [#9](https://github.com/justinpich0n/ProyectoGithub/issues/9) | Bloqueadas |
+| REQ-02 | El sistema debe integrar un módulo de inventario para la gestión y alta de productos. | Parcial | Diryan | [#7](https://github.com/justinpich0n/ProyectoGithub/issues/7) | Por hacer |
+| REQ-03 | El sistema debe contar con una funcionalidad de búsqueda de productos por nombre | Pendiente | Diryan | [#19](https://github.com/justinpich0n/ProyectoGithub/issues/19) | Por hacer |
+| REQ-04 | El sistema debe permitir el ingreso del monto con el que se realiza el pago en cada transacción. | Pendiente | Justin | [#20](https://github.com/justinpich0n/ProyectoGithub/issues/20) | Por hacer |
+| REQ-05 | El sistema debe permitir seleccionar el método de pago, efectivo o medios electrónicos. | Pendiente | Justin | [#11](https://github.com/justinpich0n/ProyectoGithub/issues/11) | Por hacer |
+| REQ-06 | El sistema debe proporcionar una funcionalidad para consultar el historial de ventas del día | Pendiente | Yulian | [#14](https://github.com/justinpich0n/ProyectoGithub/issues/14) | Bloqueadas |
+| REQ-07 | El sistema debe generar factura al realizar una venta | Pendiente | Yulian | [#21](https://github.com/justinpich0n/ProyectoGithub/issues/21) | Bloqueadas |
+| REQ-08 | El sistema debe incluir un módulo de creación de clientes con nombre, teléfono y dirección | Pendiente | Yulian | [#12](https://github.com/justinpich0n/ProyectoGithub/issues/12) | Por hacer |
+| REQ-09 | El sistema debe permitir la modificación de datos en el módulo de clientes. | Pendiente | Yulian | [#22](https://github.com/justinpich0n/ProyectoGithub/issues/22) | Por hacer |
+| REQ-10 | El sistema debe gestionar ventas a crédito, registrando y controlando saldos pendientes. | Pendiente | Yulian | [#13](https://github.com/justinpich0n/ProyectoGithub/issues/13) | Bloqueadas |
+| REQ-11 | El sistema debe actualizar automáticamente el stock al vender un producto | Pendiente | Diryan | [#8](https://github.com/justinpich0n/ProyectoGithub/issues/8) | Por hacer |
+| REQ-12 | El sistema debe permitir el ingreso del precio costo de los productos | Pendiente | Diryan | [#23](https://github.com/justinpich0n/ProyectoGithub/issues/23) | Por hacer |
+| REQ-13 | El sistema debe permitir la definición y actualización del precio de venta de los productos. | Parcial | Justin | [#24](https://github.com/justinpich0n/ProyectoGithub/issues/24) | Por hacer |
+| REQ-14 | El sistema debe generar una ventana emergente de 50px * 60px en la parte superior derecha cuando un producto esté bajo en stock | Pendiente | Diryan | [#25](https://github.com/justinpich0n/ProyectoGithub/issues/25) | Por hacer |
+| RNF-01 | El sistema debe procesar y responder a cada operación en un tiempo máximo de 2 segundos. | Sin verificar | Justin | [#16](https://github.com/justinpich0n/ProyectoGithub/issues/16) | Por hacer |
+| RNF-02 | La aplicación debe contar con una interfaz intuitiva. | Parcial | Justin | [#26](https://github.com/justinpich0n/ProyectoGithub/issues/26) | Por hacer |
+| RNF-03 | El sistema debe permitir la gestión de hasta 3.000 productos en el inventario. | Sin verificar | Justin | [#27](https://github.com/justinpich0n/ProyectoGithub/issues/27) | Por hacer |
+| RNF-04 | La aplicación debe ser capaz de integrarse con impresoras. | Pendiente | Yulian | [#28](https://github.com/justinpich0n/ProyectoGithub/issues/28) | Bloqueadas |
+| RNF-05 | El sistema debe ofrecer una función para generar copias de seguridad. | Pendiente | Diryan | [#15](https://github.com/justinpich0n/ProyectoGithub/issues/15) | Bloqueadas |
 
-## Orden de coordinación
+Resultado: 14 pendientes, 3 parciales (REQ-02, REQ-13, RNF-02) y 2 sin verificar (RNF-01, RNF-03). No se declaran completas las fichas solo por existir el CRUD o una interfaz.
 
-1. Justin ya coordinó acceso y revisión de ramas y pull requests (#5); cada integrante concreta con el equipo las dudas de sus tarjetas antes de implementar.
-2. Diryan define acceso y completa productos/inventario; Yulian define caja y clientes. Justin concreta ventas, pagos y los criterios de pruebas en coordinación con ambos.
-3. Integrar ventas con caja, stock y pagos; después crédito e historial/comprobantes con Yulian. Respaldos/restauración con Diryan y validación de rendimiento/usabilidad con Justin requieren criterios y entorno acordados.
-4. Pasar a Haciendo solo cuando exista trabajo activo; pasar a Hechas cuando se cumplan todos los criterios y se adjunte evidencia. Los avances parciales de productos e interfaz no cierran el requisito completo.
+## Evidencias y dudas
 
-## Verificación de esta revisión
+Los modelos actuales son Usuario y Producto; Producto contiene nombre, precio, descripcion y usuarioId. Existen CRUD y formularios React con validaciones, pero no stock, costo, ventas, pagos, clientes, credito, impresora o respaldo/restauracion. La integracion CRUD real con MySQL, health automatizado y lint/build frontend pasaron en esta revision; no certifican rendimiento bajo carga ni usabilidad global. RNF-03 requiere comprobar 3000 registros y consultas optimizadas; RNF-04 requiere prueba con impresora termica USB/red y formato compatible. RNF-05 se conserva como no funcional porque asi lo clasifica el PPI.
 
-Se inspeccionaron modelos, rutas, controladores y formularios React. Se repitió satisfactoriamente la integración CRUD contra MySQL local con datos ficticios y limpieza de los registros de la prueba. La evidencia visual y los resultados de lint/build previos están en el seguimiento técnico. No se modificó el código funcional ni se implementaron módulos pendientes durante este reparto.
+Las descripciones desplazadas REQ-09 a REQ-14 y RNF-01 se conservan en cada tarjeta, separadas del titulo original. Las propuestas de interpretacion no son correcciones aprobadas. La [matriz de contraste](contraste-funcional-2026-10-28.md) explica evidencia y contradicciones.
 
-Resultado esperado del tablero: 17 tarjetas, seis Hechas atribuidas a Justin, cinco Por hacer y seis Bloqueadas tras cerrar ORG-02. Ninguna Haciendo porque la asignación no implica inicio del desarrollo. Las cuentas están confirmadas. Las ocho tareas de Yulian y Diryan tienen sus cuentas en Assignees. El acuerdo de revisión queda registrado y completado en #5 el 28 de octubre: Justin revisa las entregas de sus compañeros.
+## Soporte fuera del conteo del PPI
 
-## Ramas de las entregas terminadas
+Se conservan como soporte #1, #2, #3, #4, #5 y #17 (entregas tecnicas y organizativas completadas por Justin), #6 (autenticacion/permisos presentes en alcance y precondiciones sin ficha independiente), y #10 (venta citada como REQ-15 en CU15 sin ficha). No se inventa una ficha REQ-15. El [historial del agrupamiento anterior](historial-backlog-agrupado.md) conserva las referencias originales; las issues reutilizadas guardan su texto previo en un apartado historico.
 
-El 28 de octubre de 2026 se crearon ramas retrospectivas con el prefijo justin/ para identificar las etapas ya integradas en master. Véase el [mapa de ramas y commits](ramas-y-trazabilidad.md). No implica que esas entregas se desarrollaran originalmente en ramas ni cambia los estados funcionales. La documentación de esta regularización se revisa desde justin/docs-trazabilidad-requisitos.
+## Trabajo del equipo
 
-## Flujo confirmado el 28 de octubre
-
-Yulian y Diryan entregan por rama y pull request hacia master; Justin revisa y decide la integración. Los cambios propios de Justin pueden integrarse sin PR, documentando autoría, rama, commits y pruebas en su tarjeta. El [acuerdo completo](ramas-y-trazabilidad.md) documenta el ruleset activo de master: únicamente Justin, como único administrador actual, integra o publica directamente. Yulian y Diryan entregan por PR identificada con su cuenta, commits, issue y pruebas. Las aprobaciones se invalidan ante cambios nuevos.
-
-Protección técnica verificada el 28 de octubre: [ruleset 26082885](https://github.com/justinpich0n/ProyectoGithub/rules/26082885), activo y aplicado a refs/heads/master. El administrador tiene excepción para sus cambios propios.
+Justin: justinpich0n; Diryan: DiryanS; Yulian: yuliandavid144-collab. Las 19 issues tienen responsables oficiales. Cada entrega de compañeros va en rama y PR, la revisa Justin y se integra solo con su decision. La regla activa de master y las excepciones estan en [ramas y trazabilidad](ramas-y-trazabilidad.md). La tarea cambia a Hechas cuando los criterios del requisito y su evidencia estan completos, no por terminar una tarea de soporte.
