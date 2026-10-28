@@ -44,3 +44,7 @@ Las etiquetas RF de las tarjetas agrupan requisitos del PPI: no reemplazan los i
 Se inspeccionaron modelos, rutas, controladores y formularios React. Se repitió satisfactoriamente la integración CRUD contra MySQL local con datos ficticios y limpieza de los registros de la prueba. La evidencia visual y los resultados de lint/build previos están en el seguimiento técnico. No se modificó el código funcional ni se implementaron módulos pendientes durante este reparto.
 
 Resultado esperado del tablero: 17 tarjetas, cinco Hechas atribuidas a Justin, seis Por hacer y seis Bloqueadas. Ninguna Haciendo porque la asignación no implica inicio del desarrollo. Las cuentas están confirmadas. Las ocho tareas de Yulian y Diryan tienen sus cuentas en Assignees. El acuerdo de revisores continúa pendiente en #5.
+
+## Ramas de las entregas terminadas
+
+El 28 de octubre de 2026 se crearon ramas retrospectivas con el prefijo justin/ para identificar las etapas ya integradas en master. Véase el [mapa de ramas y commits](ramas-y-trazabilidad.md). No implica que esas entregas se desarrollaran originalmente en ramas ni cambia los estados funcionales. La documentación de esta regularización se revisa desde justin/docs-trazabilidad-requisitos.
