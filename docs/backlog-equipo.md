@@ -52,3 +52,42 @@ Se conservan como soporte #1, #2, #3, #4, #5 y #17 (entregas tecnicas y organiza
 ## Trabajo del equipo
 
 Justin: justinpich0n; Diryan: DiryanS; Yulian: yuliandavid144-collab. Las 19 issues tienen responsables oficiales. Cada entrega de compañeros va en rama y PR, la revisa Justin y se integra solo con su decision. La regla activa de master y las excepciones estan en [ramas y trazabilidad](ramas-y-trazabilidad.md). La tarea cambia a Hechas cuando los criterios del requisito y su evidencia estan completos, no por terminar una tarea de soporte.
+
+## Motivos de los requisitos bloqueados
+
+### REQ-01 · #9
+
+**Motivo:** El documento impide una segunda apertura diaria, pero no define si la regla se aplica por negocio, caja o usuario. Tampoco especifica el cierre que permite calcular el saldo final diario. Resolverlo es necesario para definir las restricciones y el ciclo de caja.
+
+**Para desbloquear:** Yulian debe acordar con el equipo y validar con el profesor la unidad de apertura, la regla diaria y el cierre/saldo. Registrar la decisión y sus criterios de prueba en esta tarjeta. La base cero ya está permitida por CU5; no está pendiente de decidir.
+
+### REQ-10 · #13
+
+**Motivo:** No existen todavía Cliente, Venta ni Pago. Además, faltan reglas de vencimiento y de autorización especial por deuda vencida que exige CU8; la descripción de REQ-10 trata stock en vez de crédito. Estas dudas impiden cerrar el modelo y el flujo de crédito.
+
+**Para desbloquear:** Yulian coordina las dependencias REQ-08, REQ-09 y las tareas de venta/pagos, y valida las reglas de crédito y la descripción contradictoria. Documentar cliente obligatorio, estado/saldo de deuda, abono inicial y autorización por vencimiento antes de implementar el flujo completo.
+
+### REQ-06 · #14
+
+**Motivo:** No hay ventas ni detalles persistidos que constituyan un historial. El título restringe la consulta al día, mientras la descripción exige rangos de fechas y producto; la poscondición de CU11 repite la precondición. Falta acordar qué se aceptará como consulta completa.
+
+**Para desbloquear:** Yulian acuerda y registra los filtros y la poscondición correctos, y coordina el contrato de datos con la tarea de ventas #10. Se puede preparar diseño y pruebas, pero la validación integral requiere ventas ficticias registradas.
+
+### REQ-07 · #21
+
+**Motivo:** No existen ventas confirmadas, detalle y pagos de los que obtener los campos del comprobante. CU1 mezcla el registro completo de la venta con la generación del comprobante, por lo que falta delimitar el momento de emisión y su relación con el pago.
+
+**Para desbloquear:** Yulian coordina ventas #10 y REQ-05, y registra el acuerdo sobre emisión de comprobante. Debe conservar ID, fecha/hora, detalle, total y método de pago. La integración con impresora térmica se verifica por separado en RNF-04; no bloquea por sí sola diseñar o visualizar el comprobante.
+
+### RNF-04 · #28
+
+**Motivo:** El proyecto no tiene integración de impresión ni se ha identificado una impresora térmica de prueba, su conexión USB/red y el formato admitido. Sin esos datos no puede acreditarse compatibilidad. También falta el comprobante de REQ-07 como contenido de prueba.
+
+**Para desbloquear:** Yulian identifica modelo de impresora disponible, conexión, formato/protocolo compatible y entorno de prueba; registra el acuerdo y coordina REQ-07. Ejecutar y documentar una impresión real con datos ficticios. ESC/POS solo si el equipo lo admite.
+
+### RNF-05 · #15
+
+**Motivo:** CU20 desarrolla generar un respaldo, pero no explica el flujo de restauración manual exigido por RNF-05. No están acordados destino, acceso, conservación ni tratamiento de los datos existentes durante la restauración. No hay aún un entorno aislado de recuperación definido.
+
+**Para desbloquear:** Diryan documenta y acuerda el procedimiento de exportación y restauración, permisos, destino, conservación y manejo de errores. Define una base de prueba aislada y criterios para comprobar la recuperación desde un archivo válido sin sobrescribir los datos de trabajo.
+
