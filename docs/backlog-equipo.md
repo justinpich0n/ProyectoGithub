@@ -15,27 +15,27 @@ La columna del tablero representa el flujo del trabajo (Por hacer, Haciendo, Hec
 
 ## Las 19 fichas del PPI
 
-| Codigo original | Requisito por titulo | Cumplimiento | Responsable | Issue | Columna |
-| --- | --- | --- | --- | --- | --- |
-| REQ-01 | El sistema debe permitir el registro de apertura de caja con el ingreso del monto de base inicial. | Pendiente | Yulian | [#9](https://github.com/justinpich0n/ProyectoGithub/issues/9) | Bloqueadas |
-| REQ-02 | El sistema debe integrar un módulo de inventario para la gestión y alta de productos. | Parcial | Diryan | [#7](https://github.com/justinpich0n/ProyectoGithub/issues/7) | Por hacer |
-| REQ-03 | El sistema debe contar con una funcionalidad de búsqueda de productos por nombre | Pendiente | Diryan | [#19](https://github.com/justinpich0n/ProyectoGithub/issues/19) | Por hacer |
-| REQ-04 | El sistema debe permitir el ingreso del monto con el que se realiza el pago en cada transacción. | Pendiente | Justin | [#20](https://github.com/justinpich0n/ProyectoGithub/issues/20) | Por hacer |
-| REQ-05 | El sistema debe permitir seleccionar el método de pago, efectivo o medios electrónicos. | Pendiente | Justin | [#11](https://github.com/justinpich0n/ProyectoGithub/issues/11) | Por hacer |
-| REQ-06 | El sistema debe proporcionar una funcionalidad para consultar el historial de ventas del día | Pendiente | Yulian | [#14](https://github.com/justinpich0n/ProyectoGithub/issues/14) | Bloqueadas |
-| REQ-07 | El sistema debe generar factura al realizar una venta | Pendiente | Yulian | [#21](https://github.com/justinpich0n/ProyectoGithub/issues/21) | Bloqueadas |
-| REQ-08 | El sistema debe incluir un módulo de creación de clientes con nombre, teléfono y dirección | Pendiente | Yulian | [#12](https://github.com/justinpich0n/ProyectoGithub/issues/12) | Por hacer |
-| REQ-09 | El sistema debe permitir la modificación de datos en el módulo de clientes. | Pendiente | Yulian | [#22](https://github.com/justinpich0n/ProyectoGithub/issues/22) | Por hacer |
-| REQ-10 | El sistema debe gestionar ventas a crédito, registrando y controlando saldos pendientes. | Pendiente | Yulian | [#13](https://github.com/justinpich0n/ProyectoGithub/issues/13) | Bloqueadas |
-| REQ-11 | El sistema debe actualizar automáticamente el stock al vender un producto | Pendiente | Diryan | [#8](https://github.com/justinpich0n/ProyectoGithub/issues/8) | Por hacer |
-| REQ-12 | El sistema debe permitir el ingreso del precio costo de los productos | Pendiente | Diryan | [#23](https://github.com/justinpich0n/ProyectoGithub/issues/23) | Por hacer |
-| REQ-13 | El sistema debe permitir la definición y actualización del precio de venta de los productos. | Parcial | Justin | [#24](https://github.com/justinpich0n/ProyectoGithub/issues/24) | Por hacer |
-| REQ-14 | El sistema debe generar una ventana emergente de 50px * 60px en la parte superior derecha cuando un producto esté bajo en stock | Pendiente | Diryan | [#25](https://github.com/justinpich0n/ProyectoGithub/issues/25) | Por hacer |
-| RNF-01 | El sistema debe procesar y responder a cada operación en un tiempo máximo de 2 segundos. | Sin verificar | Justin | [#16](https://github.com/justinpich0n/ProyectoGithub/issues/16) | Por hacer |
-| RNF-02 | La aplicación debe contar con una interfaz intuitiva. | Parcial | Justin | [#26](https://github.com/justinpich0n/ProyectoGithub/issues/26) | Por hacer |
-| RNF-03 | El sistema debe permitir la gestión de hasta 3.000 productos en el inventario. | Sin verificar | Justin | [#27](https://github.com/justinpich0n/ProyectoGithub/issues/27) | Por hacer |
-| RNF-04 | La aplicación debe ser capaz de integrarse con impresoras. | Pendiente | Yulian | [#28](https://github.com/justinpich0n/ProyectoGithub/issues/28) | Bloqueadas |
-| RNF-05 | El sistema debe ofrecer una función para generar copias de seguridad. | Pendiente | Diryan | [#15](https://github.com/justinpich0n/ProyectoGithub/issues/15) | Bloqueadas |
+| Codigo original | Requisito por titulo | Prioridad PPI | Cumplimiento | Responsable | Issue | Columna |
+| --- | --- | --- | --- | --- | --- | --- |
+| REQ-01 | El sistema debe permitir el registro de apertura de caja con el ingreso del monto de base inicial. | Media | Pendiente | Yulian | [#9](https://github.com/justinpich0n/ProyectoGithub/issues/9) | Bloqueadas |
+| REQ-02 | El sistema debe integrar un módulo de inventario para la gestión y alta de productos. | Alta | Parcial | Diryan | [#7](https://github.com/justinpich0n/ProyectoGithub/issues/7) | Por hacer |
+| REQ-03 | El sistema debe contar con una funcionalidad de búsqueda de productos por nombre | Alta | Pendiente | Diryan | [#19](https://github.com/justinpich0n/ProyectoGithub/issues/19) | Por hacer |
+| REQ-04 | El sistema debe permitir el ingreso del monto con el que se realiza el pago en cada transacción. | Alta | Pendiente | Justin | [#20](https://github.com/justinpich0n/ProyectoGithub/issues/20) | Por hacer |
+| REQ-05 | El sistema debe permitir seleccionar el método de pago, efectivo o medios electrónicos. | Media | Pendiente | Justin | [#11](https://github.com/justinpich0n/ProyectoGithub/issues/11) | Por hacer |
+| REQ-06 | El sistema debe proporcionar una funcionalidad para consultar el historial de ventas del día | Media | Pendiente | Yulian | [#14](https://github.com/justinpich0n/ProyectoGithub/issues/14) | Bloqueadas |
+| REQ-07 | El sistema debe generar factura al realizar una venta | Media | Pendiente | Yulian | [#21](https://github.com/justinpich0n/ProyectoGithub/issues/21) | Bloqueadas |
+| REQ-08 | El sistema debe incluir un módulo de creación de clientes con nombre, teléfono y dirección | Alta | Pendiente | Yulian | [#12](https://github.com/justinpich0n/ProyectoGithub/issues/12) | Por hacer |
+| REQ-09 | El sistema debe permitir la modificación de datos en el módulo de clientes. | Media | Pendiente | Yulian | [#22](https://github.com/justinpich0n/ProyectoGithub/issues/22) | Por hacer |
+| REQ-10 | El sistema debe gestionar ventas a crédito, registrando y controlando saldos pendientes. | Media | Pendiente | Yulian | [#13](https://github.com/justinpich0n/ProyectoGithub/issues/13) | Bloqueadas |
+| REQ-11 | El sistema debe actualizar automáticamente el stock al vender un producto | Alta | Pendiente | Diryan | [#8](https://github.com/justinpich0n/ProyectoGithub/issues/8) | Por hacer |
+| REQ-12 | El sistema debe permitir el ingreso del precio costo de los productos | Alta | Pendiente | Diryan | [#23](https://github.com/justinpich0n/ProyectoGithub/issues/23) | Por hacer |
+| REQ-13 | El sistema debe permitir la definición y actualización del precio de venta de los productos. | Alta | Parcial | Justin | [#24](https://github.com/justinpich0n/ProyectoGithub/issues/24) | Por hacer |
+| REQ-14 | El sistema debe generar una ventana emergente de 50px * 60px en la parte superior derecha cuando un producto esté bajo en stock | Baja | Pendiente | Diryan | [#25](https://github.com/justinpich0n/ProyectoGithub/issues/25) | Por hacer |
+| RNF-01 | El sistema debe procesar y responder a cada operación en un tiempo máximo de 2 segundos. | Alta | Sin verificar | Justin | [#16](https://github.com/justinpich0n/ProyectoGithub/issues/16) | Por hacer |
+| RNF-02 | La aplicación debe contar con una interfaz intuitiva. | Alta | Parcial | Justin | [#26](https://github.com/justinpich0n/ProyectoGithub/issues/26) | Por hacer |
+| RNF-03 | El sistema debe permitir la gestión de hasta 3.000 productos en el inventario. | Alta | Sin verificar | Justin | [#27](https://github.com/justinpich0n/ProyectoGithub/issues/27) | Por hacer |
+| RNF-04 | La aplicación debe ser capaz de integrarse con impresoras. | Media | Pendiente | Yulian | [#28](https://github.com/justinpich0n/ProyectoGithub/issues/28) | Bloqueadas |
+| RNF-05 | El sistema debe ofrecer una función para generar copias de seguridad. | Alta | Pendiente | Diryan | [#15](https://github.com/justinpich0n/ProyectoGithub/issues/15) | Bloqueadas |
 
 Resultado: 14 pendientes, 3 parciales (REQ-02, REQ-13, RNF-02) y 2 sin verificar (RNF-01, RNF-03). No se declaran completas las fichas solo por existir el CRUD o una interfaz.
 
