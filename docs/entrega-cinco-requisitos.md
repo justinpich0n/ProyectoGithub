@@ -1,6 +1,6 @@
 # Implementación de cinco requisitos del PPI
 
-29 de octubre de 2026. Rama justin/ppi-busqueda-clientes-costos-precios. Implementación atribuida a Justin. Estado: implementado y probado en rama, pendiente de revisión e integración en master mediante pull request. Esta entrega no fusiona la PR de documentación #18 ni reescribe el historial.
+29 de octubre de 2026. Rama justin/ppi-busqueda-clientes-costos-precios. Implementación atribuida a Justin. Estado: implementado y probado en rama, pendiente de revisión e integración en master mediante [PR #29](https://github.com/justinpich0n/ProyectoGithub/pull/29). Commit principal: 868d4ed. Esta entrega no fusiona la PR de documentación #18 ni reescribe el historial.
 
 ## Alcance y evidencia
 
