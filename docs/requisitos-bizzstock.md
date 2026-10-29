@@ -1,3 +1,5 @@
+> Estado del 29 de octubre: REQ-03, REQ-08, REQ-09, REQ-12 y REQ-13 se implementaron y probaron en la rama justin/ppi-busqueda-clientes-costos-precios. La revisión e integración en master siguen pendientes. La documentación anterior conserva el diagnóstico inicial; los avances se detallan en [la entrega de cinco requisitos](entrega-cinco-requisitos.md).
+
 # BizzStock: alcance y contraste de requisitos
 
 Fuente funcional vigente comprobada el 28 de octubre de 2026: PPI_INGENIERIA_DE_SOFTWARE_ArchivoActualizado.docx, secciones de contexto, necesidades, requisitos y casos de uso. La revisión anterior usó PPI_INGENIERIA_DE_SOFTWARE-2.docx. Se omiten datos personales y académicos. Esta revisión contrasta el texto de las tablas; no verifica el contenido gráfico de los diagramas incrustados.

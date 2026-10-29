@@ -14,8 +14,10 @@ module.exports = (sequelize) =>
         allowNull: false,
         defaultValue: 0,
       },
+      costo: { type: DataTypes.DECIMAL(10, 2), allowNull: true },
+      cantidad: { type: DataTypes.INTEGER, allowNull: true },
       descripcion: { type: DataTypes.TEXT, allowNull: true },
       usuarioId: { type: DataTypes.INTEGER, allowNull: false },
     },
-    { tableName: 'productos', timestamps: true },
+    { tableName: 'productos', timestamps: true, indexes: [{ name: 'productos_nombre_busqueda', fields: ['nombre'] }] },
   );

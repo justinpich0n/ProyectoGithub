@@ -1,13 +1,17 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useSesion } from '../services/sesion';
+import ImportarCostos from './ImportarCostos';
 import api, { mensajeError } from '../services/api';
 
 export default function Gestion({ producto = false }) {
+  const { usuario } = useSesion();
+  const admin = usuario.rol === 'administrador';
+  const [q, setQ] = useState('');
   const recurso = producto ? 'productos' : 'usuarios';
   const singular = producto ? 'producto' : 'usuario';
   const titulo = producto ? 'Productos' : 'Usuarios';
   const vacio = producto
-    ? { nombre: '', precio: '', descripcion: '', usuarioId: '' }
+    ? { nombre: '', precio: '', costo: '', cantidad: '', descripcion: '', usuarioId: '', confirmarCostoCero: false }
     : { nombre: '', email: '' };
   const [filas, setFilas] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
@@ -20,12 +24,12 @@ export default function Gestion({ producto = false }) {
   const cargar = useCallback(
     async (signal) => {
       const [lista, equipo] = await Promise.all([
-        api.get(`/${recurso}`, { signal }),
-        producto ? api.get('/usuarios', { signal }) : Promise.resolve(null),
+        api.get(`/${recurso}`, { signal, params: producto ? { q } : {} }),
+        producto && admin ? api.get('/usuarios', { signal }) : Promise.resolve(null),
       ]);
       return { lista, equipo };
     },
-    [recurso, producto],
+    [recurso, producto, q, admin],
   );
   function mostrar({ lista, equipo }) {
     setFilas(lista.data);
@@ -33,6 +37,8 @@ export default function Gestion({ producto = false }) {
   }
   useEffect(() => {
     const controller = new AbortController();
+    const timer = setTimeout(() => {
+    setCargando(true); setError('');
     cargar(controller.signal)
       .then((datos) => {
         if (!controller.signal.aborted) mostrar(datos);
@@ -43,7 +49,8 @@ export default function Gestion({ producto = false }) {
       .finally(() => {
         if (!controller.signal.aborted) setCargando(false);
       });
-    return () => controller.abort();
+    }, 250);
+    return () => { clearTimeout(timer); controller.abort(); };
   }, [cargar]);
   function limpiar() {
     setForm(vacio);
@@ -72,7 +79,7 @@ export default function Gestion({ producto = false }) {
     try {
       if (editandoId) await api.put(`/${recurso}/${editandoId}`, form);
       else await api.post(`/${recurso}`, form);
-      setAviso(editandoId ? 'Cambios guardados.' : 'Registro creado.');
+      setAviso([editandoId ? 'Cambios guardados.' : 'Registro creado.', ...(Number(form.precio) < Number(form.costo) ? ['El precio de venta es menor al costo: posible pérdida económica.'] : [])].join(' '));
       limpiar();
       mostrar(await cargar());
     } catch (e) {
@@ -88,6 +95,9 @@ export default function Gestion({ producto = false }) {
         ? {
             nombre: fila.nombre,
             precio: fila.precio,
+            costo: fila.costo ?? '',
+            cantidad: fila.cantidad ?? '',
+            confirmarCostoCero: false,
             descripcion: fila.descripcion || '',
             usuarioId: fila.usuarioId,
           }
@@ -150,7 +160,7 @@ export default function Gestion({ producto = false }) {
           {aviso}
         </p>
       )}
-      <div className="crud-panel">
+      {admin && <div className="crud-panel">
         <div className="section-title">
           <h2>{editandoId ? `Editar ${singular}` : `Nuevo ${singular}`}</h2>
           <span className="small-tag">
@@ -171,7 +181,7 @@ export default function Gestion({ producto = false }) {
             {producto ? (
               <>
                 <label>
-                  Precio
+                  Precio de venta
                   <input
                     type="number"
                     min="0"
@@ -182,6 +192,10 @@ export default function Gestion({ producto = false }) {
                     onChange={(e) => campo('precio', e.target.value)}
                   />
                 </label>
+                <label>Precio de costo<input type="number" min="0" max="99999999.99" step="0.01" required value={form.costo} onChange={(e) => { campo('costo', e.target.value); campo('confirmarCostoCero', false); }} /></label>
+                <label>Cantidad disponible<input type="number" min="0" max="2147483647" step="1" required value={form.cantidad} onChange={(e) => campo('cantidad', e.target.value)} /></label>
+                {form.costo !== '' && Number(form.costo) === 0 && <label className="check-line"><input type="checkbox" required checked={form.confirmarCostoCero} onChange={(e) => campo('confirmarCostoCero', e.target.checked)} />Confirmo guardar el costo en cero</label>}
+                {form.costo !== '' && form.precio !== '' && Number(form.precio) < Number(form.costo) && <p role="status" className="crud-warning full-field">El precio de venta es menor al costo: posible pérdida económica.</p>}
                 <label>
                   Usuario
                   <select
@@ -241,16 +255,17 @@ export default function Gestion({ producto = false }) {
         </form>
         {!producto && (
           <p className="crud-note">
-            Estos registros todavía no habilitan inicio de sesión ni permisos.
+            Los datos de usuarios y sus cuentas de acceso se gestionan por separado.
           </p>
         )}
         {producto && !cargando && !error && !usuarios.length && (
           <p className="crud-note">
-            Primero <Link to="/usuarios">crea un usuario</Link> para registrar
-            productos.
+            Primero crea un usuario en la sección Usuarios para registrar productos.
           </p>
         )}
-      </div>
+      </div>}
+      {producto && admin && <ImportarCostos actualizado={refrescar} />}
+      {producto && <div className="crud-panel"><label>Buscar productos por nombre<input type="search" list="productos-sugeridos" autoComplete="off" maxLength={100} value={q} onChange={(e) => setQ(e.target.value)} placeholder="Escribe el inicio del nombre" /></label><datalist id="productos-sugeridos">{filas.slice(0, 10).map((p) => <option key={p.id} value={p.nombre} />)}</datalist><p className="crud-note">Coincidencias por inicio del nombre. Hasta 100 resultados; las sugerencias se actualizan mientras escribes.</p></div>}
       <div className="crud-panel">
         <div className="section-title">
           <h2>{titulo} registrados</h2>
@@ -268,7 +283,7 @@ export default function Gestion({ producto = false }) {
           <p className="crud-note">
             {error
               ? 'No se pudo cargar la lista.'
-              : `Todavía no hay ${recurso}. Crea el primero con el formulario.`}
+              : `No se encontraron ${recurso}${q ? " con ese nombre" : ""}.`}
           </p>
         ) : (
           <div
@@ -284,14 +299,14 @@ export default function Gestion({ producto = false }) {
                   <th>Nombre</th>
                   {producto ? (
                     <>
-                      <th>Precio</th>
+                      <th>Precio de venta</th><th>Costo</th><th>Disponible</th>
                       <th>Descripción</th>
                       <th>Usuario</th>
                     </>
                   ) : (
                     <th>Correo</th>
                   )}
-                  <th>Acciones</th>
+                  {admin && <th>Acciones</th>}
                 </tr>
               </thead>
               <tbody>
@@ -306,13 +321,14 @@ export default function Gestion({ producto = false }) {
                             minimumFractionDigits: 2,
                           })}
                         </td>
+                        <td>{fila.costo ?? 'Por completar'}</td><td>{fila.cantidad ?? 'Por completar'}</td>
                         <td>{fila.descripcion || '—'}</td>
                         <td>{fila.Usuario?.nombre || '—'}</td>
                       </>
                     ) : (
                       <td>{fila.email}</td>
                     )}
-                    <td>
+                    {admin && <td>
                       <div className="row-actions">
                         <button
                           disabled={ocupado}
@@ -330,7 +346,7 @@ export default function Gestion({ producto = false }) {
                           Eliminar
                         </button>
                       </div>
-                    </td>
+                    </td>}
                   </tr>
                 ))}
               </tbody>

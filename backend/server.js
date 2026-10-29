@@ -23,6 +23,7 @@ async function iniciarServidor() {
       console.log('MySQL respondió correctamente a SELECT 1.');
       const modelos = crearModelos(sequelize);
       await sequelize.authenticate();
+      await require('./src/config/esquema')(sequelize);
       await sequelize.sync(); // Sin force ni alter: conserva las tablas existentes.
       app.locals.modelos = modelos;
       console.log('Modelos de Usuarios y Productos preparados.');

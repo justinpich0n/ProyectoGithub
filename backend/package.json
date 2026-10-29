@@ -2,14 +2,16 @@
   "name": "bizzstock-backend",
   "version": "0.1.0",
   "private": true,
-  "description": "Backend de BizzStock para la papelería y variedades Arte y Belleza",
+  "description": "Backend de BizzStock para la papeler\u00eda y variedades Arte y Belleza",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
     "lint": "eslint .",
     "test": "node --test test/health.test.js",
-    "test:integration": "node test/crud.integration.js"
+    "test:integration": "node test/crud.integration.js",
+    "crear:cuenta": "node scripts/crear-cuenta.js",
+    "test:ppi": "node test/ppi.integration.js"
   },
   "dependencies": {
     "cors": "^2.8.6",

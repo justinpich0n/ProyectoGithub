@@ -40,3 +40,7 @@ npm run build
 En el navegador, recorrer Inicio → Usuarios → Productos → Inicio y recargar una ruta directa. Comprobar título, contenido y barra. Crear un usuario ficticio con correo de example.com, crear un producto asociado, editar su precio y recargar para verificar persistencia. Eliminar un usuario también elimina sus productos: el diálogo lo advierte. La compilación se guarda en `dist/`, ignorado por Git. Si en el futuro se publica en un servidor distinto de Vite, ese servidor deberá devolver `index.html` para las rutas de la SPA.
 
 Se conservaron los recursos de ejemplo de Vite en `src/assets/` y `public/`, aunque la interfaz actual ya no los usa.
+
+## Entrega de cinco requisitos
+
+La interfaz requiere una cuenta creada mediante el asistente del backend; no hay credenciales predeterminadas. Incluye login, sesión, productos con costo/cantidad/precio, búsqueda dinámica e importación CSV, y alta/consulta/edición de clientes. El cajero consulta productos; el administrador administra los datos. No se implementan ventas/crédito/pagos/alertas. Consulta [la entrega y pruebas](../docs/entrega-cinco-requisitos.md).

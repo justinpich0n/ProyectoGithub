@@ -1,3 +1,5 @@
+> Actualización del 29 de octubre: esta matriz conserva el diagnóstico del 28 como línea base. REQ-03, REQ-08, REQ-09, REQ-12 y REQ-13 están implementados y probados en justin/ppi-busqueda-clientes-costos-precios, pendientes de revisión/integración. Véase [la entrega](entrega-cinco-requisitos.md) para el estado actual y sus límites. No se declara cumplimiento nuevo en master antes de integrar la PR.
+
 # Contraste entre el PPI actualizado y el código
 
 Revisión del 28 de octubre de 2026. Base de código funcional: da8cd57; rama de trabajo consultada: justin/docs-trazabilidad-requisitos.

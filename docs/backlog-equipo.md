@@ -19,17 +19,17 @@ La columna del tablero representa el flujo del trabajo (Por hacer, Haciendo, Hec
 | --- | --- | --- | --- | --- | --- | --- |
 | REQ-01 | El sistema debe permitir el registro de apertura de caja con el ingreso del monto de base inicial. | Media | Pendiente | Yulian | [#9](https://github.com/justinpich0n/ProyectoGithub/issues/9) | Bloqueadas |
 | REQ-02 | El sistema debe integrar un módulo de inventario para la gestión y alta de productos. | Alta | Parcial | Diryan | [#7](https://github.com/justinpich0n/ProyectoGithub/issues/7) | Por hacer |
-| REQ-03 | El sistema debe contar con una funcionalidad de búsqueda de productos por nombre | Alta | Pendiente | Diryan | [#19](https://github.com/justinpich0n/ProyectoGithub/issues/19) | Por hacer |
+| REQ-03 | El sistema debe contar con una funcionalidad de búsqueda de productos por nombre | Alta | Implementado en rama; revisión pendiente | Diryan | [#19](https://github.com/justinpich0n/ProyectoGithub/issues/19) | Haciendo |
 | REQ-04 | El sistema debe permitir el ingreso del monto con el que se realiza el pago en cada transacción. | Alta | Pendiente | Justin | [#20](https://github.com/justinpich0n/ProyectoGithub/issues/20) | Por hacer |
 | REQ-05 | El sistema debe permitir seleccionar el método de pago, efectivo o medios electrónicos. | Media | Pendiente | Justin | [#11](https://github.com/justinpich0n/ProyectoGithub/issues/11) | Por hacer |
 | REQ-06 | El sistema debe proporcionar una funcionalidad para consultar el historial de ventas del día | Media | Pendiente | Yulian | [#14](https://github.com/justinpich0n/ProyectoGithub/issues/14) | Bloqueadas |
 | REQ-07 | El sistema debe generar factura al realizar una venta | Media | Pendiente | Yulian | [#21](https://github.com/justinpich0n/ProyectoGithub/issues/21) | Bloqueadas |
-| REQ-08 | El sistema debe incluir un módulo de creación de clientes con nombre, teléfono y dirección | Alta | Pendiente | Yulian | [#12](https://github.com/justinpich0n/ProyectoGithub/issues/12) | Por hacer |
-| REQ-09 | El sistema debe permitir la modificación de datos en el módulo de clientes. | Media | Pendiente | Yulian | [#22](https://github.com/justinpich0n/ProyectoGithub/issues/22) | Por hacer |
+| REQ-08 | El sistema debe incluir un módulo de creación de clientes con nombre, teléfono y dirección | Alta | Implementado en rama; revisión pendiente | Yulian | [#12](https://github.com/justinpich0n/ProyectoGithub/issues/12) | Haciendo |
+| REQ-09 | El sistema debe permitir la modificación de datos en el módulo de clientes. | Media | Implementado en rama; revisión pendiente | Yulian | [#22](https://github.com/justinpich0n/ProyectoGithub/issues/22) | Haciendo |
 | REQ-10 | El sistema debe gestionar ventas a crédito, registrando y controlando saldos pendientes. | Media | Pendiente | Yulian | [#13](https://github.com/justinpich0n/ProyectoGithub/issues/13) | Bloqueadas |
 | REQ-11 | El sistema debe actualizar automáticamente el stock al vender un producto | Alta | Pendiente | Diryan | [#8](https://github.com/justinpich0n/ProyectoGithub/issues/8) | Por hacer |
-| REQ-12 | El sistema debe permitir el ingreso del precio costo de los productos | Alta | Pendiente | Diryan | [#23](https://github.com/justinpich0n/ProyectoGithub/issues/23) | Por hacer |
-| REQ-13 | El sistema debe permitir la definición y actualización del precio de venta de los productos. | Alta | Parcial | Justin | [#24](https://github.com/justinpich0n/ProyectoGithub/issues/24) | Por hacer |
+| REQ-12 | El sistema debe permitir el ingreso del precio costo de los productos | Alta | Implementado en rama; revisión pendiente | Diryan | [#23](https://github.com/justinpich0n/ProyectoGithub/issues/23) | Haciendo |
+| REQ-13 | El sistema debe permitir la definición y actualización del precio de venta de los productos. | Alta | Implementado en rama; revisión pendiente | Justin | [#24](https://github.com/justinpich0n/ProyectoGithub/issues/24) | Haciendo |
 | REQ-14 | El sistema debe generar una ventana emergente de 50px * 60px en la parte superior derecha cuando un producto esté bajo en stock | Baja | Pendiente | Diryan | [#25](https://github.com/justinpich0n/ProyectoGithub/issues/25) | Por hacer |
 | RNF-01 | El sistema debe procesar y responder a cada operación en un tiempo máximo de 2 segundos. | Alta | Sin verificar | Justin | [#16](https://github.com/justinpich0n/ProyectoGithub/issues/16) | Por hacer |
 | RNF-02 | La aplicación debe contar con una interfaz intuitiva. | Alta | Parcial | Justin | [#26](https://github.com/justinpich0n/ProyectoGithub/issues/26) | Por hacer |
@@ -37,7 +37,7 @@ La columna del tablero representa el flujo del trabajo (Por hacer, Haciendo, Hec
 | RNF-04 | La aplicación debe ser capaz de integrarse con impresoras. | Media | Pendiente | Yulian | [#28](https://github.com/justinpich0n/ProyectoGithub/issues/28) | Bloqueadas |
 | RNF-05 | El sistema debe ofrecer una función para generar copias de seguridad. | Alta | Pendiente | Diryan | [#15](https://github.com/justinpich0n/ProyectoGithub/issues/15) | Bloqueadas |
 
-Resultado: 14 pendientes, 3 parciales (REQ-02, REQ-13, RNF-02) y 2 sin verificar (RNF-01, RNF-03). No se declaran completas las fichas solo por existir el CRUD o una interfaz.
+Estado del 29 de octubre en la rama de entrega: 5 implementados y probados pendientes de revisión/integración (REQ-03, REQ-08, REQ-09, REQ-12 y REQ-13), 10 pendientes, 2 parciales (REQ-02 y RNF-02) y 2 sin verificar (RNF-01 y RNF-03). En master aún no se integraron esos cinco. No se declaran completas las fichas solo por existir el CRUD o una interfaz.
 
 ## Evidencias y dudas
 
@@ -90,3 +90,7 @@ Justin: justinpich0n; Diryan: DiryanS; Yulian: yuliandavid144-collab. Las 19 iss
 **Motivo:** CU20 desarrolla generar un respaldo, pero no explica el flujo de restauración manual exigido por RNF-05. No están acordados destino, acceso, conservación ni tratamiento de los datos existentes durante la restauración. No hay aún un entorno aislado de recuperación definido.
 
 **Para desbloquear:** Diryan documenta y acuerda el procedimiento de exportación y restauración, permisos, destino, conservación y manejo de errores. Define una base de prueba aislada y criterios para comprobar la recuperación desde un archivo válido sin sobrescribir los datos de trabajo.
+
+## Entrega del 29 de octubre
+
+Los cinco requisitos se implementaron por Justin en justin/ppi-busqueda-clientes-costos-precios; véase [evidencia y demostración](entrega-cinco-requisitos.md). Las cinco tarjetas siguen abiertas en Haciendo con etiqueta estado:en-revision y su responsable original para coordinar revisión; no se atribuyen commits nuevos a Diryan o Yulian. Su PR se enlaza en cada tarjeta. Solo se pasarán a Hechas tras la revisión e integración correspondiente. Las descripciones de la situación anterior y los motivos de bloqueo de otras tarjetas son históricos respecto a esta entrega; se actualizan cuando su responsable resuelva las dependencias restantes.

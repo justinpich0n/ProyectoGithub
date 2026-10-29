@@ -1,3 +1,11 @@
+# Sustentación de la entrega actual
+
+Para la entrega del 29 de octubre, consulta [cinco requisitos implementados](docs/entrega-cinco-requisitos.md): REQ-03 búsqueda, REQ-08/09 clientes, REQ-12 costo y REQ-13 precio. El acceso de administrador protege las operaciones; no hay credenciales predeterminadas. La rama está probada y se presenta mediante PR, todavía sin integrar a master. Las instrucciones anteriores de CRUD sin sesión son históricas.
+
+Explicación: el frontend React envía solicitudes con la sesión al backend Express. El backend valida permisos y datos; Sequelize consulta MySQL. La búsqueda usa un índice por nombre; la importación de costos usa una transacción que confirma todas las filas o ninguna. La interfaz muestra resultados y errores, y avisa si el precio de venta es menor al costo. Las pruebas usan datos ficticios y conservan los registros anteriores.
+
+## Material anterior
+
 # BizzStock: guion de sustentación
 
 ## Qué se construyó

@@ -14,6 +14,7 @@ export default function Navbar() {
           ['/', '⌂', 'Inicio'],
           ['/productos', '▦', 'Productos'],
           ['/usuarios', '◎', 'Usuarios'],
+          ['/clientes', '◇', 'Clientes'],
         ].map(([path, icon, label]) => (
           <li key={path}>
             <NavLink to={path} end>

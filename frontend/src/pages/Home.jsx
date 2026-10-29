@@ -75,7 +75,7 @@ export default function Home() {
           <h3>Estamos construyendo lo que sigue.</h3>
           <p>
             Ya puedes crear, consultar, editar y eliminar usuarios y productos.
-            Las ventas, el inventario y el inicio de sesión siguen pendientes.
+            También puedes buscar productos, registrar costos y gestionar clientes con tu cuenta. Las ventas, pagos y alertas de inventario siguen pendientes.
           </p>
         </div>
         <span className="small-tag">Etapa inicial</span>
