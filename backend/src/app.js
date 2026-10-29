@@ -4,7 +4,7 @@ const { verificarConexion } = require('./db');
 
 const app = express();
 
-app.use(cors());
+app.use(cors({ origin: 'http://127.0.0.1:5173' }));
 app.use(express.json());
 
 // El estado se consulta en MySQL en cada petición; no se guarda como una bandera.
@@ -45,12 +45,15 @@ function exigirModelos(req, res, next) {
       });
   next();
 }
-app.use('/api/usuarios', exigirModelos, require('./routes/usuario.routes'));
-app.use('/api/productos', exigirModelos, require('./routes/producto.routes'));
+const { autenticar, administrador } = require('./auth/seguridad');
+app.use('/api/auth', exigirModelos, require('./routes/auth.routes'));
+app.use('/api/clientes', exigirModelos, autenticar, administrador, require('./routes/cliente.routes'));
+app.use('/api/usuarios', exigirModelos, autenticar, administrador, require('./routes/usuario.routes'));
+app.use('/api/productos', exigirModelos, autenticar, require('./routes/producto.routes'));
 app.use((error, req, res, next) => {
   if (res.headersSent) return next(error);
   if (error.name === 'SequelizeUniqueConstraintError')
-    return res.status(409).json({ error: 'Este correo ya está registrado.' });
+    return res.status(409).json({ error: 'Ya existe un registro con ese correo o teléfono.' });
   if (error.name === 'SequelizeForeignKeyConstraintError')
     return res
       .status(400)
@@ -65,8 +68,8 @@ app.use((error, req, res, next) => {
     return res
       .status(400)
       .json({ error: 'El cuerpo debe contener JSON válido.' });
-  if (error.status === 400)
-    return res.status(400).json({ error: error.message });
+  if ([400, 409].includes(error.status))
+    return res.status(error.status).json({ error: error.message });
   if (error.status === 413)
     return res.status(413).json({ error: 'La petición es demasiado grande.' });
   return res

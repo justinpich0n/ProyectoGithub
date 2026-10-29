@@ -1,46 +1,100 @@
-# Backlog y reparto del equipo
+# Backlog de requisitos del PPI
 
-Revisión: 15 de octubre de 2026. Base de implementación: commit `da8cd57`.
+Revision: 28 de octubre de 2026. Fuente: PPI_INGENIERIA_DE_SOFTWARE_ArchivoActualizado.docx, secciones 2.1 y 2.2. El backlog de producto se compone exactamente de 14 fichas funcionales y 5 no funcionales. No se agregan faltantes tecnicos como si fueran requisitos del PPI.
 
-[Tablero GitHub](https://github.com/users/justinpich0n/projects/1) · [Requisitos y dudas](requisitos-bizzstock.md) · [Evidencias técnicas](seguimiento-guia.md).
+[Vista Requisitos PPI](https://github.com/users/justinpich0n/projects/1/views/1) filtrada y guardada con label:ppi. Las issues con etiqueta soporte conservan el trabajo tecnico y organizativo, y no se cuentan dentro de las 19 fichas. Los avances terminados siguen atribuidos a Justin. Los responsables que aparecen abajo asumen lo pendiente o su validacion; el reparto conserva los modulos y separa las fichas que antes estaban agrupadas.
 
-## Criterio de reparto
+## Estados de cumplimiento
 
-Por indicación de Justin, todo lo terminado se atribuye a Justin y el trabajo pendiente se distribuye entre Justin, Diryan y Yulian: cuatro tarjetas abiertas para cada integrante. El número de tarjetas no representa igual esfuerzo; ventas e integración requieren colaboración. Cuentas confirmadas el 20 de octubre: Yulian = [yuliandavid144-collab](https://github.com/yuliandavid144-collab), Diryan = [DiryanS](https://github.com/DiryanS). Se registraron en las descripciones de sus ocho tareas. Yulian aceptó la invitación y quedó asignado en Assignees a #9, #12, #13 y #14, verificado el 20 de octubre. Diryan también aceptó y quedó asignado en Assignees a #6, #7, #8 y #15, verificado el 20 de octubre. Ambos compañeros tienen acceso y sus cuatro tareas asignadas. No se inventan fechas ni se asigna un sprint sin acordarlo.
+- Pendiente: funcion o capacidad ausente.
+- Parcial: existe evidencia de una parte, pero no cumple todos los criterios.
+- Sin verificar: falta una prueba adecuada; no se afirma que falle ni que cumpla.
+- Completo: todos los criterios acordados comprobados. Actualmente ninguna ficha del PPI esta en este estado.
 
-Las etiquetas RF de las tarjetas agrupan requisitos del PPI: no reemplazan los identificadores REQ/CU originales. Los requisitos contradictorios conservan sus dudas. La planificación no amplía la implementación autorizada por la guía.
+La columna del tablero representa el flujo del trabajo (Por hacer, Haciendo, Hechas o Bloqueadas), mientras las etiquetas estado:pendiente, estado:parcial y estado:sin-verificar representan cumplimiento. Por hacer no elimina el avance parcial. No se marca Haciendo solo por asignar una tarjeta.
 
-## Estado comprobado y responsabilidades
+## Las 19 fichas del PPI
 
-| Tarjeta | Responsable | Estado | Análisis y siguiente paso |
-| --- | --- | --- | --- |
-| [#1 TEC-01 · Preparar y verificar backend con MySQL](https://github.com/justinpich0n/ProyectoGithub/issues/1) | Justin | Hechas | Backend Express/MySQL y health comprobados. La referencia a cero tablas describe el diagnóstico histórico; actualmente existen usuarios y productos (da8cd57). |
-| [#2 TEC-02 · Navegación React de Inicio, Usuarios y Productos](https://github.com/justinpich0n/ProyectoGithub/issues/2) | Justin | Hechas | Navegación React y diseño existentes completos para esta etapa. Formularios CRUD registrados en tarjeta técnica separada; no equivalen a autenticación. |
-| [#3 DOC-01 · Documentar ejecución y sustentación en Mac](https://github.com/justinpich0n/ProyectoGithub/issues/3) | Justin | Hechas | README, instrucciones de Mac, exposición y seguimiento actualizados con partes 3 y 4 en da8cd57. |
-| [#4 ORG-01 · Organizar el backlog de BizzStock](https://github.com/justinpich0n/ProyectoGithub/issues/4) | Justin | Hechas | Tablero existente con 16 tarjetas originales y cuatro estados. Reparto del 15 de octubre documentado; coordinación pendiente en #5. |
-| [#5 ORG-02 · Acordar responsables y revisión de pull requests](https://github.com/justinpich0n/ProyectoGithub/issues/5) | Justin | Por hacer | Parcial: responsables por nombre ya definidos. Cuentas confirmadas; Yulian y Diryan ya tienen sus tareas asignadas oficialmente. Falta acordar revisores de pull requests. No inventar cuentas ni fechas. |
-| [#6 RF-01 · Inicio de sesión y permisos](https://github.com/justinpich0n/ProyectoGithub/issues/6) | Diryan | Bloqueadas | Sin implementar. El CRUD de usuarios solo contiene nombre/correo: no hay autenticación ni roles. Primero acordar matriz de permisos. |
-| [#7 RF-02 · Gestionar productos, costos y precios](https://github.com/justinpich0n/ProyectoGithub/issues/7) | Diryan | Por hacer | Parcial: Justin completó alta, consulta, edición y precio básico mediante CRUD (da8cd57). Diryan asume lo restante: búsqueda, costo y validaciones funcionales acordadas. Resolver borrado/cascada y relación producto-usuario para uso definitivo. No cerrar el requisito completo. |
-| [#8 RF-03 · Controlar existencias y alertas de inventario](https://github.com/justinpich0n/ProyectoGithub/issues/8) | Diryan | Por hacer | Sin implementar: el modelo Producto no incluye existencias ni mínimo. Acordar alerta y coordinar descuento atómico con ventas #10; depende de #7. |
-| [#9 RF-04 · Apertura y reglas de caja](https://github.com/justinpich0n/ProyectoGithub/issues/9) | Yulian | Bloqueadas | Sin implementar. Resolver apertura por negocio/caja/usuario, cierre y turnos; coordinar permisos con #6. |
-| [#10 RF-05 · Registrar y confirmar ventas](https://github.com/justinpich0n/ProyectoGithub/issues/10) | Justin | Bloqueadas | Sin implementar. Formalizar REQ-15 y separar confirmación de comprobante; depende de inventario #8, caja #9 y pagos #11. Justin coordina contrato de integración con ambos compañeros. |
-| [#11 RF-06 · Registrar pagos y calcular cambio](https://github.com/justinpich0n/ProyectoGithub/issues/11) | Justin | Por hacer | Sin implementar. Corregir flujo CU2 y acordar medios; coordinar confirmación y cambio con #10. Crédito #13 no es un medio de pago. |
-| [#12 RF-07 · Registrar, consultar y editar clientes](https://github.com/justinpich0n/ProyectoGithub/issues/12) | Yulian | Por hacer | Sin implementar. Usuarios no equivale a clientes. Corregir REQ-09 y acordar permisos con #6; base para crédito #13. |
-| [#13 RF-08 · Gestionar crédito, saldos y abonos](https://github.com/justinpich0n/ProyectoGithub/issues/13) | Yulian | Bloqueadas | Sin implementar. Depende de clientes #12, ventas #10 y reglas de abonos/límites/vencimiento pendientes de acordar. |
-| [#14 RF-09 · Consultar historial y emitir comprobantes](https://github.com/justinpich0n/ProyectoGithub/issues/14) | Yulian | Bloqueadas | Sin implementar. Depende de ventas #10; acordar filtros, formato y diferencia comprobante/factura. No asumir facturación electrónica. |
-| [#15 RF-10 · Copias de seguridad y restauración](https://github.com/justinpich0n/ProyectoGithub/issues/15) | Diryan | Bloqueadas | Sin implementar. Acordar destino, retención, permisos y restauración. Prueba futura en entorno aislado; no sobrescribir datos existentes. |
-| [#16 RNF-01 · Precisar rendimiento y usabilidad](https://github.com/justinpich0n/ProyectoGithub/issues/16) | Justin | Por hacer | Parcial en interfaz: Justin realizó navegación, diseño y formularios React. No hay evidencia de cumplimiento global de usabilidad ni medición de rendimiento bajo carga. Acordar criterios RNF-01/RNF-02 antes de medir; lint/build no demuestran esos requisitos. |
-| [#17 TEC-03 · CRUD Sequelize y formularios React](https://github.com/justinpich0n/ProyectoGithub/issues/17) | Justin | Hechas | Partes 3 y 4 completas. Prueba real de CRUD repetida y aprobada el 15 de octubre; commit da8cd57. |
+| Codigo original | Requisito por titulo | Prioridad PPI | Cumplimiento | Responsable | Issue | Columna |
+| --- | --- | --- | --- | --- | --- | --- |
+| REQ-01 | El sistema debe permitir el registro de apertura de caja con el ingreso del monto de base inicial. | Media | Pendiente | Yulian | [#9](https://github.com/justinpich0n/ProyectoGithub/issues/9) | Bloqueadas |
+| REQ-02 | El sistema debe integrar un módulo de inventario para la gestión y alta de productos. | Alta | Parcial | Diryan | [#7](https://github.com/justinpich0n/ProyectoGithub/issues/7) | Por hacer |
+| REQ-03 | El sistema debe contar con una funcionalidad de búsqueda de productos por nombre | Alta | Implementado en rama; revisión pendiente | Diryan | [#19](https://github.com/justinpich0n/ProyectoGithub/issues/19) | Por hacer; etiqueta en revisión |
+| REQ-04 | El sistema debe permitir el ingreso del monto con el que se realiza el pago en cada transacción. | Alta | Pendiente | Justin | [#20](https://github.com/justinpich0n/ProyectoGithub/issues/20) | Por hacer |
+| REQ-05 | El sistema debe permitir seleccionar el método de pago, efectivo o medios electrónicos. | Media | Pendiente | Justin | [#11](https://github.com/justinpich0n/ProyectoGithub/issues/11) | Por hacer |
+| REQ-06 | El sistema debe proporcionar una funcionalidad para consultar el historial de ventas del día | Media | Pendiente | Yulian | [#14](https://github.com/justinpich0n/ProyectoGithub/issues/14) | Bloqueadas |
+| REQ-07 | El sistema debe generar factura al realizar una venta | Media | Pendiente | Yulian | [#21](https://github.com/justinpich0n/ProyectoGithub/issues/21) | Bloqueadas |
+| REQ-08 | El sistema debe incluir un módulo de creación de clientes con nombre, teléfono y dirección | Alta | Implementado en rama; revisión pendiente | Yulian | [#12](https://github.com/justinpich0n/ProyectoGithub/issues/12) | Por hacer; etiqueta en revisión |
+| REQ-09 | El sistema debe permitir la modificación de datos en el módulo de clientes. | Media | Implementado en rama; revisión pendiente | Yulian | [#22](https://github.com/justinpich0n/ProyectoGithub/issues/22) | Por hacer; etiqueta en revisión |
+| REQ-10 | El sistema debe gestionar ventas a crédito, registrando y controlando saldos pendientes. | Media | Pendiente | Yulian | [#13](https://github.com/justinpich0n/ProyectoGithub/issues/13) | Bloqueadas |
+| REQ-11 | El sistema debe actualizar automáticamente el stock al vender un producto | Alta | Pendiente | Diryan | [#8](https://github.com/justinpich0n/ProyectoGithub/issues/8) | Por hacer |
+| REQ-12 | El sistema debe permitir el ingreso del precio costo de los productos | Alta | Implementado en rama; revisión pendiente | Diryan | [#23](https://github.com/justinpich0n/ProyectoGithub/issues/23) | Por hacer; etiqueta en revisión |
+| REQ-13 | El sistema debe permitir la definición y actualización del precio de venta de los productos. | Alta | Implementado en rama; revisión pendiente | Justin | [#24](https://github.com/justinpich0n/ProyectoGithub/issues/24) | Por hacer; etiqueta en revisión |
+| REQ-14 | El sistema debe generar una ventana emergente de 50px * 60px en la parte superior derecha cuando un producto esté bajo en stock | Baja | Pendiente | Diryan | [#25](https://github.com/justinpich0n/ProyectoGithub/issues/25) | Por hacer |
+| RNF-01 | El sistema debe procesar y responder a cada operación en un tiempo máximo de 2 segundos. | Alta | Sin verificar | Justin | [#16](https://github.com/justinpich0n/ProyectoGithub/issues/16) | Por hacer |
+| RNF-02 | La aplicación debe contar con una interfaz intuitiva. | Alta | Parcial | Justin | [#26](https://github.com/justinpich0n/ProyectoGithub/issues/26) | Por hacer |
+| RNF-03 | El sistema debe permitir la gestión de hasta 3.000 productos en el inventario. | Alta | Sin verificar | Justin | [#27](https://github.com/justinpich0n/ProyectoGithub/issues/27) | Por hacer |
+| RNF-04 | La aplicación debe ser capaz de integrarse con impresoras. | Media | Pendiente | Yulian | [#28](https://github.com/justinpich0n/ProyectoGithub/issues/28) | Bloqueadas |
+| RNF-05 | El sistema debe ofrecer una función para generar copias de seguridad. | Alta | Pendiente | Diryan | [#15](https://github.com/justinpich0n/ProyectoGithub/issues/15) | Bloqueadas |
 
-## Orden de coordinación
+Estado del 29 de octubre en la rama de entrega: 5 implementados y probados pendientes de revisión/integración (REQ-03, REQ-08, REQ-09, REQ-12 y REQ-13), 10 pendientes, 2 parciales (REQ-02 y RNF-02) y 2 sin verificar (RNF-01 y RNF-03). En master aún no se integraron esos cinco. No se declaran completas las fichas solo por existir el CRUD o una interfaz.
 
-1. Justin coordina acceso de las cuentas confirmadas y acuerda revisión de ramas y pull requests (#5); cada integrante concreta con el equipo las dudas de sus tarjetas antes de implementar.
-2. Diryan define acceso y completa productos/inventario; Yulian define caja y clientes. Justin concreta ventas, pagos y los criterios de pruebas en coordinación con ambos.
-3. Integrar ventas con caja, stock y pagos; después crédito e historial/comprobantes con Yulian. Respaldos/restauración con Diryan y validación de rendimiento/usabilidad con Justin requieren criterios y entorno acordados.
-4. Pasar a Haciendo solo cuando exista trabajo activo; pasar a Hechas cuando se cumplan todos los criterios y se adjunte evidencia. Los avances parciales de productos e interfaz no cierran el requisito completo.
+## Evidencias y dudas
 
-## Verificación de esta revisión
+Los modelos actuales son Usuario y Producto; Producto contiene nombre, precio, descripcion y usuarioId. Existen CRUD y formularios React con validaciones, pero no stock, costo, ventas, pagos, clientes, credito, impresora o respaldo/restauracion. La integracion CRUD real con MySQL, health automatizado y lint/build frontend pasaron en esta revision; no certifican rendimiento bajo carga ni usabilidad global. RNF-03 requiere comprobar 3000 registros y consultas optimizadas; RNF-04 requiere prueba con impresora termica USB/red y formato compatible. RNF-05 se conserva como no funcional porque asi lo clasifica el PPI.
 
-Se inspeccionaron modelos, rutas, controladores y formularios React. Se repitió satisfactoriamente la integración CRUD contra MySQL local con datos ficticios y limpieza de los registros de la prueba. La evidencia visual y los resultados de lint/build previos están en el seguimiento técnico. No se modificó el código funcional ni se implementaron módulos pendientes durante este reparto.
+Las descripciones desplazadas REQ-09 a REQ-14 y RNF-01 se conservan en cada tarjeta, separadas del titulo original. Las propuestas de interpretacion no son correcciones aprobadas. La [matriz de contraste](contraste-funcional-2026-10-28.md) explica evidencia y contradicciones.
 
-Resultado esperado del tablero: 17 tarjetas, cinco Hechas atribuidas a Justin, seis Por hacer y seis Bloqueadas. Ninguna Haciendo porque la asignación no implica inicio del desarrollo. Las cuentas están confirmadas. Las ocho tareas de Yulian y Diryan tienen sus cuentas en Assignees. El acuerdo de revisores continúa pendiente en #5.
+## Soporte fuera del conteo del PPI
+
+Se conservan como soporte #1, #2, #3, #4, #5 y #17 (entregas tecnicas y organizativas completadas por Justin), #6 (autenticacion/permisos presentes en alcance y precondiciones sin ficha independiente), y #10 (venta citada como REQ-15 en CU15 sin ficha). No se inventa una ficha REQ-15. El [historial del agrupamiento anterior](historial-backlog-agrupado.md) conserva las referencias originales; las issues reutilizadas guardan su texto previo en un apartado historico.
+
+## Trabajo del equipo
+
+Justin: justinpich0n; Diryan: DiryanS; Yulian: yuliandavid144-collab. Las 19 issues tienen responsables oficiales. Cada entrega de compañeros va en rama y PR, la revisa Justin y se integra solo con su decision. La regla activa de master y las excepciones estan en [ramas y trazabilidad](ramas-y-trazabilidad.md). La tarea cambia a Hechas cuando los criterios del requisito y su evidencia estan completos, no por terminar una tarea de soporte.
+
+## Motivos de los requisitos bloqueados
+
+### REQ-01 · #9
+
+**Motivo:** El documento impide una segunda apertura diaria, pero no define si la regla se aplica por negocio, caja o usuario. Tampoco especifica el cierre que permite calcular el saldo final diario. Resolverlo es necesario para definir las restricciones y el ciclo de caja.
+
+**Para desbloquear:** Yulian debe acordar con el equipo y validar con el profesor la unidad de apertura, la regla diaria y el cierre/saldo. Registrar la decisión y sus criterios de prueba en esta tarjeta. La base cero ya está permitida por CU5; no está pendiente de decidir.
+
+### REQ-10 · #13
+
+**Motivo:** No existen todavía Cliente, Venta ni Pago. Además, faltan reglas de vencimiento y de autorización especial por deuda vencida que exige CU8; la descripción de REQ-10 trata stock en vez de crédito. Estas dudas impiden cerrar el modelo y el flujo de crédito.
+
+**Para desbloquear:** Yulian coordina las dependencias REQ-08, REQ-09 y las tareas de venta/pagos, y valida las reglas de crédito y la descripción contradictoria. Documentar cliente obligatorio, estado/saldo de deuda, abono inicial y autorización por vencimiento antes de implementar el flujo completo.
+
+### REQ-06 · #14
+
+**Motivo:** No hay ventas ni detalles persistidos que constituyan un historial. El título restringe la consulta al día, mientras la descripción exige rangos de fechas y producto; la poscondición de CU11 repite la precondición. Falta acordar qué se aceptará como consulta completa.
+
+**Para desbloquear:** Yulian acuerda y registra los filtros y la poscondición correctos, y coordina el contrato de datos con la tarea de ventas #10. Se puede preparar diseño y pruebas, pero la validación integral requiere ventas ficticias registradas.
+
+### REQ-07 · #21
+
+**Motivo:** No existen ventas confirmadas, detalle y pagos de los que obtener los campos del comprobante. CU1 mezcla el registro completo de la venta con la generación del comprobante, por lo que falta delimitar el momento de emisión y su relación con el pago.
+
+**Para desbloquear:** Yulian coordina ventas #10 y REQ-05, y registra el acuerdo sobre emisión de comprobante. Debe conservar ID, fecha/hora, detalle, total y método de pago. La integración con impresora térmica se verifica por separado en RNF-04; no bloquea por sí sola diseñar o visualizar el comprobante.
+
+### RNF-04 · #28
+
+**Motivo:** El proyecto no tiene integración de impresión ni se ha identificado una impresora térmica de prueba, su conexión USB/red y el formato admitido. Sin esos datos no puede acreditarse compatibilidad. También falta el comprobante de REQ-07 como contenido de prueba.
+
+**Para desbloquear:** Yulian identifica modelo de impresora disponible, conexión, formato/protocolo compatible y entorno de prueba; registra el acuerdo y coordina REQ-07. Ejecutar y documentar una impresión real con datos ficticios. ESC/POS solo si el equipo lo admite.
+
+### RNF-05 · #15
+
+**Motivo:** CU20 desarrolla generar un respaldo, pero no explica el flujo de restauración manual exigido por RNF-05. No están acordados destino, acceso, conservación ni tratamiento de los datos existentes durante la restauración. No hay aún un entorno aislado de recuperación definido.
+
+**Para desbloquear:** Diryan documenta y acuerda el procedimiento de exportación y restauración, permisos, destino, conservación y manejo de errores. Define una base de prueba aislada y criterios para comprobar la recuperación desde un archivo válido sin sobrescribir los datos de trabajo.
+
+## Entrega del 29 de octubre
+
+Los cinco requisitos se implementaron por Justin en justin/ppi-busqueda-clientes-costos-precios; véase [evidencia y demostración](entrega-cinco-requisitos.md). Las cinco tarjetas siguen abiertas con etiqueta estado:en-revision y su responsable original para coordinar revisión; no se atribuyen commits nuevos a Diryan o Yulian. Su PR se enlaza en cada tarjeta. Solo se pasarán a Hechas tras la revisión e integración correspondiente. Las descripciones de la situación anterior y los motivos de bloqueo de otras tarjetas son históricos respecto a esta entrega; se actualizan cuando su responsable resuelva las dependencias restantes.
+
+## Acceso al tablero comprobado el 29 de octubre
+
+El usuario dejó el proyecto público. Se comprobó en una sesión sin iniciar en GitHub que https://github.com/users/justinpich0n/projects/1/views/1 muestra las 19 fichas; Yulian y Diryan pueden consultarlo sin invitación adicional al proyecto. Esto no concede edición del tablero ni altera la protección de master. Durante el trabajo simultáneo en Brave se suspendió mover las cinco tarjetas de Por hacer a Haciendo; la etiqueta en revisión y los enlaces a PR #29 sí están guardados y verificados. La columna conserva Por hacer hasta coordinar ese movimiento.

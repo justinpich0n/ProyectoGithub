@@ -1,4 +1,17 @@
-# Backend de BizzStock: conexión local a MySQL
+# Backend de BizzStock
+
+## Actualización del 29 de octubre de 2026
+
+Se incorpora acceso mínimo con Cuenta (scrypt, administrador/cajero, sesión opaca de ocho horas), Cliente y los campos costo/cantidad. Antes de usar la interfaz, crear una cuenta desde esta carpeta con `npm run crear:cuenta` en una terminal interactiva. No introduce contraseña en argumentos ni sobrescribe cuentas existentes. Los usuarios previos siguen como registros sin acceso automático.
+
+Las rutas de productos requieren sesión; sus escrituras y el lote de costos requieren administrador, al igual que clientes y usuarios. `/api/auth/login`, `/api/auth/sesion` y `/api/auth/logout` gestionan acceso. Los tokens se mantienen solo en memoria del servidor y caducan al reiniciar; volver a iniciar sesión. Health conserva su consulta MySQL. La matriz completa de negocio sigue pendiente.
+
+La migración aditiva conserva productos previos con costo/cantidad pendientes (NULL), crea cuentas/clientes e índice de búsqueda sin force ni alter. Los registros nuevos o editados requieren precio, costo y cantidad explícitos. La búsqueda usa prefijo por nombre y el índice, con máximo 100 resultados. `POST /api/productos/costos/importar` recibe filas `{id,costo}` y confirmación para ceros; hasta 500, con transacción atómica. El frontend admite CSV id,costo o id;costo. No se cambian dependencias.
+
+Pruebas actuales: `npm run lint`, `npm test` y `npm run test:ppi`. La integración prueba 54 respuestas HTTP, prepara cuentas ficticias propias y las elimina al concluir. Se conserva el script `test:integration` enlazado a la prueba actualizada. Véase [la entrega](../docs/entrega-cinco-requisitos.md).
+
+## Documentación anterior y referencias
+
 
 Servidor de BizzStock para la papelería y variedades Arte y Belleza. La etapa actual incorpora el CRUD de Usuarios y Productos con Sequelize. No incluye autenticación. El frontend React está en `../frontend/`.
 

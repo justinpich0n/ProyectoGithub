@@ -10,7 +10,9 @@ router.param('id', (req, res, next, id) => {
 });
 router.get('/', controller.listar);
 router.get('/:id', controller.obtener);
-router.post('/', controller.crear);
-router.put('/:id', controller.actualizar);
-router.delete('/:id', controller.eliminar);
+const { administrador } = require('../auth/seguridad');
+router.post('/costos/importar', administrador, controller.importarCostos);
+router.post('/', administrador, controller.crear);
+router.put('/:id', administrador, controller.actualizar);
+router.delete('/:id', administrador, controller.eliminar);
 module.exports = router;

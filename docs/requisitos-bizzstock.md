@@ -1,6 +1,8 @@
+> Estado del 29 de octubre: REQ-03, REQ-08, REQ-09, REQ-12 y REQ-13 se implementaron y probaron en la rama justin/ppi-busqueda-clientes-costos-precios. La revisión e integración en master siguen pendientes. La documentación anterior conserva el diagnóstico inicial; los avances se detallan en [la entrega de cinco requisitos](entrega-cinco-requisitos.md).
+
 # BizzStock: alcance y contraste de requisitos
 
-Fuente funcional: texto de PPI_INGENIERIA_DE_SOFTWARE-2.docx, secciones de contexto, necesidades, requisitos y casos de uso. Se omiten datos personales y académicos. Esta revisión contrasta el texto de las tablas; no verifica el contenido gráfico de los diagramas incrustados.
+Fuente funcional vigente comprobada el 28 de octubre de 2026: PPI_INGENIERIA_DE_SOFTWARE_ArchivoActualizado.docx, secciones de contexto, necesidades, requisitos y casos de uso. La revisión anterior usó PPI_INGENIERIA_DE_SOFTWARE-2.docx. Se omiten datos personales y académicos. Esta revisión contrasta el texto de las tablas; no verifica el contenido gráfico de los diagramas incrustados.
 
 Fuente técnica: https://github.com/borissalleg/practica-node
 
@@ -68,3 +70,11 @@ La guía no resuelve las inconsistencias funcionales de la tabla anterior. Sus i
 Se completó la conexión local a MySQL y la preparación de la base vacía `bizzstock`. Las instrucciones para instalar dependencias, configurar el archivo privado `.env`, crear la base e iniciar y verificar el backend están en [backend/README.md](../backend/README.md).
 
 El archivo `.env.example` contiene únicamente valores de ejemplo. Las credenciales locales y los respaldos privados no forman parte del repositorio. Aquella preparación inicial no implementó nuevas rutas ni tablas; las dudas anteriores se resolverán cuando se retome cada módulo.
+
+## Cotejo de la fuente actualizada
+
+Se verificaron las 14 fichas REQ-01 a REQ-14 y los 20 casos de uso. Véase la [matriz con evidencias de código](contraste-funcional-2026-10-28.md). REQ-02 y REQ-13 presentan avances parciales; ningún requisito funcional de negocio se certifica completo de extremo a extremo. La guía técnica CRUD sí está completada. Persisten descripciones desplazadas y REQ-15 citado sin ficha. Los criterios adicionales de búsqueda, cliente, precio/costo, apertura y comprobantes se reflejan en el backlog sin implementar funciones nuevas.
+
+## Backlog por ficha original
+
+La revision del 28 de octubre cubre 14 REQ y 5 RNF individualmente. El [backlog vigente](backlog-equipo.md) sustituye las agrupaciones RF anteriores y distingue cumplimiento de flujo de trabajo. RNF-01 y RNF-03 siguen sin verificar, RNF-02 parcial, RNF-04 y RNF-05 pendientes. Las tareas tecnicas se conservan como soporte y no se cuentan como requisitos nuevos.
