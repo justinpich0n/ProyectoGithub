@@ -1,11 +1,12 @@
 /* Navegación y composición de BizzStock. */
+/* Navegación y composición de Multitienda. */
 .navbar {
   position: fixed;
   inset: 0 auto 0 0;
   width: 225px;
   padding: 34px 22px;
-  background: #fffef9;
-  border-right: 1px solid #e4e8dc;
+  background: #ffffff;
+  border-right: 1px solid #e5e7eb;
   display: flex;
   flex-direction: column;
   z-index: 2;
@@ -23,14 +24,14 @@
   display: block;
   font-size: 9px;
   letter-spacing: 2px;
-  color: #65745f;
+  color: #6b7280;
   margin-top: 1px;
 }
 .brand-mark {
   display: grid;
   place-content: center;
-  background: #234b3b;
-  color: #f3edcf;
+  background: #2563eb;
+  color: #ffffff;
   width: 42px;
   height: 46px;
   border-radius: 13px;
@@ -39,7 +40,7 @@
 .nav-label {
   font-size: 9px;
   letter-spacing: 1.4px;
-  color: #68745f;
+  color: #9ca3af;
   margin: 55px 8px 17px;
   font-weight: 700;
 }
@@ -59,7 +60,7 @@
   text-decoration: none;
   font-size: 14px;
   font-weight: 600;
-  color: #626f61;
+  color: #4b5563;
 }
 .navbar li a > span {
   font-size: 22px;
@@ -68,11 +69,11 @@
   line-height: 1;
 }
 .navbar li a:hover {
-  background: #f1f4e9;
+  background: #f3f4f6;
 }
 .navbar li a.active {
-  background: #e8eedb;
-  color: #254c3a;
+  background: #eff6ff;
+  color: #1d4ed8;
 }
 .nav-note {
   margin-top: auto;
@@ -84,7 +85,7 @@
 .nav-note p {
   font-size: 11px;
   font-weight: 400;
-  color: #65725e;
+  color: #6b7280;
   margin-top: 6px;
 }
 main {
@@ -94,12 +95,12 @@ main {
 }
 .topbar {
   height: 72px;
-  border-bottom: 1px solid #dfe4d8;
+  border-bottom: 1px solid #e5e7eb;
   display: flex;
   align-items: center;
   justify-content: space-between;
   font-size: 12px;
-  color: #64705c;
+  color: #6b7280;
 }
 .stage {
   display: flex;
@@ -108,7 +109,7 @@ main {
   font-size: 10px;
 }
 .stage i {
-  background: #718c50;
+  background: #2563eb;
   width: 6px;
   height: 6px;
   border-radius: 50%;
@@ -120,7 +121,7 @@ main {
   font-size: 10px;
   letter-spacing: 1.9px;
   font-weight: 750;
-  color: #63764f;
+  color: #2563eb;
 }
 .page-heading h1 {
   font-size: clamp(34px, 3.7vw, 57px);
@@ -132,12 +133,12 @@ main {
 .page-heading h1 em {
   font-family: Georgia, serif;
   font-weight: 400;
-  color: #5f784a;
+  color: #1d4ed8;
 }
 .intro {
   font-size: 13px;
   line-height: 1.8;
-  color: #65725e;
+  color: #4b5563;
 }
 .home-grid {
   display: grid;
@@ -161,13 +162,13 @@ main {
 }
 .feature-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 25px #29432a10;
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.05);
 }
 .products-card {
-  background: #e8edd8;
+  background: #f1f5f9;
 }
 .people-card {
-  background: #f0e7d6;
+  background: #f3f4f6;
 }
 .card-top {
   display: flex;
@@ -178,7 +179,7 @@ main {
   font-weight: 650;
 }
 .arrow {
-  border: 1px solid #47604140;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 50%;
   width: 29px;
   height: 29px;
@@ -194,7 +195,7 @@ main {
 }
 .feature-card p {
   font-size: 11px;
-  color: #586c52;
+  color: #4b5563;
   margin-top: 10px;
 }
 .card-action {
@@ -216,19 +217,19 @@ main {
   top: -8px;
   width: 76px;
   height: 98px;
-  background: #49664b;
+  background: #1e40af;
   border-radius: 3px 9px 9px 3px;
   transform: rotate(-13deg);
-  box-shadow: 6px 8px 10px #2b402321;
-  border-left: 6px solid #334d37;
-  color: #e6edc8;
+  box-shadow: 6px 8px 10px rgba(0, 0, 0, 0.08);
+  border-left: 6px solid #1e3a8a;
+  color: #ffffff;
   padding: 8px;
   font-family: Georgia, serif;
   font-size: 30px;
 }
 .notebook i {
   display: block;
-  background: #b6c3a244;
+  background: rgba(255, 255, 255, 0.2);
   height: 1px;
   margin: 5px 0;
 }
@@ -238,11 +239,11 @@ main {
   top: 5px;
   width: 80px;
   height: 82px;
-  background: #fffbed;
+  background: #ffffff;
   border-radius: 2px;
   transform: rotate(12deg);
   padding: 15px 10px;
-  box-shadow: 2px 5px 7px #2b402312;
+  box-shadow: 2px 5px 7px rgba(0, 0, 0, 0.05);
   font-family: Georgia, serif;
   font-style: italic;
   font-size: 12px;
@@ -252,7 +253,7 @@ main {
   display: block;
   width: 35px;
   height: 3px;
-  background: #e4b875;
+  background: #60a5fa;
   margin-top: 9px;
 }
 .pencil {
@@ -261,10 +262,10 @@ main {
   top: 3px;
   width: 9px;
   height: 94px;
-  background: #c79c56;
+  background: #f59e0b;
   transform: rotate(22deg);
-  border-top: 8px solid #e6c7ae;
-  border-bottom: 10px solid #355039;
+  border-top: 8px solid #fcd34d;
+  border-bottom: 10px solid #1f2937;
 }
 .people-art {
   height: 83px;
@@ -277,8 +278,8 @@ main {
   position: absolute;
   width: 70px;
   height: 70px;
-  background: #dcccb1;
-  border: 5px solid #f0e7d6;
+  background: #e5e7eb;
+  border: 5px solid #f3f4f6;
   display: grid;
   place-items: center;
   border-radius: 50%;
@@ -291,8 +292,8 @@ main {
 .people-art > span + span {
   right: 16px;
   top: 12px;
-  background: #768365;
-  color: #fff5dc;
+  background: #9ca3af;
+  color: #ffffff;
   transform: rotate(9deg);
 }
 .people-art i {
@@ -303,9 +304,10 @@ main {
   font-size: 8px;
   letter-spacing: 2px;
   border-radius: 4px;
-  background: #fff8e6;
+  background: #ffffff;
   padding: 5px 9px;
   transform: rotate(-6deg);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 .status-strip {
   display: flex;
@@ -316,7 +318,7 @@ main {
 }
 .status-icon {
   font-size: 28px;
-  color: #718951;
+  color: #2563eb;
 }
 .status-strip h3 {
   font-size: 12px;
@@ -324,29 +326,29 @@ main {
 }
 .status-strip p {
   font-size: 11px;
-  color: #66735d;
+  color: #6b7280;
   margin-top: 4px;
   max-width: 620px;
 }
 .small-tag {
   font-size: 9px;
   white-space: nowrap;
-  background: #eaf0df;
-  border: 1px solid #dce5cb;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
   border-radius: 20px;
   padding: 5px 10px;
-  color: #536740;
+  color: #1d4ed8;
 }
 .status-strip > .small-tag {
   margin-left: auto;
 }
 .page-footer {
-  border-top: 1px solid #dfe4d8;
+  border-top: 1px solid #e5e7eb;
   padding: 17px 0 22px;
   display: flex;
   justify-content: space-between;
   font-size: 10px;
-  color: #64735a;
+  color: #9ca3af;
 }
 .section-title {
   display: flex;
@@ -365,8 +367,8 @@ main {
   gap: 15px;
 }
 .detail-card {
-  background: #fffef9;
-  border: 1px solid #e3e7da;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
   border-radius: 13px;
   padding: 24px 20px;
   display: flex;
@@ -377,9 +379,9 @@ main {
   place-content: center;
   width: 37px;
   height: 37px;
-  background: #e9eedc;
+  background: #eff6ff;
   border-radius: 10px;
-  color: #576d45;
+  color: #2563eb;
   font-size: 12px;
   font-weight: 650;
   margin-bottom: 23px;
@@ -391,22 +393,23 @@ main {
 }
 .detail-card p {
   font-size: 12px;
-  color: #65745d;
+  color: #6b7280;
   line-height: 1.8;
   margin-top: 9px;
 }
 .detail-bottom {
   margin-top: 23px;
   padding-top: 17px;
-  border-top: 1px solid #e8ebdf;
+  border-top: 1px solid #f3f4f6;
   font-size: 10px;
-  color: #5d744c;
+  color: #4b5563;
 }
 .empty-state {
   display: flex;
   gap: 20px;
   align-items: center;
-  background: #e8eddc;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
   border-radius: 13px;
   margin-top: 22px;
   padding: 25px;
@@ -419,13 +422,13 @@ main {
 }
 .empty-state p {
   font-size: 12px;
-  color: #5b704f;
+  color: #6b7280;
   max-width: 560px;
   line-height: 1.7;
 }
 .empty-symbol {
   font-size: 37px;
-  color: #658252;
+  color: #9ca3af;
   flex-shrink: 0;
 }
 .empty-state > .small-tag {
@@ -440,8 +443,8 @@ main {
   display: flex;
   gap: 20px;
   padding: 30px 24px;
-  background: #fffef9;
-  border: 1px solid #e3e7da;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
   border-radius: 13px;
 }
 .role-avatar {
@@ -450,15 +453,15 @@ main {
   flex-shrink: 0;
   width: 58px;
   height: 58px;
-  background: #e8edda;
-  color: #577045;
+  background: #eff6ff;
+  color: #1d4ed8;
   border-radius: 50%;
   font-family: Georgia, serif;
   font-size: 27px;
 }
 .role-avatar.cashier {
-  background: #eee3d0;
-  color: #80613b;
+  background: #fef3c7;
+  color: #d97706;
 }
 .role-card .eyebrow {
   font-size: 8px;
@@ -471,15 +474,15 @@ main {
 }
 .role-card p {
   font-size: 12px;
-  color: #65745d;
+  color: #6b7280;
   line-height: 1.8;
 }
 .role-note {
   display: inline-block;
   margin-top: 24px;
   font-size: 10px;
-  color: #60754b;
-  border-top: 1px solid #e6eadc;
+  color: #4b5563;
+  border-top: 1px solid #f3f4f6;
   padding-top: 12px;
   width: 100%;
 }
@@ -537,7 +540,7 @@ main {
     width: auto;
     padding: 18px 20px;
     border-right: 0;
-    border-bottom: 1px solid #e4e8dc;
+    border-bottom: 1px solid #e5e7eb;
   }
   .brand {
     font-size: 23px;
@@ -656,13 +659,13 @@ main {
   }
 }
 
-/* Formularios y tablas del CRUD en la identidad visual de BizzStock. */
+/* Formularios y tablas del CRUD */
 .crud-page .page-heading h1 {
   font-size: clamp(2.2rem, 4vw, 3.7rem);
 }
 .crud-panel {
-  background: #fff;
-  border: 1px solid #dce5dd;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
   border-radius: 22px;
   padding: 26px;
   margin-bottom: 24px;
@@ -697,11 +700,11 @@ main {
   box-sizing: border-box;
   font: inherit;
   font-weight: 400;
-  color: #203c35;
+  color: #1f2937;
   padding: 12px 14px;
-  border: 1px solid #b9cbbf;
+  border: 1px solid #d1d5db;
   border-radius: 10px;
-  background: #fcfdf9;
+  background: #f9fafb;
 }
 .crud-fields textarea {
   resize: vertical;
@@ -715,27 +718,27 @@ main {
   font-weight: 600;
   cursor: pointer;
   padding: 10px 15px;
-  border: 1px solid #c4d4c8;
+  border: 1px solid #d1d5db;
   border-radius: 9px;
-  background: #f5f8f2;
-  color: #23483d;
+  background: #ffffff;
+  color: #374151;
 }
 .crud-page button.crud-primary {
-  background: #244f3f;
+  background: #2563eb;
   color: white;
-  border-color: #244f3f;
+  border-color: #2563eb;
 }
 .crud-page button.crud-danger {
-  color: #983b31;
-  background: #fff6f3;
-  border-color: #e9c7bf;
+  color: #dc2626;
+  background: #fef2f2;
+  border-color: #fca5a5;
 }
 .crud-page button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 .crud-page :is(button, input, select, textarea, .table-scroll):focus-visible {
-  outline: 3px solid #ba9148;
+  outline: 3px solid #60a5fa;
   outline-offset: 3px;
 }
 .crud-actions,
@@ -746,11 +749,11 @@ main {
 }
 .crud-note {
   font-size: 14px;
-  color: #586d63;
+  color: #6b7280;
   line-height: 1.6;
 }
 .crud-note a {
-  color: #244f3f;
+  color: #2563eb;
   text-decoration: underline;
 }
 .crud-error,
@@ -760,13 +763,14 @@ main {
   line-height: 1.5;
 }
 .crud-error {
-  background: #fff0eb;
-  color: #8b3025;
-  border: 1px solid #e8b5a7;
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
 }
 .crud-success {
-  background: #e7f3e6;
-  color: #245337;
+  background: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
 }
 .table-scroll {
   overflow-x: auto;
@@ -778,16 +782,16 @@ main {
   text-align: left;
 }
 .crud-table th {
-  color: #5a7065;
+  color: #4b5563;
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  background: #f6f8f2;
+  background: #f9fafb;
 }
 .crud-table th,
 .crud-table td {
   padding: 15px 12px;
-  border-bottom: 1px solid #e5ebe3;
+  border-bottom: 1px solid #e5e7eb;
   vertical-align: middle;
 }
 .crud-table td {
