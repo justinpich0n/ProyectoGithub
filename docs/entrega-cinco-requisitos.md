@@ -1,5 +1,7 @@
 # Implementación de cinco requisitos del PPI
 
+Actualización de cierre: PR #29 integrada con autorización de Justin el 29 de octubre de 2026 (8570fe9). REQ-03, REQ-08, REQ-09, REQ-12 y REQ-13 están en Hechas. Las menciones posteriores a revisión pendiente describen el estado anterior a esta integración.
+
 29 de octubre de 2026. Rama justin/ppi-busqueda-clientes-costos-precios. Implementación atribuida a Justin. Estado: implementado y probado en rama, pendiente de revisión e integración en master mediante [PR #29](https://github.com/justinpich0n/ProyectoGithub/pull/29). Commit principal: 868d4ed. Esta entrega no fusiona la PR de documentación #18 ni reescribe el historial.
 
 ## Alcance y evidencia

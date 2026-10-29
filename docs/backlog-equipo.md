@@ -9,7 +9,7 @@ Revision: 28 de octubre de 2026. Fuente: PPI_INGENIERIA_DE_SOFTWARE_ArchivoActua
 - Pendiente: funcion o capacidad ausente.
 - Parcial: existe evidencia de una parte, pero no cumple todos los criterios.
 - Sin verificar: falta una prueba adecuada; no se afirma que falle ni que cumpla.
-- Completo: todos los criterios acordados comprobados. Actualmente ninguna ficha del PPI esta en este estado.
+- Completo: todos los criterios acordados comprobados. Cinco fichas están completas e integradas mediante la PR #29.
 
 La columna del tablero representa el flujo del trabajo (Por hacer, Haciendo, Hechas o Bloqueadas), mientras las etiquetas estado:pendiente, estado:parcial y estado:sin-verificar representan cumplimiento. Por hacer no elimina el avance parcial. No se marca Haciendo solo por asignar una tarjeta.
 
@@ -19,17 +19,17 @@ La columna del tablero representa el flujo del trabajo (Por hacer, Haciendo, Hec
 | --- | --- | --- | --- | --- | --- | --- |
 | REQ-01 | El sistema debe permitir el registro de apertura de caja con el ingreso del monto de base inicial. | Media | Pendiente | Yulian | [#9](https://github.com/justinpich0n/ProyectoGithub/issues/9) | Bloqueadas |
 | REQ-02 | El sistema debe integrar un módulo de inventario para la gestión y alta de productos. | Alta | Parcial | Diryan | [#7](https://github.com/justinpich0n/ProyectoGithub/issues/7) | Por hacer |
-| REQ-03 | El sistema debe contar con una funcionalidad de búsqueda de productos por nombre | Alta | Implementado en rama; revisión pendiente | Diryan | [#19](https://github.com/justinpich0n/ProyectoGithub/issues/19) | Por hacer; etiqueta en revisión |
+| REQ-03 | El sistema debe contar con una funcionalidad de búsqueda de productos por nombre | Alta | Completo | Diryan | [#19](https://github.com/justinpich0n/ProyectoGithub/issues/19) | Hechas |
 | REQ-04 | El sistema debe permitir el ingreso del monto con el que se realiza el pago en cada transacción. | Alta | Pendiente | Justin | [#20](https://github.com/justinpich0n/ProyectoGithub/issues/20) | Por hacer |
 | REQ-05 | El sistema debe permitir seleccionar el método de pago, efectivo o medios electrónicos. | Media | Pendiente | Justin | [#11](https://github.com/justinpich0n/ProyectoGithub/issues/11) | Por hacer |
 | REQ-06 | El sistema debe proporcionar una funcionalidad para consultar el historial de ventas del día | Media | Pendiente | Yulian | [#14](https://github.com/justinpich0n/ProyectoGithub/issues/14) | Bloqueadas |
 | REQ-07 | El sistema debe generar factura al realizar una venta | Media | Pendiente | Yulian | [#21](https://github.com/justinpich0n/ProyectoGithub/issues/21) | Bloqueadas |
-| REQ-08 | El sistema debe incluir un módulo de creación de clientes con nombre, teléfono y dirección | Alta | Implementado en rama; revisión pendiente | Yulian | [#12](https://github.com/justinpich0n/ProyectoGithub/issues/12) | Por hacer; etiqueta en revisión |
-| REQ-09 | El sistema debe permitir la modificación de datos en el módulo de clientes. | Media | Implementado en rama; revisión pendiente | Yulian | [#22](https://github.com/justinpich0n/ProyectoGithub/issues/22) | Por hacer; etiqueta en revisión |
+| REQ-08 | El sistema debe incluir un módulo de creación de clientes con nombre, teléfono y dirección | Alta | Completo | Yulian | [#12](https://github.com/justinpich0n/ProyectoGithub/issues/12) | Hechas |
+| REQ-09 | El sistema debe permitir la modificación de datos en el módulo de clientes. | Media | Completo | Yulian | [#22](https://github.com/justinpich0n/ProyectoGithub/issues/22) | Hechas |
 | REQ-10 | El sistema debe gestionar ventas a crédito, registrando y controlando saldos pendientes. | Media | Pendiente | Yulian | [#13](https://github.com/justinpich0n/ProyectoGithub/issues/13) | Bloqueadas |
 | REQ-11 | El sistema debe actualizar automáticamente el stock al vender un producto | Alta | Pendiente | Diryan | [#8](https://github.com/justinpich0n/ProyectoGithub/issues/8) | Por hacer |
-| REQ-12 | El sistema debe permitir el ingreso del precio costo de los productos | Alta | Implementado en rama; revisión pendiente | Diryan | [#23](https://github.com/justinpich0n/ProyectoGithub/issues/23) | Por hacer; etiqueta en revisión |
-| REQ-13 | El sistema debe permitir la definición y actualización del precio de venta de los productos. | Alta | Implementado en rama; revisión pendiente | Justin | [#24](https://github.com/justinpich0n/ProyectoGithub/issues/24) | Por hacer; etiqueta en revisión |
+| REQ-12 | El sistema debe permitir el ingreso del precio costo de los productos | Alta | Completo | Diryan | [#23](https://github.com/justinpich0n/ProyectoGithub/issues/23) | Hechas |
+| REQ-13 | El sistema debe permitir la definición y actualización del precio de venta de los productos. | Alta | Completo | Justin | [#24](https://github.com/justinpich0n/ProyectoGithub/issues/24) | Hechas |
 | REQ-14 | El sistema debe generar una ventana emergente de 50px * 60px en la parte superior derecha cuando un producto esté bajo en stock | Baja | Pendiente | Diryan | [#25](https://github.com/justinpich0n/ProyectoGithub/issues/25) | Por hacer |
 | RNF-01 | El sistema debe procesar y responder a cada operación en un tiempo máximo de 2 segundos. | Alta | Sin verificar | Justin | [#16](https://github.com/justinpich0n/ProyectoGithub/issues/16) | Por hacer |
 | RNF-02 | La aplicación debe contar con una interfaz intuitiva. | Alta | Parcial | Justin | [#26](https://github.com/justinpich0n/ProyectoGithub/issues/26) | Por hacer |
@@ -37,11 +37,11 @@ La columna del tablero representa el flujo del trabajo (Por hacer, Haciendo, Hec
 | RNF-04 | La aplicación debe ser capaz de integrarse con impresoras. | Media | Pendiente | Yulian | [#28](https://github.com/justinpich0n/ProyectoGithub/issues/28) | Bloqueadas |
 | RNF-05 | El sistema debe ofrecer una función para generar copias de seguridad. | Alta | Pendiente | Diryan | [#15](https://github.com/justinpich0n/ProyectoGithub/issues/15) | Bloqueadas |
 
-Estado del 29 de octubre en la rama de entrega: 5 implementados y probados pendientes de revisión/integración (REQ-03, REQ-08, REQ-09, REQ-12 y REQ-13), 10 pendientes, 2 parciales (REQ-02 y RNF-02) y 2 sin verificar (RNF-01 y RNF-03). En master aún no se integraron esos cinco. No se declaran completas las fichas solo por existir el CRUD o una interfaz.
+Estado del 29 de octubre tras integrar la PR #29: 5 completos y probados (REQ-03, REQ-08, REQ-09, REQ-12 y REQ-13), 10 pendientes, 2 parciales (REQ-02 y RNF-02) y 2 sin verificar (RNF-01 y RNF-03). Los cinco están integrados en master mediante el commit 8570fe9. No se declaran completas las fichas solo por existir el CRUD o una interfaz.
 
 ## Evidencias y dudas
 
-Los modelos actuales son Usuario y Producto; Producto contiene nombre, precio, descripcion y usuarioId. Existen CRUD y formularios React con validaciones, pero no stock, costo, ventas, pagos, clientes, credito, impresora o respaldo/restauracion. La integracion CRUD real con MySQL, health automatizado y lint/build frontend pasaron en esta revision; no certifican rendimiento bajo carga ni usabilidad global. RNF-03 requiere comprobar 3000 registros y consultas optimizadas; RNF-04 requiere prueba con impresora termica USB/red y formato compatible. RNF-05 se conserva como no funcional porque asi lo clasifica el PPI.
+La revisión inicial del 28 de octubre solo incluía Usuario y Producto. La PR #29 incorpora Cliente y Cuenta, búsqueda por prefijo, cantidad, costo y precio de venta con validaciones. Cantidad no acredita todavía descuento automático de stock al vender. Ventas, pagos, crédito, impresora y respaldo/restauración siguen pendientes. La integracion CRUD real con MySQL, health automatizado y lint/build frontend pasaron en esta revision; no certifican rendimiento bajo carga ni usabilidad global. RNF-03 requiere comprobar 3000 registros y consultas optimizadas; RNF-04 requiere prueba con impresora termica USB/red y formato compatible. RNF-05 se conserva como no funcional porque asi lo clasifica el PPI.
 
 Las descripciones desplazadas REQ-09 a REQ-14 y RNF-01 se conservan en cada tarjeta, separadas del titulo original. Las propuestas de interpretacion no son correcciones aprobadas. La [matriz de contraste](contraste-funcional-2026-10-28.md) explica evidencia y contradicciones.
 
@@ -63,7 +63,7 @@ Justin: justinpich0n; Diryan: DiryanS; Yulian: yuliandavid144-collab. Las 19 iss
 
 ### REQ-10 · #13
 
-**Motivo:** No existen todavía Cliente, Venta ni Pago. Además, faltan reglas de vencimiento y de autorización especial por deuda vencida que exige CU8; la descripción de REQ-10 trata stock en vez de crédito. Estas dudas impiden cerrar el modelo y el flujo de crédito.
+**Motivo:** Cliente ya está integrado mediante la PR #29; siguen ausentes Venta y Pago. Además, faltan reglas de vencimiento y de autorización especial por deuda vencida que exige CU8; la descripción de REQ-10 trata stock en vez de crédito. Estas dudas impiden cerrar el modelo y el flujo de crédito.
 
 **Para desbloquear:** Yulian coordina las dependencias REQ-08, REQ-09 y las tareas de venta/pagos, y valida las reglas de crédito y la descripción contradictoria. Documentar cliente obligatorio, estado/saldo de deuda, abono inicial y autorización por vencimiento antes de implementar el flujo completo.
 
@@ -93,8 +93,15 @@ Justin: justinpich0n; Diryan: DiryanS; Yulian: yuliandavid144-collab. Las 19 iss
 
 ## Entrega del 29 de octubre
 
-Los cinco requisitos se implementaron por Justin en justin/ppi-busqueda-clientes-costos-precios; véase [evidencia y demostración](entrega-cinco-requisitos.md). Las cinco tarjetas siguen abiertas con etiqueta estado:en-revision y su responsable original para coordinar revisión; no se atribuyen commits nuevos a Diryan o Yulian. Su PR se enlaza en cada tarjeta. Solo se pasarán a Hechas tras la revisión e integración correspondiente. Las descripciones de la situación anterior y los motivos de bloqueo de otras tarjetas son históricos respecto a esta entrega; se actualizan cuando su responsable resuelva las dependencias restantes.
+Los cinco requisitos fueron implementados por Justin en justin/ppi-busqueda-clientes-costos-precios e integrados con su autorización mediante [PR #29](https://github.com/justinpich0n/ProyectoGithub/pull/29), commit 8570fe9. Véase [evidencia y demostración](entrega-cinco-requisitos.md). Las cinco issues están cerradas como completadas, con etiqueta estado:completo y columna Hechas verificada. Sus responsables conservan la coordinación y sustentación; no se atribuyen commits a quienes no los realizaron.
+
+Ramas de referencia creadas desde la integración, disponibles en GitHub y como referencias remotas locales:
+- diryan/req-03-req-12: búsqueda de productos y costos.
+- yulian/req-08-req-09: creación, consulta y modificación de clientes.
+- justin/req-13: definición y actualización del precio de venta.
+
+Estas ramas contienen la versión integrada completa; no separan retroactivamente la implementación ni certifican autoría. Los nuevos cambios de cada compañero deberán salir de su rama y pasar por una nueva PR para revisión de Justin.
 
 ## Acceso al tablero comprobado el 29 de octubre
 
-El usuario dejó el proyecto público. Se comprobó en una sesión sin iniciar en GitHub que https://github.com/users/justinpich0n/projects/1/views/1 muestra las 19 fichas; Yulian y Diryan pueden consultarlo sin invitación adicional al proyecto. Esto no concede edición del tablero ni altera la protección de master. Durante el trabajo simultáneo en Brave se suspendió mover las cinco tarjetas de Por hacer a Haciendo; la etiqueta en revisión y los enlaces a PR #29 sí están guardados y verificados. La columna conserva Por hacer hasta coordinar ese movimiento.
+El usuario dejó el proyecto público. Se comprobó en una sesión sin iniciar en GitHub que https://github.com/users/justinpich0n/projects/1/views/1 muestra las 19 fichas; Yulian y Diryan pueden consultarlo sin invitación adicional al proyecto. Esto no concede edición del tablero ni altera la protección de master. Tras el cierre de las cinco issues, el flujo del tablero las movió a Hechas. Se verificaron las columnas: 8 Por hacer, 0 Haciendo, 5 Hechas y 6 Bloqueadas.
