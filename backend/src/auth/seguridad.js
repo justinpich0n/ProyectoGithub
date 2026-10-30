@@ -2,8 +2,8 @@ const { randomBytes, scrypt, timingSafeEqual, createHash } = require('node:crypt
 const { promisify } = require('node:util');
 const derivar = promisify(scrypt);
 async function hashPassword(password) {
-  if (typeof password !== 'string' || password.length < 12 || password.length > 128) {
-    throw new Error('La contraseña debe tener entre 12 y 128 caracteres.');
+  if (typeof password !== 'string' || password.length < 6 || password.length > 128) {
+    throw new Error('La contraseña debe tener entre 6 y 128 caracteres.');
   }
   const sal = randomBytes(16).toString('hex');
   const hash = await derivar(password, sal, 64);

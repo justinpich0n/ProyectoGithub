@@ -17,7 +17,7 @@ async function main() {
     rl.close();
     const password = await new Promise((resolve, reject) => {
       if (!process.stdin.isTTY) return reject(new Error('Ejecuta este asistente en una terminal interactiva.'));
-      process.stdout.write('Contraseña nueva (12 a 128 caracteres, no se muestra): ');
+      process.stdout.write('Contraseña nueva (6 a 128 caracteres, no se muestra): ');
       let valor = '';
       process.stdin.setRawMode(true); process.stdin.resume(); process.stdin.setEncoding('utf8');
       const leer = (s) => {
