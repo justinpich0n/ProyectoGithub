@@ -30,7 +30,7 @@ La migración agrega costo y cantidad como columnas anulables de productos anter
 
 ## Cómo ejecutarlo y demostrarlo
 
-1. En backend ejecutar npm run crear:cuenta una vez, desde una terminal interactiva. Introducir nombre, correo, rol y contraseña de 12 a 128 caracteres; la contraseña no se muestra ni se guarda en Git. El asistente no sobrescribe cuentas existentes.
+1. En backend ejecutar npm run crear:cuenta una vez, desde una terminal interactiva. Introducir nombre, correo, rol y contraseña de 6 a 128 caracteres; la contraseña no se muestra ni se guarda en Git. El asistente no sobrescribe cuentas existentes.
 2. Iniciar backend con npm run dev y frontend con npm run dev -- --host 127.0.0.1 --strictPort, en terminales distintas. Evitar arrancar otra copia si los puertos ya están ocupados.
 3. Abrir http://127.0.0.1:5173 e iniciar sesión. En Productos registrar nombre, costo, precio, cantidad y usuario. Probar costo cero y la advertencia precio menor al costo.
 4. Escribir el inicio del nombre en Buscar productos; elegir una sugerencia o revisar la tabla. Con un nombre inexistente se muestra el resultado vacío.
