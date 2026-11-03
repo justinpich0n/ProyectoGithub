@@ -45,3 +45,17 @@ test('health comprueba cada consulta, informa fallos sin detalles y se recupera'
     await new Promise((resolve) => server.close(resolve));
   }
 });
+
+test('CORS permite las dos direcciones locales y excluye sitios externos', async () => {
+  const server = app.listen(0, '127.0.0.1');
+  await new Promise(resolve => server.once('listening', resolve));
+  try {
+    const base = `http://127.0.0.1:${server.address().port}`;
+    for (const origin of ['http://localhost:5173', 'http://127.0.0.1:5173']) {
+      const r = await fetch(base + '/api/auth/login', { method: 'OPTIONS', headers: { Origin: origin, 'Access-Control-Request-Method': 'POST' } });
+      assert.equal(r.headers.get('access-control-allow-origin'), origin);
+    }
+    const r = await fetch(base + '/api/health', { headers: { Origin: 'https://sitio-ajeno.example' } });
+    assert.equal(r.headers.get('access-control-allow-origin'), null);
+  } finally { await new Promise(resolve => server.close(resolve)); }
+});

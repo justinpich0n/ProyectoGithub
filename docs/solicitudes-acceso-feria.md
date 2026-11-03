@@ -35,3 +35,9 @@ No se usa WhatsApp ni se envían notificaciones o mensajes. Las credenciales de 
 En navegador: solicitud ficticia, revisión del propietario a 390 por 844 píxeles, aprobación, actualización automática al visitante e ingreso como cajero sin acceso al panel de autorización. Las tablas de demostración se eliminan al finalizar. No se certifica aún una prueba desde un teléfono físico fuera del Mac, porque el proyecto sigue local.
 
 La auditoría npm del frontend informó avisos en dependencias existentes (eslint y transitivas, follow-redirects y zod); no corresponden a qrcode. Deben revisarse antes de un despliegue público y no se ejecutó una actualización forzada fuera de este alcance.
+
+## Corrección del botón Continuar
+
+Se admiten localhost:5173 y 127.0.0.1:5173 como alias de desarrollo; un origen remoto configurado sigue teniendo una lista exacta, sin comodines. La bienvenida informa cuando todavía está consultando el backend, ofrece reintento si falla y explica si falta configurar al propietario. La clave privada de configuración se conserva solo en sessionStorage de la pestaña para permitir recargar el asistente; se elimina tras completarlo o detectar configuración terminada. El formulario público sigue bloqueado hasta que exista propietario: no se habilita registro anónimo automático.
+
+Verificación: preflight CORS de ambos alias, rechazo de un dominio externo, 35 pruebas de acceso, lint y build. En navegador se comprobó el aviso en localhost y el asistente privado en una pestaña nueva de Brave. No se crearon cuentas con datos o contraseñas del usuario.
