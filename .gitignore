@@ -8,3 +8,6 @@ respaldos/
 *.bak
 *.dump
 *.sql.gz
+
+# Enlace privado de configuración inicial del propietario
+.inicio-propietario.json

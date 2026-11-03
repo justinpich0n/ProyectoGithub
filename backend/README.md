@@ -1,5 +1,9 @@
 # Backend de BizzStock
 
+## Actualización del 3 de noviembre de 2026
+
+La bienvenida permite solicitar acceso sin terminal; el propietario revisa y aprueba o rechaza desde Solicitudes. El primer propietario usa un asistente visual con enlace privado de un solo uso. No hay registro público automático de administradores. Véase [configuración y pruebas](../docs/solicitudes-acceso-feria.md). Prueba de acceso: `npm run test:acceso`. Los pasos de consola siguientes son antecedentes y herramientas técnicas de mantenimiento.
+
 ## Actualización del 29 de octubre de 2026
 
 Se incorpora acceso mínimo con Cuenta (scrypt, administrador/cajero, sesión opaca de ocho horas), Cliente y los campos costo/cantidad. Antes de usar la interfaz, crear una cuenta desde esta carpeta con `npm run crear:cuenta` en una terminal interactiva. No introduce contraseña en argumentos ni sobrescribe cuentas existentes. Los usuarios previos siguen como registros sin acceso automático.

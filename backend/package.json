@@ -12,7 +12,8 @@
     "test:integration": "node test/crud.integration.js",
     "crear:cuenta": "node scripts/crear-cuenta.js",
     "test:ppi": "node test/ppi.integration.js",
-    "test:rendimiento": "node scripts/probar-rendimiento.js"
+    "test:rendimiento": "node scripts/probar-rendimiento.js",
+    "test:acceso": "node test/inicio.integration.js"
   },
   "dependencies": {
     "cors": "^2.8.6",

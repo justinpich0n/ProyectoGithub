@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { verificarPassword, abrirSesion, autenticar, cerrarSesion } = require('../auth/seguridad');
 const intentos = new Map();
-const publico = (c) => ({ id: c.usuarioId, nombre: c.Usuario.nombre, email: c.Usuario.email, rol: c.rol });
+const publico = async (c, m) => ({ propietario: await require('../auth/propietario').esPropietario(m, c.id), id: c.usuarioId, nombre: c.Usuario.nombre, email: c.Usuario.email, rol: c.rol });
 router.post('/login', async (req, res) => {
   res.set('Cache-Control', 'no-store');
   const clave = req.ip;
@@ -17,8 +17,8 @@ router.post('/login', async (req, res) => {
     return res.status(401).json({ error: 'Correo o contraseña incorrectos.' });
   }
   intentos.delete(clave);
-  res.json({ token: abrirSesion(cuenta.id), usuario: publico(cuenta) });
+  res.json({ token: abrirSesion(cuenta.id), usuario: await publico(cuenta, req.app.locals.modelos) });
 });
-router.get('/sesion', autenticar, (req, res) => { res.set('Cache-Control', 'no-store'); res.json(publico(req.cuenta)); });
+router.get('/sesion', autenticar, async (req, res) => { res.set('Cache-Control', 'no-store'); res.json(await publico(req.cuenta, req.app.locals.modelos)); });
 router.post('/logout', autenticar, (req, res) => { cerrarSesion(req); res.json({ mensaje: 'Sesión cerrada.' }); });
 module.exports = router;

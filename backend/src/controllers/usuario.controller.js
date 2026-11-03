@@ -15,15 +15,26 @@ async function crear(req, res) {
   );
   res.status(201).json(fila);
 }
+async function protegerPropietario(req, res, fila, eliminar = false) {
+  const m = req.app.locals.modelos;
+  const config = await m.ConfiguracionAcceso.findByPk(1);
+  const cuenta = config && await m.Cuenta.findByPk(config.propietarioCuentaId);
+  if (cuenta?.usuarioId !== fila.id) return false;
+  if (eliminar) { res.status(409).json({ error: 'No puedes eliminar la cuenta propietaria.' }); return true; }
+  if (req.cuenta.id !== cuenta.id) { res.status(403).json({ error: 'Solo el propietario puede modificar sus datos.' }); return true; }
+  return false;
+}
 async function actualizar(req, res) {
   const fila = await req.app.locals.modelos.Usuario.findByPk(req.params.id);
   if (!fila) return res.status(404).json({ error: 'Usuario no encontrado.' });
+  if (await protegerPropietario(req, res, fila)) return;
   await fila.update(datosUsuario(req.body));
   res.json(fila);
 }
 async function eliminar(req, res) {
   const fila = await req.app.locals.modelos.Usuario.findByPk(req.params.id);
   if (!fila) return res.status(404).json({ error: 'Usuario no encontrado.' });
+  if (await protegerPropietario(req, res, fila, true)) return;
   await fila.destroy();
   res.json({ mensaje: 'Usuario eliminado.' });
 }

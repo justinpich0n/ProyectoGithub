@@ -113,3 +113,8 @@ REQ-04 y REQ-05 implementados por Justin, probados e integrados mediante la entr
 ## RNF 01 verificado el 3 de noviembre
 
 240 solicitudes HTTP en tres rondas, con 3000 productos ficticios por ronda PPI e importación de 500 costos. Máximo 294.77 ms; percentil 95 de 28.17 ms, todos menores a 2000 ms. Cierre limitado a las operaciones actuales y al entorno local de un usuario; no certifica operaciones futuras, otros equipos, concurrencia ni tiempo completo de renderizado. Véase [informe reproducible](rendimiento-2026-11-03.md). Ocho fichas cerradas en total.
+
+
+## Mejora de acceso para la feria
+
+[Solicitudes de acceso y aprobación privada](solicitudes-acceso-feria.md), realizada por Justin como soporte solicitado expresamente. No modifica el conteo de 19 fichas ni declara nuevos requisitos del PPI completos. WhatsApp se descartó como dependencia de esta demostración.
