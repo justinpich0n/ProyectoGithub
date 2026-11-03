@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Cuentas from './pages/Cuentas';
+import Cobro from './pages/Cobro';
 import Navbar from './components/Navbar.jsx';
 import Home from './pages/Home.jsx';
 import Usuarios from './pages/Usuarios.jsx';
@@ -23,6 +25,8 @@ function Contenido() {
           </span>
         </header>
         <Routes>
+          <Route path="/cuentas" element={<Cuentas />} />
+          <Route path="/cobro" element={<Cobro />} />
           <Route path="/" element={<Home />} />
           <Route path="/usuarios" element={usuario.rol === 'administrador' ? <Usuarios /> : <p className="page">Esta sección requiere administrador.</p>} />
           <Route path="/clientes" element={<Clientes />} />

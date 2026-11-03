@@ -10,5 +10,6 @@ module.exports = function crearModelos(sequelize) {
   const Cliente = require('./Cliente')(sequelize);
   Usuario.hasOne(Cuenta, { foreignKey: 'usuarioId', onDelete: 'CASCADE' });
   Cuenta.belongsTo(Usuario, { foreignKey: 'usuarioId' });
-  return { Usuario, Producto, Cuenta, Cliente };
+  const Venta = require('./Venta')(sequelize);
+  return { Usuario, Producto, Cuenta, Cliente, Venta };
 };

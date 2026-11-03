@@ -20,8 +20,8 @@ La columna del tablero representa el flujo del trabajo (Por hacer, Haciendo, Hec
 | REQ-01 | El sistema debe permitir el registro de apertura de caja con el ingreso del monto de base inicial. | Media | Pendiente | Yulian | [#9](https://github.com/justinpich0n/ProyectoGithub/issues/9) | Bloqueadas |
 | REQ-02 | El sistema debe integrar un módulo de inventario para la gestión y alta de productos. | Alta | Parcial | Diryan | [#7](https://github.com/justinpich0n/ProyectoGithub/issues/7) | Por hacer |
 | REQ-03 | El sistema debe contar con una funcionalidad de búsqueda de productos por nombre | Alta | Completo | Diryan | [#19](https://github.com/justinpich0n/ProyectoGithub/issues/19) | Hechas |
-| REQ-04 | El sistema debe permitir el ingreso del monto con el que se realiza el pago en cada transacción. | Alta | Pendiente | Justin | [#20](https://github.com/justinpich0n/ProyectoGithub/issues/20) | Por hacer |
-| REQ-05 | El sistema debe permitir seleccionar el método de pago, efectivo o medios electrónicos. | Media | Pendiente | Justin | [#11](https://github.com/justinpich0n/ProyectoGithub/issues/11) | Por hacer |
+| REQ-04 | El sistema debe permitir el ingreso del monto con el que se realiza el pago en cada transacción. | Alta | Completo | Justin | [#20](https://github.com/justinpich0n/ProyectoGithub/issues/20) | Hechas |
+| REQ-05 | El sistema debe permitir seleccionar el método de pago, efectivo o medios electrónicos. | Media | Completo | Justin | [#11](https://github.com/justinpich0n/ProyectoGithub/issues/11) | Hechas |
 | REQ-06 | El sistema debe proporcionar una funcionalidad para consultar el historial de ventas del día | Media | Pendiente | Yulian | [#14](https://github.com/justinpich0n/ProyectoGithub/issues/14) | Bloqueadas |
 | REQ-07 | El sistema debe generar factura al realizar una venta | Media | Pendiente | Yulian | [#21](https://github.com/justinpich0n/ProyectoGithub/issues/21) | Bloqueadas |
 | REQ-08 | El sistema debe incluir un módulo de creación de clientes con nombre, teléfono y dirección | Alta | Completo | Yulian | [#12](https://github.com/justinpich0n/ProyectoGithub/issues/12) | Hechas |
@@ -105,3 +105,7 @@ Estas ramas contienen la versión integrada completa; no separan retroactivament
 ## Acceso al tablero comprobado el 29 de octubre
 
 El usuario dejó el proyecto público. Se comprobó en una sesión sin iniciar en GitHub que https://github.com/users/justinpich0n/projects/1/views/1 muestra las 19 fichas; Yulian y Diryan pueden consultarlo sin invitación adicional al proyecto. Esto no concede edición del tablero ni altera la protección de master. Tras el cierre de las cinco issues, el flujo del tablero las movió a Hechas. Se verificaron las columnas: 8 Por hacer, 0 Haciendo, 5 Hechas y 6 Bloqueadas.
+
+## Actualización del 3 de noviembre de 2026
+
+REQ-04 y REQ-05 implementados por Justin, probados e integrados mediante la entrega de cuentas y cobro. Siete fichas completas en total. Véase [alcance, pruebas y diferencias documentales](entrega-cuentas-cobro-2026-11-03.md). Las cifras y motivos anteriores conservan la revisión histórica. Ventas ya existe para registrar cobros; stock automático, factura, crédito, caja e historial de consulta siguen pendientes.
