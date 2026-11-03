@@ -1,0 +1,15 @@
+.git
+**/node_modules
+**/dist
+**/.env
+**/.env.*
+**/.inicio-propietario.json
+**/backups
+**/respaldos
+**/*.bak
+**/*.dump
+**/*.sql
+**/*.sql.gz
+**/npm-debug.log*
+!backend/package-lock.json
+!frontend/package-lock.json

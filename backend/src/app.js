@@ -3,6 +3,8 @@ const cors = require('cors');
 const { verificarConexion } = require('./db');
 
 const app = express();
+// Railway termina HTTPS en su proxy; habilitar únicamente al desplegar detrás de él.
+if (process.env.TRUST_PROXY_HOPS === '1') app.set('trust proxy', 1);
 
 const origenFrontend = process.env.FRONTEND_ORIGIN || 'http://127.0.0.1:5173';
 const origenesPermitidos = new Set([origenFrontend]);
@@ -40,6 +42,19 @@ app.get('/api/health', async (req, res) => {
   }
 });
 
+// En despliegue, React y API comparten dominio. No se sirve el repositorio ni .env.
+if (process.env.SERVE_FRONTEND === 'true') {
+  const path = require('node:path');
+  const fs = require('node:fs');
+  const carpeta = path.resolve(__dirname, '../../frontend/dist');
+  if (!fs.existsSync(path.join(carpeta, 'index.html'))) throw new Error('Falta compilar el frontend para el despliegue.');
+  app.use(express.static(carpeta, { index: false, dotfiles: 'deny' }));
+  app.get(/^(?!\/api(?:\/|$)).*/i, (req, res) => {
+    res.set('Cache-Control', 'no-cache');
+    res.sendFile(path.join(carpeta, 'index.html'));
+  });
+}
+
 // Express 5 envía los errores de controladores async a este manejador.
 function exigirModelos(req, res, next) {
   if (!app.locals.modelos)
@@ -60,6 +75,7 @@ app.use('/api/auth', exigirModelos, require('./routes/auth.routes'));
 app.use('/api/clientes', exigirModelos, autenticar, administrador, require('./routes/cliente.routes'));
 app.use('/api/usuarios', exigirModelos, autenticar, administrador, require('./routes/usuario.routes'));
 app.use('/api/productos', exigirModelos, autenticar, require('./routes/producto.routes'));
+app.use('/api', (req, res) => res.status(404).json({ error: 'Ruta API no encontrada.' }));
 app.use((error, req, res, next) => {
   if (res.headersSent) return next(error);
   if (error.name === 'SequelizeUniqueConstraintError')

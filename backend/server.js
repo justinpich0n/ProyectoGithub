@@ -28,6 +28,10 @@ async function iniciarServidor() {
       app.locals.modelos = modelos;
       console.log('Modelos de Usuarios y Productos preparados.');
     } catch {
+      if (process.env.NODE_ENV === 'production') {
+        await cerrarPool();
+        throw new Error('No se pudo preparar MySQL o sus tablas para el despliegue.');
+      }
       // HTTP sigue disponible para informar del fallo y volver a comprobar.
       console.error(
         'No se pudo preparar MySQL o sus tablas. Comprueba /api/health y reinicia para habilitar el CRUD.',
@@ -35,7 +39,8 @@ async function iniciarServidor() {
     }
   }
 
-  const server = app.listen(port, '127.0.0.1', () => {
+  const host = process.env.HOST || (process.env.NODE_ENV === 'production' ? '0.0.0.0' : '127.0.0.1');
+  const server = app.listen(port, host, () => {
     console.log(`BizzStock: http://127.0.0.1:${port}/api/health`);
   });
   server.on('error', async () => {
