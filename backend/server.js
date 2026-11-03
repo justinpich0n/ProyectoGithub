@@ -27,8 +27,12 @@ async function iniciarServidor() {
       await sequelize.sync(); // Sin force ni alter: conserva las tablas existentes.
       app.locals.modelos = modelos;
       console.log('Modelos de Usuarios y Productos preparados.');
-    } catch {
+    } catch (error) {
       if (process.env.NODE_ENV === 'production') {
+        const codigo = error.original?.code ?? error.code;
+        if (typeof codigo === 'string' && /^[A-Z0-9_]+$/.test(codigo)) {
+          console.error('Código de conexión MySQL:', codigo);
+        }
         await cerrarPool();
         throw new Error('No se pudo preparar MySQL o sus tablas para el despliegue.');
       }
