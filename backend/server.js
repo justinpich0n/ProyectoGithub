@@ -25,6 +25,10 @@ async function iniciarServidor() {
       await sequelize.authenticate();
       await require('./src/config/esquema')(sequelize);
       await sequelize.sync(); // Sin force ni alter: conserva las tablas existentes.
+      if (process.env.BIZZSTOCK_CATALOGO_FERIA === 'true') {
+        const creados = await require('./src/config/catalogo-demo')(modelos);
+        console.log(`Productos de feria agregados: ${creados}.`);
+      }
       app.locals.modelos = modelos;
       console.log('Modelos de Usuarios y Productos preparados.');
     } catch (error) {
@@ -34,7 +38,7 @@ async function iniciarServidor() {
           console.error('Código de conexión MySQL:', codigo);
         }
         await cerrarPool();
-        throw new Error('No se pudo preparar MySQL o sus tablas para el despliegue.');
+        throw new Error('No se pudo preparar MySQL o sus tablas para el despliegue.', { cause: error });
       }
       // HTTP sigue disponible para informar del fallo y volver a comprobar.
       console.error(

@@ -12,6 +12,13 @@ router.get('/', controller.listar);
 router.get('/:id', controller.obtener);
 const { administrador } = require('../auth/seguridad');
 router.post('/costos/importar', administrador, controller.importarCostos);
+router.post('/catalogo-demo', administrador, async (req, res) => {
+  if (!req.cuenta.propietario) {
+    return res.status(403).json({ error: 'Solo el propietario puede cargar el catálogo de feria.' });
+  }
+  const creados = await require('../config/catalogo-demo')(req.app.locals.modelos);
+  res.json({ creados });
+});
 router.post('/', administrador, controller.crear);
 router.put('/:id', administrador, controller.actualizar);
 router.delete('/:id', administrador, controller.eliminar);
