@@ -4,7 +4,13 @@ const { verificarConexion } = require('./db');
 
 const app = express();
 
-app.use(cors({ origin: process.env.FRONTEND_ORIGIN || 'http://127.0.0.1:5173' }));
+const origenFrontend = process.env.FRONTEND_ORIGIN || 'http://127.0.0.1:5173';
+const origenesPermitidos = new Set([origenFrontend]);
+if (['http://127.0.0.1:5173', 'http://localhost:5173'].includes(origenFrontend)) {
+  origenesPermitidos.add('http://127.0.0.1:5173');
+  origenesPermitidos.add('http://localhost:5173');
+}
+app.use(cors({ origin: (origen, callback) => callback(null, !origen || origenesPermitidos.has(origen)) }));
 app.use(express.json());
 
 // El estado se consulta en MySQL en cada petición; no se guarda como una bandera.
