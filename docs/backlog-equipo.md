@@ -31,7 +31,7 @@ La columna del tablero representa el flujo del trabajo (Por hacer, Haciendo, Hec
 | REQ-12 | El sistema debe permitir el ingreso del precio costo de los productos | Alta | Completo | Diryan | [#23](https://github.com/justinpich0n/ProyectoGithub/issues/23) | Hechas |
 | REQ-13 | El sistema debe permitir la definición y actualización del precio de venta de los productos. | Alta | Completo | Justin | [#24](https://github.com/justinpich0n/ProyectoGithub/issues/24) | Hechas |
 | REQ-14 | El sistema debe generar una ventana emergente de 50px * 60px en la parte superior derecha cuando un producto esté bajo en stock | Baja | Pendiente | Diryan | [#25](https://github.com/justinpich0n/ProyectoGithub/issues/25) | Por hacer |
-| RNF-01 | El sistema debe procesar y responder a cada operación en un tiempo máximo de 2 segundos. | Alta | Sin verificar | Justin | [#16](https://github.com/justinpich0n/ProyectoGithub/issues/16) | Por hacer |
+| RNF-01 | El sistema debe procesar y responder a cada operación en un tiempo máximo de 2 segundos. | Alta | Verificado en maqueta local | Justin | [#16](https://github.com/justinpich0n/ProyectoGithub/issues/16) | Hechas |
 | RNF-02 | La aplicación debe contar con una interfaz intuitiva. | Alta | Parcial | Justin | [#26](https://github.com/justinpich0n/ProyectoGithub/issues/26) | Por hacer |
 | RNF-03 | El sistema debe permitir la gestión de hasta 3.000 productos en el inventario. | Alta | Sin verificar | Justin | [#27](https://github.com/justinpich0n/ProyectoGithub/issues/27) | Por hacer |
 | RNF-04 | La aplicación debe ser capaz de integrarse con impresoras. | Media | Pendiente | Yulian | [#28](https://github.com/justinpich0n/ProyectoGithub/issues/28) | Bloqueadas |
@@ -109,3 +109,7 @@ El usuario dejó el proyecto público. Se comprobó en una sesión sin iniciar e
 ## Actualización del 3 de noviembre de 2026
 
 REQ-04 y REQ-05 implementados por Justin, probados e integrados mediante la entrega de cuentas y cobro. Siete fichas completas en total. Véase [alcance, pruebas y diferencias documentales](entrega-cuentas-cobro-2026-11-03.md). Las cifras y motivos anteriores conservan la revisión histórica. Ventas ya existe para registrar cobros; stock automático, factura, crédito, caja e historial de consulta siguen pendientes.
+
+## RNF 01 verificado el 3 de noviembre
+
+240 solicitudes HTTP en tres rondas, con 3000 productos ficticios por ronda PPI e importación de 500 costos. Máximo 294.77 ms; percentil 95 de 28.17 ms, todos menores a 2000 ms. Cierre limitado a las operaciones actuales y al entorno local de un usuario; no certifica operaciones futuras, otros equipos, concurrencia ni tiempo completo de renderizado. Véase [informe reproducible](rendimiento-2026-11-03.md). Ocho fichas cerradas en total.
