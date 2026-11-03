@@ -20,6 +20,11 @@ async function probar() {
       const u = await m.Usuario.create({ nombre: `Prueba ${rol}`, email: `${rol}-${marca}@example.com` }); usuariosPropios.push(u.id);
       await m.Cuenta.create({ usuarioId: u.id, rol, passwordHash: await hashPassword(password) });
     }
+    let carga = [];
+    if (process.env.BIZZSTOCK_RENDIMIENTO === '1') {
+      carga = await m.Producto.bulkCreate(Array.from({ length: 3000 }, (_, i) => ({ nombre: `Carga${marca}-${i}`, precio: '15.25', costo: '10.00', cantidad: 10, usuarioId: usuariosPropios[0] })));
+      assert.equal(carga.length, 3000);
+    }
     server = app.listen(0, '127.0.0.1'); await new Promise((r) => server.once('listening', r));
     const base = `http://127.0.0.1:${server.address().port}/api`;
     async function pedir(method, ruta, datos, esperado = 200, token) {
@@ -29,6 +34,10 @@ async function probar() {
     await pedir('GET', '/productos', undefined, 401);
     const admin = (await pedir('POST', '/auth/login', { email: `administrador-${marca}@example.com`, password })).token;
     const cajero = (await pedir('POST', '/auth/login', { email: `cajero-${marca}@example.com`, password })).token;
+    if (carga.length) {
+      await pedir('GET', '/productos?q=Carga', undefined, 200, admin);
+      await pedir('POST', '/productos/costos/importar', { filas: carga.slice(0, 500).map((p) => ({ id: p.id, costo: '12.50' })) }, 200, admin);
+    }
     await pedir('POST', '/auth/login', { email: `administrador-${marca}@example.com`, password: 'incorrecta' }, 401);
     await pedir('GET', '/auth/sesion', undefined, 200, admin);
     const datos = { nombre: `PPI${marca} cuaderno`, precio: '5000.25', costo: '4000.10', cantidad: 12, descripcion: 'Solo prueba ficticia', usuarioId: usuariosPropios[0] };
