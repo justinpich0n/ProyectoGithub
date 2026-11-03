@@ -1,0 +1,30 @@
+const assert = require('node:assert/strict');
+const { randomUUID } = require('node:crypto');
+require('dotenv').config({ quiet: true });
+const db = require('../src/config/database')(); const m = require('../src/models')(db); const app = require('../src/app');
+const { hashPassword } = require('../src/auth/seguridad');
+async function main() {
+ let server; const usuarios = []; const ventas = []; const productos = []; let total = 0; const marca = randomUUID();
+ try {
+  await require('../src/config/esquema')(db); await db.sync(); app.locals.modelos = m;
+  for (const rol of ['administrador','cajero']) { const u = await m.Usuario.create({ nombre: 'Prueba ficticia', email: `${rol}-${marca}@example.com` }); usuarios.push(u.id); await m.Cuenta.create({usuarioId:u.id,rol,passwordHash:await hashPassword('abc123')}); }
+  server=app.listen(0,'127.0.0.1');await new Promise(r=>server.once('listening',r));
+  async function pedir(ruta,datos,status,token) { const r=await fetch(`http://127.0.0.1:${server.address().port}/api${ruta}`,{method:'POST',headers:{'Content-Type':'application/json',...(token?{Authorization:`Bearer ${token}`}:{})},body:JSON.stringify(datos)}); const b=await r.json();assert.equal(r.status,status,JSON.stringify(b));total++;return b; }
+  const admin=(await pedir('/auth/login',{email:`administrador-${marca}@example.com`,password:'abc123'},200)).token;
+  const cajero=(await pedir('/auth/login',{email:`cajero-${marca}@example.com`,password:'abc123'},200)).token;
+  const cuenta={nombre:'Cuenta ficticia',email:`nueva-${marca}@example.com`,password:'abcdef',rol:'cajero'};
+  await pedir('/cuentas',cuenta,401);await pedir('/cuentas',cuenta,403,cajero);await pedir('/cuentas',{...cuenta,password:'12345'},400,admin);await pedir('/cuentas',cuenta,201,admin);
+  usuarios.push((await m.Usuario.findOne({where:{email:cuenta.email}})).id);
+  await pedir('/cuentas',cuenta,409,admin);await pedir('/auth/login',{email:cuenta.email,password:cuenta.password},200);
+  const producto=await m.Producto.create({nombre:'Producto ficticio',precio:'10.25',costo:'5.00',cantidad:10,usuarioId:usuarios[0]});productos.push(producto.id);
+  const datos=()=>({operacion:randomUUID(),productos:[{id:producto.id,cantidad:2}],metodo:'efectivo',recibido:'25.00'});
+  await pedir('/ventas',datos(),401);
+  for(const alterar of [x=>{x.recibido='1';},x=>{x.recibido='-1';},x=>{x.recibido='20.501';},x=>{x.metodo='';},x=>{x.productos[0].cantidad=0;},x=>{x.productos=[];},x=>{x.productos.push(x.productos[0]);},x=>{x.productos[0].id=2147483647;},x=>{x.total='0';x.recibido='0';}]){const d=datos();alterar(d);await pedir('/ventas',d,400,cajero);}
+  const d=datos();const v=await pedir('/ventas',d,201,cajero);ventas.push(v.id);assert.equal(v.total,'20.50');assert.equal(v.cambio,'4.50');await pedir('/ventas',d,409,cajero);
+  for(const metodo of ['efectivo','tarjeta','movil']){const v=await pedir('/ventas',{...datos(),metodo,recibido:'20.50'},201,admin);ventas.push(v.id);assert.equal(v.cambio,'0.00');assert.equal((await m.Venta.findByPk(v.id)).metodo,metodo);}
+  await pedir('/ventas',{...datos(),metodo:'tarjeta'},400,admin);
+  assert.equal((await m.Producto.findByPk(producto.id)).cantidad,10);
+  console.log(`${total} pruebas HTTP correctas: cuentas, permisos, montos, cambio, métodos, duplicados y persistencia.`);
+ } finally {if(server) await new Promise(r=>server.close(r));await m.Venta.destroy({where:{id:ventas}});await m.Producto.destroy({where:{id:productos}});await m.Cuenta.destroy({where:{usuarioId:usuarios}});await m.Usuario.destroy({where:{id:usuarios}});await db.close();}
+}
+main().catch(e=>{console.error(e);process.exitCode=1;});

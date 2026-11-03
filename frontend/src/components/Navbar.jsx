@@ -14,6 +14,8 @@ export default function Navbar() {
           ['/', '⌂', 'Inicio'],
           ['/productos', '▦', 'Productos'],
           ['/usuarios', '◎', 'Usuarios'],
+          ['/cuentas', '+', 'Crear cuenta'],
+          ['/cobro', '$', 'Cobro'],
           ['/clientes', '◇', 'Clientes'],
         ].map(([path, icon, label]) => (
           <li key={path}>

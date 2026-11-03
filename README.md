@@ -59,3 +59,9 @@ Permisos, inventario, caja, ventas, pagos, clientes, crédito, comprobantes, res
 En la rama justin/ppi-busqueda-clientes-costos-precios se implementan REQ-03, REQ-08, REQ-09, REQ-12 y REQ-13. Se exige iniciar sesión; los usuarios anteriores no son cuentas de acceso automáticamente. Para la primera cuenta: desde backend ejecutar `npm run crear:cuenta` en una terminal interactiva, elegir rol y contraseña privada. Después arrancar ambos servidores como se indica arriba.
 
 La [entrega con alcance, pruebas y demostración](docs/entrega-cinco-requisitos.md) explica campos nuevos, importación CSV, permisos y límites. `npm run test:ppi` desde backend ejecuta la integración real con MySQL y registros ficticios propios. Las rutas CRUD ahora requieren autenticación; las instrucciones antiguas de acceso sin sesión son históricas.
+
+## Crear cuentas y registrar cobros
+
+Con sesión de administrador abre **Crear cuenta** en el menú. Completa datos, confirma contraseña (6 a 128 caracteres), elige rol y guarda. No necesitas terminal para las cuentas siguientes. El primer administrador de una instalación vacía todavía se crea con `npm run crear:cuenta` desde backend.
+
+En **Cobro** selecciona productos, cantidades, método y monto recibido. Consulta [alcance y pruebas](docs/entrega-cuentas-cobro-2026-11-03.md).
