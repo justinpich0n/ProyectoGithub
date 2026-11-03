@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Solicitudes from './pages/Solicitudes';
 import Cuentas from './pages/Cuentas';
 import Cobro from './pages/Cobro';
 import Navbar from './components/Navbar.jsx';
@@ -25,6 +26,7 @@ function Contenido() {
           </span>
         </header>
         <Routes>
+          <Route path="/solicitudes" element={<Solicitudes />} />
           <Route path="/cuentas" element={<Cuentas />} />
           <Route path="/cobro" element={<Cobro />} />
           <Route path="/" element={<Home />} />

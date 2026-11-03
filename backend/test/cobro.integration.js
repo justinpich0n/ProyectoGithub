@@ -5,9 +5,13 @@ const db = require('../src/config/database')(); const m = require('../src/models
 const { hashPassword } = require('../src/auth/seguridad');
 async function main() {
  let server; const usuarios = []; const ventas = []; const productos = []; let total = 0; const marca = randomUUID();
+ const { DataTypes } = require('sequelize');
+ const config = db.define('ConfigPrueba', { id: { type: DataTypes.INTEGER, primaryKey: true }, propietarioCuentaId: DataTypes.INTEGER }, { tableName: 'test_owner_' + marca.replace(/-/g, '').slice(0, 12), timestamps: false });
+ m.ConfiguracionAcceso = config;
  try {
   await require('../src/config/esquema')(db); await db.sync(); app.locals.modelos = m;
   for (const rol of ['administrador','cajero']) { const u = await m.Usuario.create({ nombre: 'Prueba ficticia', email: `${rol}-${marca}@example.com` }); usuarios.push(u.id); await m.Cuenta.create({usuarioId:u.id,rol,passwordHash:await hashPassword('abc123')}); }
+  const propietario = await m.Cuenta.findOne({ where: { usuarioId: usuarios[0] } }); await config.create({ id: 1, propietarioCuentaId: propietario.id });
   server=app.listen(0,'127.0.0.1');await new Promise(r=>server.once('listening',r));
   async function pedir(ruta,datos,status,token) { const r=await fetch(`http://127.0.0.1:${server.address().port}/api${ruta}`,{method:'POST',headers:{'Content-Type':'application/json',...(token?{Authorization:`Bearer ${token}`}:{})},body:JSON.stringify(datos)}); const b=await r.json();assert.equal(r.status,status,JSON.stringify(b));total++;return b; }
   const admin=(await pedir('/auth/login',{email:`administrador-${marca}@example.com`,password:'abc123'},200)).token;
@@ -25,6 +29,6 @@ async function main() {
   await pedir('/ventas',{...datos(),metodo:'tarjeta'},400,admin);
   assert.equal((await m.Producto.findByPk(producto.id)).cantidad,10);
   console.log(`${total} pruebas HTTP correctas: cuentas, permisos, montos, cambio, métodos, duplicados y persistencia.`);
- } finally {if(server) await new Promise(r=>server.close(r));await m.Venta.destroy({where:{id:ventas}});await m.Producto.destroy({where:{id:productos}});await m.Cuenta.destroy({where:{usuarioId:usuarios}});await m.Usuario.destroy({where:{id:usuarios}});await db.close();}
+ } finally {if(server) await new Promise(r=>server.close(r));await m.Venta.destroy({where:{id:ventas}});await m.Producto.destroy({where:{id:productos}});await m.Cuenta.destroy({where:{usuarioId:usuarios}});await m.Usuario.destroy({where:{id:usuarios}});await config.drop();await db.close();}
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});

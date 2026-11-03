@@ -75,7 +75,7 @@ export default function Home() {
           <h3>Estamos construyendo lo que sigue.</h3>
           <p>
             Ya puedes crear, consultar, editar y eliminar usuarios y productos.
-            También puedes buscar productos, registrar costos y gestionar clientes con tu cuenta. Las ventas, pagos y alertas de inventario siguen pendientes.
+            También puedes buscar productos, registrar costos y gestionar clientes según tus permisos. Ya hay registro de cobros; el propietario revisa las solicitudes de acceso. Stock automático, facturación y crédito siguen pendientes.
           </p>
         </div>
         <span className="small-tag">Etapa inicial</span>

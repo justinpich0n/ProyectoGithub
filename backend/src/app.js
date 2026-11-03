@@ -4,7 +4,7 @@ const { verificarConexion } = require('./db');
 
 const app = express();
 
-app.use(cors({ origin: 'http://127.0.0.1:5173' }));
+app.use(cors({ origin: process.env.FRONTEND_ORIGIN || 'http://127.0.0.1:5173' }));
 app.use(express.json());
 
 // El estado se consulta en MySQL en cada petición; no se guarda como una bandera.
@@ -48,6 +48,8 @@ function exigirModelos(req, res, next) {
 const { autenticar, administrador } = require('./auth/seguridad');
 app.use('/api/cuentas', exigirModelos, autenticar, administrador, require('./routes/cuenta.routes'));
 app.use('/api/ventas', exigirModelos, autenticar, require('./routes/venta.routes'));
+app.use('/api/solicitudes', exigirModelos, require('./routes/solicitud.routes'));
+app.use('/api/inicio', exigirModelos, require('./routes/inicio.routes'));
 app.use('/api/auth', exigirModelos, require('./routes/auth.routes'));
 app.use('/api/clientes', exigirModelos, autenticar, administrador, require('./routes/cliente.routes'));
 app.use('/api/usuarios', exigirModelos, autenticar, administrador, require('./routes/usuario.routes'));

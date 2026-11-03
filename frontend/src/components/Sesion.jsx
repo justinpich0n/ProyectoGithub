@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import api, { mensajeError } from '../services/api';
+import Bienvenida from './Bienvenida';
 import { SesionContext } from '../services/sesion';
 export default function Sesion({ children }) {
   const [usuario, setUsuario] = useState(null);
@@ -32,12 +33,6 @@ export default function Sesion({ children }) {
     sessionStorage.removeItem('bizzstock-token'); setUsuario(null);
   }
   if (verificando) return <p role="status" className="page">Comprobando sesión…</p>;
-  if (!usuario) return <main className="login-page"><section className="crud-panel"><p className="eyebrow">BIZZSTOCK · ARTE Y BELLEZA</p><h1>Tu negocio, en orden.</h1><p>Inicia sesión para continuar.</p>
-    {error && <p role="alert" className="crud-error">{error}</p>}
-    <form onSubmit={entrar} className="crud-fields"><label>Correo<input type="email" required autoComplete="username" value={email} onChange={(e) => setEmail(e.target.value)} /></label>
-      <label>Contraseña<input type="password" required autoComplete="current-password" maxLength={128} value={password} onChange={(e) => setPassword(e.target.value)} /></label>
-      <button className="crud-primary" disabled={ocupado}>{ocupado ? 'Ingresando…' : 'Iniciar sesión'}</button></form>
-    <p className="crud-note">Solicita tu cuenta al administrador del negocio.</p>
-  </section></main>;
+  if (!usuario) return <Bienvenida email={email} setEmail={setEmail} password={password} setPassword={setPassword} error={error} ocupado={ocupado} entrar={entrar} completar={(data) => { sessionStorage.setItem('bizzstock-token', data.token); setUsuario(data.usuario); setPassword(''); }} />;
   return <SesionContext.Provider value={{ usuario, salir }}>{children}</SesionContext.Provider>;
 }

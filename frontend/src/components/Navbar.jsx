@@ -1,5 +1,7 @@
+import { useSesion } from '../services/sesion';
 import { NavLink } from 'react-router-dom';
 export default function Navbar() {
+  const { usuario } = useSesion();
   return (
     <nav className="navbar" aria-label="Navegación principal">
       <NavLink className="brand" to="/" aria-label="BizzStock, inicio">
@@ -14,7 +16,7 @@ export default function Navbar() {
           ['/', '⌂', 'Inicio'],
           ['/productos', '▦', 'Productos'],
           ['/usuarios', '◎', 'Usuarios'],
-          ['/cuentas', '+', 'Crear cuenta'],
+          ...(usuario.propietario ? [['/solicitudes', '✓', 'Solicitudes'], ['/cuentas', '+', 'Crear cuenta']] : []),
           ['/cobro', '$', 'Cobro'],
           ['/clientes', '◇', 'Clientes'],
         ].map(([path, icon, label]) => (

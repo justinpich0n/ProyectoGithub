@@ -1,0 +1,66 @@
+const assert = require('node:assert/strict');
+const { randomBytes, createHash } = require('node:crypto');
+require('dotenv').config({ quiet: true });
+const db = require('../src/config/database')(); const m = require('../src/models')(db); const app = require('../src/app');
+const prefijo = 'test_acc_' + randomBytes(4).toString('hex') + '_';
+const nombres = new Map(Object.values(m).map(x => [x.tableName, prefijo + x.tableName]));
+for (const x of Object.values(m)) x.tableName = nombres.get(x.tableName);
+for (const x of Object.values(m)) for (const campo of Object.values(x.rawAttributes)) if (campo.references && nombres.has(campo.references.model)) campo.references.model = nombres.get(campo.references.model);
+async function main() {
+ let server; let total = 0; const clave = randomBytes(32).toString('hex');
+ const anterior = process.env.BIZZSTOCK_SETUP_TOKEN_HASH; process.env.BIZZSTOCK_SETUP_TOKEN_HASH = createHash('sha256').update(clave).digest('hex');
+ try {
+  await db.sync(); app.locals.modelos = m; server = app.listen(0,'127.0.0.1'); await new Promise(r=>server.once('listening',r));
+  async function pedir(method,ruta,datos,status,token,setup) {
+   const r=await fetch(`http://127.0.0.1:${server.address().port}/api${ruta}`,{method,headers:{'Content-Type':'application/json',...(token?{Authorization:`Bearer ${token}`} :{}),...(setup?{'X-Setup-Token':setup}:{})},body:datos===undefined?undefined:JSON.stringify(datos)});
+   const b=await r.json();if(status)assert.equal(r.status,status,JSON.stringify(b));total++;return {status:r.status,b};
+  }
+  const datos={nombre:'Propietario ficticio',email:'owner@example.com',password:'abc123'};
+  assert.equal((await pedir('GET','/inicio',undefined,200)).b.configurado,false);
+  await pedir('POST','/inicio',datos,403);
+  const intentos=await Promise.all([pedir('POST','/inicio',datos,null,null,clave),pedir('POST','/inicio',{...datos,email:'otro@example.com'},null,null,clave)]);
+  assert.deepEqual(intentos.map(x=>x.status).sort(),[201,409]);assert.equal(await m.Cuenta.count(),1);
+  const owner=intentos.find(x=>x.status===201).b;assert.equal(owner.usuario.propietario,true);
+  await pedir('POST','/inicio',datos,409,null,clave);
+  const visita={nombre:'Visitante ficticio',email:'visita@example.com',password:'abcdef',rol:'administrador'};
+  await pedir('POST','/solicitudes',{...visita,password:'12345'},400);
+  await pedir('POST','/solicitudes',{...visita,rol:'propietario'},400);
+  const nueva=(await pedir('POST','/solicitudes',visita,202)).b;assert.equal(nueva.passwordHash,undefined);assert.equal(await m.Cuenta.count(),1);
+  await pedir('POST','/auth/login',{email:visita.email,password:visita.password},401);
+  await pedir('POST','/solicitudes',{...visita,email:'VISITA@example.com'},409);
+  assert.equal((await pedir('POST','/solicitudes/estado',{seguimiento:nueva.seguimiento},200)).b.estado,'pendiente');
+  await pedir('POST','/solicitudes/estado',{seguimiento:randomBytes(32).toString('hex')},404);
+  await pedir('GET','/solicitudes',undefined,401);
+  let lista=(await pedir('GET','/solicitudes',undefined,200,owner.token)).b.solicitudes;
+  assert.equal(lista.length,1);assert.equal(lista[0].passwordHash,undefined);assert.equal(lista[0].seguimientoHash,undefined);
+  const ruta=`/solicitudes/${lista[0].id}/decision`;
+  await pedir('POST',ruta,{decision:'aprobar',rol:'cajero'},401);
+  await pedir('POST',ruta,{decision:'aprobar',rol:'propietario'},400,owner.token);
+  await pedir('POST',ruta,{decision:'aprobar',rol:'administrador'},200,owner.token);
+  const autorizado=(await pedir('POST','/auth/login',{email:visita.email,password:visita.password},200)).b;
+  assert.equal(autorizado.usuario.propietario,false);
+  await pedir('GET','/solicitudes',undefined,403,autorizado.token);
+  await pedir('PUT',`/usuarios/${owner.usuario.id}`,{nombre:'Intruso',email:'intruso@example.com'},403,autorizado.token);
+  await pedir('DELETE',`/usuarios/${owner.usuario.id}`,undefined,409,owner.token);
+  await pedir('POST','/cuentas',{...visita,email:'sinpermiso@example.com'},403,autorizado.token);
+  await pedir('POST',ruta,{decision:'rechazar'},403,autorizado.token);
+  await pedir('POST',ruta,{decision:'rechazar'},409,owner.token);
+  assert.equal((await m.SolicitudCuenta.findByPk(lista[0].id)).passwordHash,null);
+  assert.equal((await pedir('POST','/solicitudes/estado',{seguimiento:nueva.seguimiento},200)).b.estado,'aprobada');
+  const rechazada=(await pedir('POST','/solicitudes',{...visita,email:'rechazar@example.com',rol:'cajero'},202)).b;
+  lista=(await pedir('GET','/solicitudes',undefined,200,owner.token)).b.solicitudes;
+  await pedir('POST',`/solicitudes/${lista[0].id}/decision`,{decision:'rechazar'},200,owner.token);
+  assert.equal((await pedir('POST','/solicitudes/estado',{seguimiento:rechazada.seguimiento},200)).b.estado,'rechazada');
+  await pedir('POST','/auth/login',{email:'rechazar@example.com',password:visita.password},401);
+  await pedir('POST','/solicitudes',{...visita,email:'vence@example.com'},202);
+  const vence=await m.SolicitudCuenta.findOne({where:{emailPendiente:'vence@example.com'}});await vence.update({expira:new Date(Date.now()-1000)});
+  await pedir('POST',`/solicitudes/${vence.id}/decision`,{decision:'aprobar',rol:'cajero'},409,owner.token);
+  await vence.reload();assert.equal(vence.estado,'expirada');assert.equal(vence.passwordHash,null);
+  await m.Cuenta.destroy({where:{}});
+  assert.equal((await pedir('GET','/inicio',undefined,200)).b.configurado,true);
+  await pedir('POST','/inicio',datos,409,null,clave);
+  await pedir('POST','/solicitudes',{...visita,email:'sindueño@example.com'},503);
+  console.log(`${total} pruebas de acceso correctas con tablas aisladas: configuración privada, carrera inicial, solicitudes, aprobación, rechazo, expiración y permisos exclusivos.`);
+ } finally { if(server)await new Promise(r=>server.close(r));for(const x of Object.values(m))assert.ok(x.tableName.startsWith(prefijo));await db.drop();await db.close();if(anterior===undefined)delete process.env.BIZZSTOCK_SETUP_TOKEN_HASH;else process.env.BIZZSTOCK_SETUP_TOKEN_HASH=anterior; }
+}
+main().catch(e=>{console.error(e);process.exitCode=1;});

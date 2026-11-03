@@ -62,6 +62,10 @@ La [entrega con alcance, pruebas y demostración](docs/entrega-cinco-requisitos.
 
 ## Crear cuentas y registrar cobros
 
-Con sesión de administrador abre **Crear cuenta** en el menú. Completa datos, confirma contraseña (6 a 128 caracteres), elige rol y guarda. No necesitas terminal para las cuentas siguientes. El primer administrador de una instalación vacía todavía se crea con `npm run crear:cuenta` desde backend.
+Con sesión de administrador abre **Crear cuenta** en el menú. Completa datos, confirma contraseña (6 a 128 caracteres), elige rol y guarda. No necesitas terminal para las cuentas siguientes. La cuenta propietaria inicial se crea con el asistente visual mediante un enlace privado de configuración de un solo uso. Consulta [flujo para la feria](docs/solicitudes-acceso-feria.md).
 
 En **Cobro** selecciona productos, cantidades, método y monto recibido. Consulta [alcance y pruebas](docs/entrega-cuentas-cobro-2026-11-03.md).
+
+## Solicitar y autorizar acceso
+
+La bienvenida incluye **Solicita tu acceso**. La cuenta queda pendiente hasta que el propietario la aprueba en **Solicitudes**. Solo el propietario puede decidir; puede hacerlo desde el navegador de su celular después del despliegue HTTPS. En **Compartir acceso con visitantes** aparece el QR del proyecto desplegado. WhatsApp no participa en este flujo. Consulta [preparación, permisos y pruebas](docs/solicitudes-acceso-feria.md).
