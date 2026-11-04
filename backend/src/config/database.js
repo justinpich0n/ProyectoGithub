@@ -5,6 +5,7 @@ module.exports = function crearSequelize(env = process.env) {
     host: env.DB_HOST,
     port: Number(env.DB_PORT || 3306),
     dialect: 'mysql',
+    dialectModule: require('mysql2'),
     dialectOptions: { ssl: require('./ssl')(env) },
     logging: false,
     define: { charset: 'utf8mb4', collate: 'utf8mb4_unicode_ci' },
