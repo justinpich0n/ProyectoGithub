@@ -5,7 +5,7 @@ import CompartirAcceso from '../components/CompartirAcceso';
 import './Cobro.css';
 
 const pesos = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 2 });
-const metodos = { efectivo: 'Efectivo', tarjeta: 'Tarjeta', movil: 'Pago móvil' };
+const metodos = { efectivo: 'Efectivo', tarjeta: 'Tarjeta', movil: 'Transferencia bancaria' };
 
 export default function Cobro() {
   const { usuario } = useSesion();
@@ -15,7 +15,6 @@ export default function Cobro() {
   const [metodo, setMetodo] = useState('');
   const [recibido, setRecibido] = useState('');
   const [error, setError] = useState('');
-  const [aviso, setAviso] = useState('');
   const [venta, setVenta] = useState(null);
   const [cliente, setCliente] = useState(null);
   const [buscarCliente, setBuscarCliente] = useState('');
@@ -26,8 +25,6 @@ export default function Cobro() {
   const dialogoHistorial = useRef(null);
   const comprobante = ventaAnterior || venta;
   const [ocupado, setOcupado] = useState(false);
-  const [cargandoDemo, setCargandoDemo] = useState(false);
-  const [revision, setRevision] = useState(0);
   const [operacion, setOperacion] = useState(() => crypto.randomUUID());
   const qr = useRef(null);
   const busqueda = useRef(null);
@@ -43,7 +40,7 @@ export default function Cobro() {
       }
     }, 200);
     return () => { clearTimeout(timer); control.abort(); };
-  }, [q, revision]);
+  }, [q]);
 
   useEffect(() => {
     if (buscarCliente.trim().length < 2 || cliente) return;
@@ -98,21 +95,6 @@ export default function Cobro() {
     setCarrito((actual) => actual.map((p) => p.id === id ? { ...p, cantidad: p.cantidad - 1 } : p).filter((p) => p.cantidad > 0));
   }
 
-  async function cargarDemo() {
-    setCargandoDemo(true);
-    setError('');
-    try {
-      const { data } = await api.post('/productos/catalogo-demo');
-      setAviso(data.creados ? `Se agregaron ${data.creados} productos de feria.` : 'El catálogo de feria ya estaba cargado.');
-      setQ('');
-      setRevision((actual) => actual + 1);
-    } catch (e) {
-      setError(mensajeError(e));
-    } finally {
-      setCargandoDemo(false);
-    }
-  }
-
   async function guardar(e) {
     e.preventDefault();
     if (!valido || ocupado) return;
@@ -146,10 +128,7 @@ export default function Cobro() {
       <div><span className="caja-marca">BIZZSTOCK · PUNTO DE VENTA</span><h1>Caja de feria</h1><p>Elige productos, registra el pago y muestra el comprobante.</p></div>
       <div className="caja-acciones">
         <button type="button" disabled={ocupado} onClick={abrirHistorial}>Últimos comprobantes</button>
-        {usuario.propietario && <>
-        <button type="button" onClick={() => qr.current.showModal()}>Mostrar QR de acceso</button>
-        <button type="button" disabled={cargandoDemo} onClick={cargarDemo}>{cargandoDemo ? 'Cargando…' : 'Cargar productos de feria'}</button>
-        </>}
+        {usuario.propietario && <button type="button" onClick={() => qr.current.showModal()}>Mostrar QR de acceso</button>}
       </div>
     </header>
     {usuario.propietario && <dialog ref={qr} className="caja-qr" aria-label="QR para visitantes">
@@ -171,7 +150,6 @@ export default function Cobro() {
       </ul>
     </dialog>
     {error && <p className="crud-error" role="alert">{error}</p>}
-    {aviso && <p role="status">{aviso}</p>}
     <div className="caja-grid">
       <section className="caja-panel" aria-label="Catálogo de caja">
         <h2>1. Elige productos</h2>

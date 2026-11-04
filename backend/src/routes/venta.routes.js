@@ -28,7 +28,7 @@ router.get('/clientes', async (req, res) => {
 router.post('/', async (req, res) => {
   const { operacion, productos, metodo, recibido, clienteId } = req.body || {};
   if (typeof operacion !== 'string' || !/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(operacion)) invalido('Identificador de operación inválido.');
-  if (!['efectivo', 'tarjeta', 'movil'].includes(metodo)) invalido('Selecciona efectivo, tarjeta o pago móvil.');
+  if (!['efectivo', 'tarjeta', 'movil'].includes(metodo)) invalido('Selecciona efectivo, tarjeta o transferencia bancaria.');
   if (!Array.isArray(productos) || productos.length < 1 || productos.length > 100) invalido('Selecciona entre 1 y 100 productos.');
   const ids = new Set();
   for (const p of productos) {
