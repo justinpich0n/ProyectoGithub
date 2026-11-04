@@ -43,6 +43,17 @@ async function main() {
   assert.equal((await m.Venta.findByPk(v.id)).cliente, null);
   assert.equal((await pedir('/ventas', undefined, 200, admin)).length, 3);
   await pedir('/ventas', undefined, 401);
+  const registrado = await pedir('/ventas/clientes', {
+    nombre: `Cliente de caja ${marca}`, telefono: String(Date.now() + 1), direccion: 'Dirección de prueba',
+  }, 201, cajero);
+  clientes.push(registrado.id);
+  await producto.update({ precio: '6250.00' });
+  const compraConPuntos = { ...datos(), recibido: '12500.00', clienteId: registrado.id };
+  ventas.push((await pedir('/ventas', compraConPuntos, 201, cajero)).id);
+  await pedir('/ventas', compraConPuntos, 409, cajero);
+  const ranking = await pedir('/ventas/mejores-compradores', undefined, 200, cajero);
+  assert.equal(Number(ranking.find((fila) => fila.id === registrado.id)?.puntos), 12);
+  assert.ok(!ranking.some((fila) => fila.id === cliente.id));
   await pedir('/ventas',{...datos(),metodo:'tarjeta'},400,admin);
   assert.equal((await m.Producto.findByPk(producto.id)).cantidad,10);
   console.log(`${total} pruebas HTTP correctas: cuentas, permisos, montos, cambio, métodos, duplicados y persistencia.`);

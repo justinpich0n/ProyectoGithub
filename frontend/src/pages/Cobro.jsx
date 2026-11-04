@@ -19,6 +19,14 @@ export default function Cobro() {
   const [cliente, setCliente] = useState(null);
   const [buscarCliente, setBuscarCliente] = useState('');
   const [clientes, setClientes] = useState([]);
+  const [consultaCliente, setConsultaCliente] = useState('');
+  const [registro, setRegistro] = useState({ nombre: '', telefono: '', direccion: '' });
+  const [errorRegistro, setErrorRegistro] = useState('');
+  const [registrando, setRegistrando] = useState(false);
+  const [ranking, setRanking] = useState([]);
+  const [estadoRanking, setEstadoRanking] = useState('');
+  const dialogoRegistro = useRef(null);
+  const dialogoRanking = useRef(null);
   const [historial, setHistorial] = useState([]);
   const [ventaAnterior, setVentaAnterior] = useState(null);
   const [estadoHistorial, setEstadoHistorial] = useState('');
@@ -48,13 +56,51 @@ export default function Cobro() {
     const timer = setTimeout(async () => {
       try {
         const { data } = await api.get('/ventas/clientes', { params: { q: buscarCliente }, signal: control.signal });
-        if (!control.signal.aborted) setClientes(data);
+        if (!control.signal.aborted) {
+          setClientes(data);
+          setConsultaCliente(buscarCliente);
+        }
       } catch (e) {
         if (!control.signal.aborted) setError(mensajeError(e));
       }
     }, 200);
     return () => { clearTimeout(timer); control.abort(); };
   }, [buscarCliente, cliente]);
+
+  async function abrirRanking() {
+    setRanking([]);
+    setEstadoRanking('Cargando clasificación…');
+    dialogoRanking.current.showModal();
+    try {
+      const { data } = await api.get('/ventas/mejores-compradores');
+      setRanking(data);
+      setEstadoRanking(data.length ? '' : 'Aún no hay clientes con puntos.');
+    } catch (e) {
+      setEstadoRanking(mensajeError(e));
+    }
+  }
+
+  function abrirRegistro() {
+    setRegistro({ nombre: buscarCliente.trim(), telefono: '', direccion: '' });
+    setErrorRegistro('');
+    dialogoRegistro.current.showModal();
+  }
+
+  async function registrarCliente(e) {
+    e.preventDefault();
+    if (registrando) return;
+    setRegistrando(true);
+    setErrorRegistro('');
+    try {
+      const { data } = await api.post('/ventas/clientes', registro);
+      setCliente(data);
+      dialogoRegistro.current.close();
+    } catch (e) {
+      setErrorRegistro(mensajeError(e));
+    } finally {
+      setRegistrando(false);
+    }
+  }
 
   async function abrirHistorial() {
     setHistorial([]);
@@ -73,6 +119,7 @@ export default function Cobro() {
   function limpiarCliente() {
     setCliente(null);
     setBuscarCliente('');
+    setConsultaCliente('');
     setClientes([]);
   }
 
@@ -128,6 +175,7 @@ export default function Cobro() {
       <div><span className="caja-marca">BIZZSTOCK · PUNTO DE VENTA</span><h1>Caja de feria</h1><p>Elige productos, registra el pago y muestra el comprobante.</p></div>
       <div className="caja-acciones">
         <button type="button" disabled={ocupado} onClick={abrirHistorial}>Últimos comprobantes</button>
+        <button type="button" onClick={abrirRanking}>Mejores compradores</button>
         {usuario.propietario && <button type="button" onClick={() => qr.current.showModal()}>Mostrar QR de acceso</button>}
       </div>
     </header>
@@ -136,6 +184,34 @@ export default function Cobro() {
       <h2>Escanea para solicitar acceso</h2>
       <CompartirAcceso abierto />
     </dialog>}
+    <dialog ref={dialogoRanking} className="caja-qr" aria-label="Mejores compradores">
+      <form method="dialog"><button autoFocus>Cerrar</button></form>
+      <h2>Mejores compradores</h2>
+      <p>Por cada $1.000 completos en una compra, el cliente suma 1 punto.</p>
+      {estadoRanking && <p role="status">{estadoRanking}</p>}
+      {ranking.length > 0 && <table className="caja-ranking">
+        <thead><tr><th scope="col">Puesto</th><th scope="col">Cliente</th><th scope="col">Puntos</th></tr></thead>
+        <tbody>{ranking.map((fila, indice) => <tr key={fila.id}>
+          <td>{indice + 1}</td><td>{fila.nombre}</td><td>{fila.puntos}</td>
+        </tr>)}</tbody>
+      </table>}
+    </dialog>
+    <dialog ref={dialogoRegistro} className="caja-qr" aria-label="Registrar cliente"
+      onCancel={(e) => { if (registrando) e.preventDefault(); }}>
+      <h2>Registrar cliente</h2>
+      <form className="crud-fields" onSubmit={registrarCliente}>
+        <fieldset disabled={registrando} className="caja-pago">
+          {Object.entries({ nombre: 'Nombre completo', telefono: 'Teléfono', direccion: 'Dirección' }).map(([campo, etiqueta]) =>
+            <label key={campo}>{etiqueta}
+              <input required maxLength={campo === 'telefono' ? 20 : 255} type={campo === 'telefono' ? 'tel' : 'text'}
+                value={registro[campo]} onChange={(e) => setRegistro({ ...registro, [campo]: e.target.value })} />
+            </label>)}
+        </fieldset>
+        {errorRegistro && <p className="crud-error" role="alert">{errorRegistro}</p>}
+        <button type="button" disabled={registrando} onClick={() => dialogoRegistro.current.close()}>Cancelar</button>
+        <button className="crud-primary" disabled={registrando}>{registrando ? 'Guardando…' : 'Registrar y asociar a la compra'}</button>
+      </form>
+    </dialog>
     <dialog ref={dialogoHistorial} className="caja-qr" aria-label="Últimos comprobantes">
       <form method="dialog"><button autoFocus>Cerrar</button></form>
       <h2>Últimos 15 comprobantes de esta cuenta</h2>
@@ -187,13 +263,17 @@ export default function Cobro() {
         <fieldset disabled={ocupado} className="caja-pago">
           <legend>3. Registra el pago</legend>
           {cliente ? <div>
-            <p>Cliente: {cliente.nombre} · {cliente.telefono}</p>
+            <p>Cliente: {cliente.nombre} · {cliente.telefono}. Esta compra suma {Math.floor(total / 100000)} puntos.</p>
             <button type="button" onClick={limpiarCliente}>Quitar cliente</button>
           </div> : <>
             <label>Cliente habitual (opcional)
               <input value={buscarCliente} maxLength={100} placeholder="Busca por nombre"
-                onChange={(e) => { setBuscarCliente(e.target.value); setClientes([]); }} />
+                onChange={(e) => { setBuscarCliente(e.target.value); setConsultaCliente(''); setClientes([]); }} />
             </label>
+            {consultaCliente === buscarCliente && buscarCliente.trim().length >= 2 && clientes.length === 0 &&
+              <p role="status">No encontramos ese nombre. Si el cliente desea sumar puntos, invítalo a registrarse.</p>}
+            {consultaCliente === buscarCliente && buscarCliente.trim().length >= 2 &&
+              <button type="button" onClick={abrirRegistro}>Registrar cliente nuevo</button>}
             {clientes.length > 0 && <div className="caja-metodos">
               {clientes.map((item) => <button key={item.id} type="button" onClick={() => setCliente(item)}>
                 {item.nombre} · {item.telefono}

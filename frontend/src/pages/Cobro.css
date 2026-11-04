@@ -37,3 +37,6 @@
   margin: 0;
   padding: 0;
 }
+
+.caja-ranking { width: 100%; border-collapse: collapse; text-align: left; }
+.caja-ranking th, .caja-ranking td { padding: .55rem; border-bottom: 1px solid #cad8cf; }

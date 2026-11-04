@@ -1,6 +1,7 @@
-const { Op } = require('sequelize');
+const { Op, QueryTypes } = require('sequelize');
 const router = require('express').Router();
 const { moneda, idValido, invalido } = require('../controllers/validacion');
+const { crear } = require('../controllers/cliente.controller');
 const centavos = (v) => Math.round(Number(moneda(v, 'Monto')) * 100);
 router.get('/', async (req, res) => {
   const ventas = await req.app.locals.modelos.Venta.findAll({
@@ -23,6 +24,23 @@ router.get('/clientes', async (req, res) => {
     limit: 15,
   });
   res.json(clientes);
+});
+
+router.post('/clientes', crear);
+
+router.get('/mejores-compradores', async (req, res) => {
+  const { sequelize } = req.app.locals.modelos.Venta;
+  const compradores = await sequelize.query(
+    `SELECT c.id, c.nombre, SUM(FLOOR(v.total / 1000)) AS puntos
+     FROM ventas AS v
+     INNER JOIN clientes AS c ON JSON_EXTRACT(v.cliente, '$.id') = c.id
+     GROUP BY c.id, c.nombre
+     HAVING puntos > 0
+     ORDER BY puntos DESC, c.nombre ASC, c.id ASC
+     LIMIT 10`,
+    { type: QueryTypes.SELECT },
+  );
+  res.json(compradores);
 });
 
 router.post('/', async (req, res) => {
