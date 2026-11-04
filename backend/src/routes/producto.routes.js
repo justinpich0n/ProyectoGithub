@@ -11,12 +11,14 @@ router.param('id', (req, res, next, id) => {
 router.get('/', controller.listar);
 router.get('/:id', controller.obtener);
 const { administrador } = require('../auth/seguridad');
+const { esPropietario } = require('../auth/propietario');
 router.post('/costos/importar', administrador, controller.importarCostos);
 router.post('/catalogo-demo', administrador, async (req, res) => {
-  if (!req.cuenta.propietario) {
+  const modelos = req.app.locals.modelos;
+  if (!await esPropietario(modelos, req.cuenta.id)) {
     return res.status(403).json({ error: 'Solo el propietario puede cargar el catálogo de feria.' });
   }
-  const creados = await require('../config/catalogo-demo')(req.app.locals.modelos);
+  const creados = await require('../config/catalogo-demo')(modelos);
   res.json({ creados });
 });
 router.post('/', administrador, controller.crear);
