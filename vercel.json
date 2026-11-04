@@ -5,6 +5,7 @@
   "buildCommand": "npm run build --prefix frontend",
   "outputDirectory": "frontend/dist",
   "rewrites": [
+    { "source": "/api/:ruta*", "destination": "/api/express?__bizzstock_ruta=:ruta*" },
     { "source": "/((?!api(?:/|$)|assets/).*)", "destination": "/index.html" }
   ]
 }

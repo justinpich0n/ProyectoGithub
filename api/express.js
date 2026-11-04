@@ -23,5 +23,11 @@ module.exports = function atender(req, res) {
     }
   }
 
+  const url = new URL(req.url, 'http://localhost');
+  if (url.pathname === '/api/express') {
+    const ruta = url.searchParams.getAll('__bizzstock_ruta').at(-1) || '';
+    url.searchParams.delete('__bizzstock_ruta');
+    req.url = '/api/' + ruta + url.search;
+  }
   return app(req, res);
 };

@@ -17,8 +17,10 @@ api.interceptors.response.use((response) => response, (error) => {
 });
 export default api;
 export function mensajeError(error) {
+  const detalle = error.response?.data?.error;
+  const mensaje = typeof detalle === 'string' ? detalle : detalle?.message;
   return (
-    error.response?.data?.error ||
+    (typeof mensaje === 'string' && mensaje) ||
     'No se pudo confirmar la operación. Comprueba el backend y actualiza la lista antes de repetirla.'
   );
 }
