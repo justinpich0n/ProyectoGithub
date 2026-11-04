@@ -7,5 +7,6 @@ module.exports = (sequelize) => sequelize.define('Venta', {
   total: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
   recibido: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
   cambio: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
+  cliente: { type: DataTypes.JSON, allowNull: true },
   detalle: { type: DataTypes.JSON, allowNull: false },
-}, { tableName: 'ventas', timestamps: true });
+}, { tableName: 'ventas', timestamps: true, indexes: [{ name: 'ventas_cuenta_recientes', fields: ['cuentaId', 'id'] }] });

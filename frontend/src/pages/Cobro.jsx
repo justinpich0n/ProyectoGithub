@@ -17,6 +17,14 @@ export default function Cobro() {
   const [error, setError] = useState('');
   const [aviso, setAviso] = useState('');
   const [venta, setVenta] = useState(null);
+  const [cliente, setCliente] = useState(null);
+  const [buscarCliente, setBuscarCliente] = useState('');
+  const [clientes, setClientes] = useState([]);
+  const [historial, setHistorial] = useState([]);
+  const [ventaAnterior, setVentaAnterior] = useState(null);
+  const [estadoHistorial, setEstadoHistorial] = useState('');
+  const dialogoHistorial = useRef(null);
+  const comprobante = ventaAnterior || venta;
   const [ocupado, setOcupado] = useState(false);
   const [cargandoDemo, setCargandoDemo] = useState(false);
   const [revision, setRevision] = useState(0);
@@ -36,6 +44,40 @@ export default function Cobro() {
     }, 200);
     return () => { clearTimeout(timer); control.abort(); };
   }, [q, revision]);
+
+  useEffect(() => {
+    if (buscarCliente.trim().length < 2 || cliente) return;
+    const control = new AbortController();
+    const timer = setTimeout(async () => {
+      try {
+        const { data } = await api.get('/ventas/clientes', { params: { q: buscarCliente }, signal: control.signal });
+        if (!control.signal.aborted) setClientes(data);
+      } catch (e) {
+        if (!control.signal.aborted) setError(mensajeError(e));
+      }
+    }, 200);
+    return () => { clearTimeout(timer); control.abort(); };
+  }, [buscarCliente, cliente]);
+
+  async function abrirHistorial() {
+    setHistorial([]);
+    setVentaAnterior(null);
+    setEstadoHistorial('Cargando comprobantes…');
+    dialogoHistorial.current.showModal();
+    try {
+      const { data } = await api.get('/ventas');
+      setHistorial(data);
+      setEstadoHistorial(data.length ? '' : 'Todavía no hay cobros registrados en esta cuenta.');
+    } catch (e) {
+      setEstadoHistorial(mensajeError(e));
+    }
+  }
+
+  function limpiarCliente() {
+    setCliente(null);
+    setBuscarCliente('');
+    setClientes([]);
+  }
 
   const total = carrito.reduce((suma, p) => suma + Math.round(Number(p.precio) * 100) * p.cantidad, 0);
   const valor = metodo === 'efectivo' ? recibido.trim().replace(',', '.') : (total / 100).toFixed(2);
@@ -78,7 +120,7 @@ export default function Cobro() {
     setError('');
     try {
       const { data } = await api.post('/ventas', {
-        operacion, productos: carrito.map(({ id, cantidad }) => ({ id, cantidad })), metodo, recibido: valor,
+        operacion, clienteId: cliente?.id, productos: carrito.map(({ id, cantidad }) => ({ id, cantidad })), metodo, recibido: valor,
       });
       setVenta(data);
     } catch (e) {
@@ -90,6 +132,7 @@ export default function Cobro() {
 
   function nuevoCobro() {
     setVenta(null);
+    limpiarCliente();
     setCarrito([]);
     setRecibido('');
     setMetodo('');
@@ -101,16 +144,32 @@ export default function Cobro() {
   return <section className="page caja">
     <header className="caja-cabecera">
       <div><span className="caja-marca">BIZZSTOCK · PUNTO DE VENTA</span><h1>Caja de feria</h1><p>Elige productos, registra el pago y muestra el comprobante.</p></div>
-      {usuario.propietario && <div className="caja-acciones">
+      <div className="caja-acciones">
+        <button type="button" disabled={ocupado} onClick={abrirHistorial}>Últimos comprobantes</button>
+        {usuario.propietario && <>
         <button type="button" onClick={() => qr.current.showModal()}>Mostrar QR de acceso</button>
         <button type="button" disabled={cargandoDemo} onClick={cargarDemo}>{cargandoDemo ? 'Cargando…' : 'Cargar productos de feria'}</button>
-      </div>}
+        </>}
+      </div>
     </header>
     {usuario.propietario && <dialog ref={qr} className="caja-qr" aria-label="QR para visitantes">
       <form method="dialog"><button autoFocus>Cerrar</button></form>
       <h2>Escanea para solicitar acceso</h2>
       <CompartirAcceso abierto />
     </dialog>}
+    <dialog ref={dialogoHistorial} className="caja-qr" aria-label="Últimos comprobantes">
+      <form method="dialog"><button autoFocus>Cerrar</button></form>
+      <h2>Últimos 15 comprobantes de esta cuenta</h2>
+      {estadoHistorial && <p role="status">{estadoHistorial}</p>}
+      <ul className="caja-historial">
+        {historial.map((item) => <li key={item.id}>
+          <button type="button" onClick={() => {
+            setVentaAnterior(item);
+            dialogoHistorial.current.close();
+          }}>#{item.id} · {new Date(item.createdAt).toLocaleString('es-CO')} · {pesos.format(item.total)}</button>
+        </li>)}
+      </ul>
+    </dialog>
     {error && <p className="crud-error" role="alert">{error}</p>}
     {aviso && <p role="status">{aviso}</p>}
     <div className="caja-grid">
@@ -118,19 +177,23 @@ export default function Cobro() {
         <h2>1. Elige productos</h2>
         <label>Buscar por nombre<input ref={busqueda} value={q} onChange={(e) => setQ(e.target.value)} maxLength={100} placeholder="Ej. Cuaderno" /></label>
         <div className="caja-productos">
-          {opciones.map((p) => <button key={p.id} type="button" disabled={ocupado || !!venta} onClick={() => sumar(p)}>
+          {opciones.map((p) => <button key={p.id} type="button" disabled={ocupado || !!comprobante} onClick={() => sumar(p)}>
             <span>{p.nombre}</span><strong>{pesos.format(p.precio)}</strong><span aria-hidden="true">＋</span>
           </button>)}
           {!opciones.length && <p>No hay productos para mostrar.</p>}
         </div>
       </section>
-      {venta ? <section className="caja-panel caja-recibo">
+      {comprobante ? <section className="caja-panel caja-recibo">
         <span className="caja-marca" role="status">PAGO REGISTRADO</span>
-        <h2>Comprobante #{venta.id}</h2>
-        <p>{metodos[venta.metodo]} · Simulación de caja</p>
-        <ul>{venta.detalle.map((p) => <li key={p.productoId}><span>{p.cantidad} × {p.nombre}</span><strong>{pesos.format(p.subtotal)}</strong></li>)}</ul>
-        <dl><div><dt>Total pagado</dt><dd>{pesos.format(venta.total)}</dd></div><div><dt>Recibido</dt><dd>{pesos.format(venta.recibido)}</dd></div><div><dt>Cambio</dt><dd>{pesos.format(venta.cambio)}</dd></div></dl>
-        <button className="crud-primary" onClick={nuevoCobro}>Nuevo cobro</button>
+        <h2>Comprobante #{comprobante.id}</h2>
+        <p>{new Date(comprobante.createdAt).toLocaleString('es-CO')}</p>
+        {comprobante.cliente && <p>Cliente: {comprobante.cliente.nombre} · {comprobante.cliente.telefono}</p>}
+        <p>{metodos[comprobante.metodo]} · Simulación de caja</p>
+        <ul>{comprobante.detalle.map((p) => <li key={p.productoId}><span>{p.cantidad} × {p.nombre}</span><strong>{pesos.format(p.subtotal)}</strong></li>)}</ul>
+        <dl><div><dt>Total pagado</dt><dd>{pesos.format(comprobante.total)}</dd></div><div><dt>Recibido</dt><dd>{pesos.format(comprobante.recibido)}</dd></div><div><dt>Cambio</dt><dd>{pesos.format(comprobante.cambio)}</dd></div></dl>
+        {ventaAnterior
+          ? <button type="button" onClick={() => setVentaAnterior(null)}>Volver a caja</button>
+          : <button type="button" className="crud-primary" onClick={nuevoCobro}>Nuevo cobro</button>}
       </section> : <form className="caja-panel" onSubmit={guardar}>
         <h2>2. Revisa la compra</h2>
         {carrito.length ? <ul className="caja-lineas">{carrito.map((p) => <li key={p.id}>
@@ -145,6 +208,20 @@ export default function Cobro() {
         <div className="caja-total"><span>Total a cobrar</span><strong>{pesos.format(total / 100)}</strong></div>
         <fieldset disabled={ocupado} className="caja-pago">
           <legend>3. Registra el pago</legend>
+          {cliente ? <div>
+            <p>Cliente: {cliente.nombre} · {cliente.telefono}</p>
+            <button type="button" onClick={limpiarCliente}>Quitar cliente</button>
+          </div> : <>
+            <label>Cliente habitual (opcional)
+              <input value={buscarCliente} maxLength={100} placeholder="Busca por nombre"
+                onChange={(e) => { setBuscarCliente(e.target.value); setClientes([]); }} />
+            </label>
+            {clientes.length > 0 && <div className="caja-metodos">
+              {clientes.map((item) => <button key={item.id} type="button" onClick={() => setCliente(item)}>
+                {item.nombre} · {item.telefono}
+              </button>)}
+            </div>}
+          </>}
           <div className="caja-metodos">{Object.entries(metodos).map(([id, nombre]) => <button key={id} type="button" aria-pressed={metodo === id} onClick={() => setMetodo(id)}>{nombre}</button>)}</div>
           {metodo === 'efectivo' && <>
             <label>Efectivo recibido<input required inputMode="decimal" value={recibido} onChange={(e) => setRecibido(e.target.value)} /></label>
