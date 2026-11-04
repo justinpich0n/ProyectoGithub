@@ -29,6 +29,6 @@ router.post('/', limitar(intentos, 5, 15 * 60000), async (req, res) => {
     return creada;
   });
   const usuario = await m.Usuario.findByPk(cuenta.usuarioId);
-  res.status(201).json({ token: abrirSesion(cuenta.id), usuario: { id: usuario.id, nombre: usuario.nombre, email: usuario.email, rol: cuenta.rol, propietario: true } });
+  res.status(201).json({ token: await abrirSesion(req.app.locals.modelos, cuenta.id), usuario: { id: usuario.id, nombre: usuario.nombre, email: usuario.email, rol: cuenta.rol, propietario: true } });
 });
 module.exports = router;

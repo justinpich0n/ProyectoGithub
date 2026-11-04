@@ -13,5 +13,6 @@ module.exports = function crearModelos(sequelize) {
   const Venta = require('./Venta')(sequelize);
   const ConfiguracionAcceso = require('./ConfiguracionAcceso')(sequelize);
   const SolicitudCuenta = require('./SolicitudCuenta')(sequelize);
-  return { Usuario, Producto, Cuenta, Cliente, Venta, ConfiguracionAcceso, SolicitudCuenta };
+  const Sesion = require('./Sesion')(sequelize);
+  return { Sesion, Usuario, Producto, Cuenta, Cliente, Venta, ConfiguracionAcceso, SolicitudCuenta };
 };

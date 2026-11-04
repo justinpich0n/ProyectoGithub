@@ -17,8 +17,8 @@ router.post('/login', async (req, res) => {
     return res.status(401).json({ error: 'Correo o contraseña incorrectos.' });
   }
   intentos.delete(clave);
-  res.json({ token: abrirSesion(cuenta.id), usuario: await publico(cuenta, req.app.locals.modelos) });
+  res.json({ token: await abrirSesion(req.app.locals.modelos, cuenta.id), usuario: await publico(cuenta, req.app.locals.modelos) });
 });
 router.get('/sesion', autenticar, async (req, res) => { res.set('Cache-Control', 'no-store'); res.json(await publico(req.cuenta, req.app.locals.modelos)); });
-router.post('/logout', autenticar, (req, res) => { cerrarSesion(req); res.json({ mensaje: 'Sesión cerrada.' }); });
+router.post('/logout', autenticar, async (req, res) => { await cerrarSesion(req); res.json({ mensaje: 'Sesión cerrada.' }); });
 module.exports = router;
