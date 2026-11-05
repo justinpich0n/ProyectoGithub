@@ -75,6 +75,7 @@ app.use('/api/ventas', exigirModelos, autenticar, personal, require('./routes/ve
 app.use('/api/solicitudes', exigirModelos, require('./routes/solicitud.routes'));
 app.use('/api/inicio', exigirModelos, require('./routes/inicio.routes'));
 app.use('/api/auth', exigirModelos, require('./routes/auth.routes'));
+app.use('/api/mi-perfil', exigirModelos, autenticar, require('./routes/mi-perfil.routes'));
 app.use('/api/clientes', exigirModelos, autenticar, administrador, require('./routes/cliente.routes'));
 app.use('/api/usuarios', exigirModelos, autenticar, administrador, require('./routes/usuario.routes'));
 app.use('/api/productos', exigirModelos, autenticar, personal, require('./routes/producto.routes'));

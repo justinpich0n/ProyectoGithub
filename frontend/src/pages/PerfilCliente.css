@@ -1,0 +1,26 @@
+.perfil-cliente { max-width:1200px; margin-inline:auto; }
+.perfil-cabecera,.perfil-historial-cabecera { display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+.perfil-cabecera h1 { margin:.5rem 0; font-size:clamp(2rem,4vw,3.4rem); }
+.perfil-resumen { display:grid; grid-template-columns:1.2fr 1fr 1fr; gap:1rem; margin:1.5rem 0; }
+.perfil-resumen article { border:1px solid #d5e0d5; background:white; border-radius:1.2rem; padding:1.5rem; min-width:0; display:flex; flex-direction:column; justify-content:center; gap:.5rem; }
+.perfil-resumen .perfil-puntos { background:#203f36; color:#fff; border-color:#203f36; }
+.perfil-resumen strong { display:block; font-size:clamp(1.6rem,3vw,2.6rem); overflow-wrap:anywhere; }
+.perfil-resumen small { line-height:1.5; }
+.perfil-premios { display:flex; gap:1.5rem; align-items:center; padding:1.6rem; border-radius:1.2rem; background:#e9efdc; color:#203f36; margin:1.5rem 0 2rem; }
+.perfil-premios h2 { margin:.4rem 0; font-size:1.5rem; }
+.perfil-premios p { margin:.5rem 0; }
+.perfil-destello { font-size:4rem; color:#617b46; }
+.perfil-historial { display:grid; gap:1rem; margin:1rem 0; }
+.perfil-compra { background:white; border:1px solid #d5e0d5; border-radius:1rem; padding:1.3rem; }
+.perfil-compra-info { display:flex; gap:1rem; flex-wrap:wrap; align-items:center; color:#536a5d; }
+.perfil-compra-info strong { color:#203f36; }
+.perfil-compra ul { list-style:none; margin:1rem 0; padding:0; }
+.perfil-compra li { display:flex; justify-content:space-between; gap:1rem; padding:.6rem 0; border-bottom:1px solid #edf0e8; }
+.perfil-compra footer { display:flex; align-items:center; flex-wrap:wrap; gap:1rem; justify-content:space-between; padding-top:.4rem; }
+.perfil-compra footer small,.perfil-compra footer strong { display:block; }
+.perfil-compra footer strong { font-size:1.3rem; margin-top:.3rem; }
+.perfil-puntos-ganados { background:#eef4e5; color:#385932; border-radius:2rem; padding:.5rem .8rem; font-weight:650; }
+@media(max-width:850px) { .perfil-resumen { grid-template-columns:1fr; } .perfil-premios { align-items:start;gap:1rem; } .perfil-destello { font-size:2.5rem; } }
+.perfil-cabecera > button,.perfil-compra footer > button { padding:.7rem 1rem; border:1px solid #b6cbb8; border-radius:.65rem; background:#edf3e6; color:#244b3b; font:inherit; cursor:pointer; }
+.perfil-cabecera > button { background:#285442; border-color:#285442; color:white; }
+.perfil-cabecera > button:disabled { opacity:.6; cursor:default; }

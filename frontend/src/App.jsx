@@ -1,3 +1,4 @@
+import PerfilCliente from './pages/PerfilCliente';
 import Catalogo from './pages/Catalogo';
 import Ventas from './pages/Ventas';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -32,6 +33,8 @@ function Contenido() {
           <Route path="/cuentas" element={<Cuentas />} />
           <Route path="/cobro" element={usuario.rol !== 'comprador' ? <Cobro /> : <Catalogo />} />
           <Route path="/ventas" element={usuario.rol === 'administrador' ? <Ventas /> : <Catalogo />} />
+          <Route path="/mi-perfil" element={<PerfilCliente />} />
+          <Route path="/clientes/:id" element={usuario.rol === 'administrador' ? <PerfilCliente administracion /> : <Catalogo />} />
           <Route path="/catalogo" element={<Catalogo />} />
           <Route path="/" element={usuario.rol === 'comprador' ? <Catalogo /> : <Home />} />
           <Route path="/usuarios" element={usuario.rol === 'administrador' ? <Usuarios /> : <p className="page">Esta sección requiere administrador.</p>} />

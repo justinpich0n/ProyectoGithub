@@ -29,6 +29,7 @@ export default function Comprobante({ venta, children }) {
       <div><dt>Cambio entregado</dt><dd>{pesos.format(venta.cambio)}</dd></div>
       <div className="comprobante-total"><dt>Total pagado</dt><dd>{pesos.format(venta.total)}</dd></div>
     </dl>
+    {venta.cliente && venta.puntosGanados != null && <p className="comprobante-puntos">Esta compra suma <strong>{venta.puntosGanados} puntos</strong> al cliente.</p>}
     <footer className="comprobante-pie"><p>Gracias por apoyar una buena idea.</p><small>Comprobante de demostración · No es factura electrónica.<br />No se realizó un cargo bancario real.</small></footer>
     <div className="comprobante-acciones"><button type="button" onClick={() => window.print()}>Imprimir o guardar PDF</button>{children}</div>
   </article>;

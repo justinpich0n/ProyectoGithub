@@ -39,3 +39,5 @@
 @media print { body:has(.comprobante) * { visibility:hidden; } body .comprobante,body .comprobante * { visibility:visible; animation:none; } body .comprobante { position:absolute; left:0; top:0; width:100%; border:0; box-shadow:none; border-radius:0; } .comprobante-check path { stroke-dashoffset:0; } body .comprobante-acciones { display:none; } body dialog[open]:has(.comprobante) { position:absolute; inset:0; width:100%; max-height:none; overflow:visible; border:0; background:white; } body dialog::backdrop { background:transparent; } }
 
 .comprobante dd small { display:block; margin-top:.2rem; color:#748173; font-weight:400; }
+
+.comprobante-puntos { margin:0 1.4rem 1rem; padding:.8rem; border-radius:.75rem; background:#edf4e5; text-align:center; color:#385932; }

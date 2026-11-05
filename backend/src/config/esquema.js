@@ -21,8 +21,19 @@ module.exports = async function prepararEsquema(sequelize) {
       await qi.addIndex(tabla, ['documentoHash'], { unique: true, name: tabla + '_documento_unico' });
     }
   }
+  if (tablas.includes('clientes')) {
+    const columnasCliente = await qi.describeTable('clientes');
+    if (!columnasCliente.usuarioId) await qi.addColumn('clientes', 'usuarioId', { type: DataTypes.INTEGER, allowNull: true, references: { model: 'usuarios', key: 'id' }, onDelete: 'SET NULL', onUpdate: 'CASCADE' });
+    if (!columnasCliente.telefono.allowNull) await qi.changeColumn('clientes', 'telefono', { type: DataTypes.STRING(20), allowNull: true });
+    if (!columnasCliente.direccion.allowNull) await qi.changeColumn('clientes', 'direccion', { type: DataTypes.STRING, allowNull: true });
+    const indicesCliente = await qi.showIndex('clientes');
+    if (!indicesCliente.some(i => i.unique && i.fields.length === 1 && i.fields[0].attribute === 'usuarioId')) await qi.addIndex('clientes', ['usuarioId'], { unique: true, name: 'clientes_usuario_unico' });
+  }
   if (tablas.includes('ventas')) {
     const columnasVenta = await qi.describeTable('ventas');
+    if (!columnasVenta.clienteId) await qi.addColumn('ventas', 'clienteId', { type: DataTypes.INTEGER, allowNull: true, references: { model: 'clientes', key: 'id' }, onDelete: 'RESTRICT', onUpdate: 'CASCADE' });
+    const indicesVenta = await qi.showIndex('ventas');
+    if (!indicesVenta.some(i => i.name === 'ventas_cliente_recientes')) await qi.addIndex('ventas', ['clienteId', 'id'], { name: 'ventas_cliente_recientes' });
     if (!columnasVenta.vendedor) await qi.addColumn('ventas', 'vendedor', { type: DataTypes.JSON, allowNull: true });
     if (!columnasVenta.cliente) await qi.addColumn('ventas', 'cliente', {
       type: DataTypes.JSON,

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import api, { mensajeError } from '../services/api';
 import { useSesion } from '../services/sesion';
@@ -42,8 +43,8 @@ export default function Clientes() {
       <div className="crud-actions"><button className="crud-primary">{ocupado ? 'Guardando…' : id ? 'Guardar cliente' : 'Crear cliente'}</button>{id && <button type="button" onClick={() => { setId(null); setForm(vacio); }}>Cancelar edición</button>}</div>
     </fieldset></form></div>
     <div className="crud-panel"><label>Buscar clientes por nombre<input type="search" maxLength={100} value={q} onChange={(e) => setQ(e.target.value)} /></label><button onClick={() => setRevision((v) => v + 1)} disabled={cargando}>Actualizar clientes</button>
-      {cargando ? <p role="status">Buscando clientes…</p> : !filas.length ? <p role="status">{error ? 'No se pudo consultar. Puedes reintentar.' : 'No se encontraron clientes.'}</p> : <div className="table-scroll" tabIndex={0} role="region" aria-label="Lista de clientes"><table className="crud-table"><thead><tr><th>Nombre</th><th>Teléfono</th><th>Dirección</th><th>Acciones</th></tr></thead><tbody>{filas.map((c) => <tr key={c.id}><td>{c.nombre}</td><td>{c.telefono}</td><td>{c.direccion}</td><td><button aria-label={`Editar cliente ${c.nombre}`} onClick={() => { setId(c.id); setForm({ nombre: c.nombre, telefono: c.telefono, direccion: c.direccion }); setAviso(''); }}>Editar</button></td></tr>)}</tbody></table></div>}
-      <p className="crud-note">Se muestran hasta 100 resultados. Usa el nombre para encontrar un cliente. No se registran créditos en esta sección.</p>
+      {cargando ? <p role="status">Buscando clientes…</p> : !filas.length ? <p role="status">{error ? 'No se pudo consultar. Puedes reintentar.' : 'No se encontraron clientes.'}</p> : <div className="table-scroll" tabIndex={0} role="region" aria-label="Lista de clientes"><table className="crud-table"><thead><tr><th>Nombre</th><th>Correo de cuenta</th><th>Teléfono</th><th>Dirección</th><th>Puntos</th><th>Compras</th><th>Acciones</th></tr></thead><tbody>{filas.map((c) => <tr key={c.id}><td>{c.nombre}</td><td>{c.email || 'Sin cuenta vinculada'}</td><td>{c.telefono || 'Por completar'}</td><td>{c.direccion || 'Por completar'}</td><td>{c.puntos}</td><td>{c.compras}</td><td><Link to={`/clientes/${c.id}`}>Ver compras y puntos</Link> <button aria-label={`Editar cliente ${c.nombre}`} onClick={() => { setId(c.id); setForm({ nombre: c.nombre, telefono: c.telefono || '', direccion: c.direccion || '' }); setAviso(''); }}>Editar</button></td></tr>)}</tbody></table></div>}
+      <p className="crud-note">Se muestran hasta 100 resultados. Usa el nombre para encontrar un cliente. Las cuentas de comprador se incorporan automáticamente. Los puntos se calculan con las ventas asignadas a cada cliente.</p>
     </div>
   </section>;
 }
