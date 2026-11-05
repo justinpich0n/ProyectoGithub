@@ -1,6 +1,7 @@
 const assert = require('node:assert/strict');
 const { randomUUID } = require('node:crypto');
 require('dotenv').config({ quiet: true });
+process.env.BIZZSTOCK_DOCUMENTO_KEY = randomUUID();
 const db = require('../src/config/database')(); const m = require('../src/models')(db); const app = require('../src/app');
 const { hashPassword } = require('../src/auth/seguridad');
 async function main() {
@@ -16,7 +17,7 @@ async function main() {
   async function pedir(ruta,datos,status,token) { const r=await fetch(`http://127.0.0.1:${server.address().port}/api${ruta}`,{method:datos === undefined ? 'GET' : 'POST',headers:{'Content-Type':'application/json',...(token?{Authorization:`Bearer ${token}`}:{})},body:JSON.stringify(datos)}); const b=await r.json();assert.equal(r.status,status,JSON.stringify(b));total++;return b; }
   const admin=(await pedir('/auth/login',{email:`administrador-${marca}@example.com`,password:'abc123'},200)).token;
   const cajero=(await pedir('/auth/login',{email:`cajero-${marca}@example.com`,password:'abc123'},200)).token;
-  const cuenta={nombre:'Cuenta ficticia',email:`nueva-${marca}@example.com`,password:'abcdef',rol:'cajero'};
+  const cuenta={nombre:'Cuenta ficticia',email:`nueva-${marca}@example.com`,password:'abcdef',rol:'cajero',tipoDocumento:'CE',numeroDocumento:marca.replace(/-/g,'').slice(0,20)};
   await pedir('/cuentas',cuenta,401);await pedir('/cuentas',cuenta,403,cajero);await pedir('/cuentas',{...cuenta,password:'12345'},400,admin);await pedir('/cuentas',cuenta,201,admin);
   usuarios.push((await m.Usuario.findOne({where:{email:cuenta.email}})).id);
   await pedir('/cuentas',cuenta,409,admin);await pedir('/auth/login',{email:cuenta.email,password:cuenta.password},200);

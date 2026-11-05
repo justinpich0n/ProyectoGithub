@@ -79,7 +79,9 @@ app.use('/api', (req, res) => res.status(404).json({ error: 'Ruta API no encontr
 app.use((error, req, res, next) => {
   if (res.headersSent) return next(error);
   if (error.name === 'SequelizeUniqueConstraintError')
-    return res.status(409).json({ error: 'Ya existe un registro con ese correo o teléfono.' });
+    return res.status(409).json({ error: /^\/api\/(auth|solicitudes|cuentas|inicio)(\/|$)/.test(req.originalUrl)
+      ? 'Ya existe una cuenta o solicitud pendiente con ese correo o documento.'
+      : 'Ya existe un registro con ese correo o teléfono.' });
   if (error.name === 'SequelizeForeignKeyConstraintError')
     return res
       .status(400)
