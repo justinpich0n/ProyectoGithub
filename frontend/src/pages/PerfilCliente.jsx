@@ -8,7 +8,7 @@ import './PerfilCliente.css';
 const pesos = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 2 });
 const numero = new Intl.NumberFormat('es-CO');
 const fecha = valor => new Date(valor).toLocaleString('es-CO', { timeZone: 'America/Bogota', dateStyle: 'medium', timeStyle: 'short' });
-const medios = { efectivo: 'Efectivo', tarjeta: 'Tarjeta', movil: 'Pago móvil' };
+const medios = { efectivo: 'Efectivo', tarjeta: 'Tarjeta', movil: 'Transferencia bancaria' };
 
 export default function PerfilCliente({ administracion = false }) {
   const { id } = useParams();

@@ -9,7 +9,7 @@ import CompartirAcceso from '../components/CompartirAcceso';
 import './Cobro.css';
 
 const pesos = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 2 });
-const metodos = { efectivo: 'Efectivo', tarjeta: 'Tarjeta', movil: 'Pago móvil' };
+const metodos = { efectivo: 'Efectivo', tarjeta: 'Tarjeta', movil: 'Transferencia bancaria' };
 
 export default function Cobro() {
   const { usuario } = useSesion();
