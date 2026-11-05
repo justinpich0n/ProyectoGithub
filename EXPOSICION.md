@@ -1,22 +1,22 @@
 # BizzStock: guion para la feria
 
-Actualizado: 5 de noviembre de 2026. Duración aproximada: 3 a 3½ minutos, sin la demostración. Las notas posteriores no se leen en voz alta.
+Actualizado: 5 de noviembre de 2026. Duración aproximada: 2 a 2½ minutos, sin la demostración. Tono conversado: hacer una pausa breve en las preguntas, sin forzar las bromas. Las notas posteriores no se leen en voz alta.
 
-Buenos días, tardes o noches. Mi nombre es Justin Enrique Mena Córdoba y hoy les presento BizzStock, una aplicación web para organizar una papelería y tienda de variedades. Su idea principal es sencilla: reunir los productos, los clientes y la caja en un mismo lugar, para registrar lo que se vende y quién lo vende.
+Buenos días, tardes o noches. Soy Justin Enrique Mena Córdoba y les presento BizzStock: una aplicación web para una papelería y tienda de variedades. La idea es tener productos, clientes y ventas organizados, para que al cobrar no toque hacer cuentas en una servilleta.
 
-Para desarrollarla utilizamos JavaScript, HTML, CSS y SQL. El frontend está hecho con React y se compila con Vite. El backend funciona con Node.js, que ejecuta JavaScript en el servidor, y Express, que recibe las solicitudes. La base de datos es relacional y compatible con MySQL. Usamos Sequelize como ORM para trabajar con sus tablas y relaciones. La aplicación está desplegada en Render, así que podemos abrirla desde un computador o celular sin iniciar el proyecto en nuestra terminal.
+La desarrollamos con JavaScript, HTML, CSS y SQL. La interfaz usa React y Vite; el servidor, Node.js y Express. Los datos se guardan en una base relacional compatible con MySQL y usamos Sequelize como ORM para trabajar con sus tablas. Está desplegada en Render: se abre desde el computador o el celular, sin depender de mi terminal.
 
-Organizamos el trabajo con la metodología Scrum y un backlog en GitHub Projects. Allí relacionamos las tareas con los requisitos funcionales y no funcionales del PPI. Git conserva el historial; las ramas permiten separar los cambios y los pull requests permiten revisarlos antes de integrarlos. No son lo mismo: Scrum organiza el trabajo y GitHub nos ayuda a seguirlo.
+Trabajamos con Scrum y organizamos los requisitos del PPI en un backlog de GitHub Projects. Las ramas separan los cambios y los pull requests permiten revisarlos antes de integrarlos: así queda registro de qué cambió y quién lo hizo.
 
-La aplicación permite crear, consultar, actualizar y eliminar registros: ese es el CRUD. El catálogo muestra fotografías, precios y disponibilidad registrada. La caja permite elegir productos, asociar un cliente, registrar el medio de pago y calcular el cambio. Después genera un comprobante con el detalle y una confirmación visual. El registro de ventas permite a los administradores consultar las ventas de todos los cajeros, con filtros de fecha y medio de pago.
+La aplicación incluye CRUD: crear, consultar, actualizar y eliminar registros. El catálogo muestra fotos, precios y disponibilidad registrada. En caja elegimos productos, asociamos al cliente y registramos el pago; el sistema calcula el cambio y genera el comprobante. Además, el administrador puede consultar las ventas de todos los cajeros.
 
-También diferenciamos los permisos. Un comprador puede registrarse para consultar el catálogo; para trabajar como cajero o administrador se necesita la autorización del propietario. El QR abre la página de acceso: no concede permisos por sí solo.
+¿Y la seguridad? Un comprador puede registrarse para ver el catálogo, pero trabajar como cajero o administrador requiere autorización del propietario. El QR abre la página; no entrega las llaves de la caja.
 
-En seguridad, no guardamos las contraseñas tal como se escriben. Usamos scrypt con una sal aleatoria para generar una huella que permite verificarlas. Los documentos de identidad de las cuentas se almacenan cifrados, y su número completo solo se muestra al propietario. La página utiliza HTTPS, el servidor valida los permisos y los datos, limita intentos fallidos de acceso y evita cuentas duplicadas por correo o documento. Las credenciales de conexión no se publican en GitHub.
+Las contraseñas se guardan como una huella con scrypt y una sal aleatoria. Los documentos de las cuentas están cifrados, usamos HTTPS, validamos permisos y datos, limitamos intentos fallidos y evitamos cuentas duplicadas. Las credenciales de conexión quedan fuera de GitHub.
 
-Estas medidas reducen los riesgos, pero no hacen que la aplicación sea imposible de hackear. Todavía es un prototipo que requiere mejoras y revisión continua para un uso real. Los cobros son simulados: no cargamos dinero a tarjetas ni emitimos facturas electrónicas.
+¿Inexpugnable? Ojalá. Tenemos protecciones para reducir riesgos, pero todavía es un prototipo que necesita mejoras y revisión. Los cobros son simulados: aquí podemos practicar sin poner a sufrir la tarjeta.
 
-Ahora voy a mostrarles cómo se realiza una venta en BizzStock. Muchas gracias.
+Ahora sí, vamos a hacer una venta.
 
 ## Notas para sustentar
 
