@@ -2,7 +2,7 @@
   "name": "bizzstock-backend",
   "version": "0.1.0",
   "private": true,
-  "description": "Backend de BizzStock para la papelería y variedades Arte y Belleza",
+  "description": "Backend de BizzStock para la papeler\u00eda y variedades Arte y Belleza",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -13,7 +13,8 @@
     "crear:cuenta": "node scripts/crear-cuenta.js",
     "test:ppi": "node test/ppi.integration.js",
     "test:rendimiento": "node scripts/probar-rendimiento.js",
-    "test:acceso": "node test/inicio.integration.js"
+    "test:acceso": "node test/inicio.integration.js",
+    "test:registro-ventas": "node test/registro-ventas.integration.js"
   },
   "dependencies": {
     "cors": "^2.8.6",
