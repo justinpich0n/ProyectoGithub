@@ -15,14 +15,15 @@ router.get('/clientes', async (req, res) => {
   const q = req.query.q;
   if (typeof q !== 'string' || q.length > 100) invalido('La búsqueda admite hasta 100 caracteres.');
   if (q.trim().length < 2) return res.json([]);
-  const nombre = q.trim().replace(/[\\%_]/g, '\\$&');
-  const clientes = await req.app.locals.modelos.Cliente.findAll({
+  const termino = `%${q.trim().replace(/[\\%_]/g, '\\$&')}%`;
+  const m = req.app.locals.modelos;
+  const clientes = await m.Cliente.findAll({
     attributes: ['id', 'nombre', 'telefono'],
-    where: { nombre: { [Op.like]: `%${nombre}%` } },
-    order: [['nombre', 'ASC'], ['id', 'ASC']],
-    limit: 15,
+    include: { model: m.Usuario, attributes: ['email'], required: false },
+    where: { [Op.or]: [{ nombre: { [Op.like]: termino } }, { telefono: { [Op.like]: termino } }, { '$Usuario.email$': { [Op.like]: termino } }] },
+    order: [['nombre', 'ASC'], ['id', 'ASC']], limit: 15,
   });
-  res.json(clientes);
+  res.json(clientes.map(c => ({ id: c.id, nombre: c.nombre, telefono: c.telefono, ...(c.Usuario ? { email: c.Usuario.email } : {}) })));
 });
 
 router.post('/', async (req, res) => {
@@ -58,7 +59,7 @@ router.post('/', async (req, res) => {
     const monto = centavos(recibido);
     if (monto < total) invalido('El monto recibido es insuficiente.');
     if (metodo !== 'efectivo' && monto !== total) invalido('En medios electrónicos ingresa el monto exacto.');
-    return m.Venta.create({ operacion, cuentaId: req.cuenta.id, vendedor: { nombre: req.cuenta.Usuario.nombre, email: req.cuenta.Usuario.email, rol: req.cuenta.rol }, cliente, metodo, total: (total / 100).toFixed(2), recibido: (monto / 100).toFixed(2), cambio: ((monto - total) / 100).toFixed(2), detalle }, { transaction });
+    return m.Venta.create({ operacion, clienteId: cliente?.id ?? null, cuentaId: req.cuenta.id, vendedor: { nombre: req.cuenta.Usuario.nombre, email: req.cuenta.Usuario.email, rol: req.cuenta.rol }, cliente, metodo, total: (total / 100).toFixed(2), recibido: (monto / 100).toFixed(2), cambio: ((monto - total) / 100).toFixed(2), detalle }, { transaction });
   });
   res.status(201).json(venta);
 });

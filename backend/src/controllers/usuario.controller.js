@@ -44,7 +44,12 @@ async function actualizar(req, res) {
   const fila = await req.app.locals.modelos.Usuario.findByPk(req.params.id);
   if (!fila) return res.status(404).json({ error: 'Usuario no encontrado.' });
   if (await protegerPropietario(req, res, fila)) return;
-  await fila.update(datosUsuario(req.body));
+  const datos = datosUsuario(req.body);
+  const m = req.app.locals.modelos;
+  await m.Usuario.sequelize.transaction(async transaction => {
+    await fila.update(datos, { transaction });
+    await m.Cliente.update({ nombre: datos.nombre }, { where: { usuarioId: fila.id }, transaction });
+  });
   res.json(fila);
 }
 async function eliminar(req, res) {

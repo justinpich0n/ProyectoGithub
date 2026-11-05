@@ -35,6 +35,7 @@ router.post('/', limitar(new Map(), 20, 15 * 60000), async (req, res) => {
     if (rol === 'comprador') {
       const [usuario] = await m.Usuario.findOrCreate({ where: { email: normalizado }, defaults: { nombre: nombre.trim() }, transaction });
       const creada = await m.Cuenta.create({ usuarioId: usuario.id, rol: 'comprador', passwordHash, ...datosDocumento }, { transaction });
+      await require('../clientes/fidelidad').asegurarCliente(m, usuario, transaction);
       return { comprador: true, cuentaId: creada.id };
     }
     return m.SolicitudCuenta.create({
