@@ -80,6 +80,15 @@ async function main(){let server,total=0;try{
  await pedir('POST','/auth/documento',doc,409,token);
  const guardada=await m.Cuenta.findOne({where:{usuarioId:anterior.id}});
  assert.equal(require('../src/auth/documento').leerNumero(guardada.documentoCifrado),doc.numeroDocumento);assert.notEqual(guardada.documentoCifrado,doc.numeroDocumento);
+ // Una base con documentos previos requiere la misma clave en el nuevo alojamiento.
+ const claveOriginal=process.env.BIZZSTOCK_DOCUMENTO_KEY;
+ await require('../src/config/documentos')(m);
+ try {
+  process.env.BIZZSTOCK_DOCUMENTO_KEY=randomBytes(32).toString('hex');
+  await assert.rejects(require('../src/config/documentos')(m));
+ } finally { process.env.BIZZSTOCK_DOCUMENTO_KEY=claveOriginal; }
+ await require('../src/config/documentos')(m);
+ await guardada.reload();assert.equal(require('../src/auth/documento').leerNumero(guardada.documentoCifrado),doc.numeroDocumento);
  // Documento duplicado entre roles, normalización y solicitudes pendientes.
  await pedir('POST','/solicitudes',{...nuevo,email:'sin-doc@example.com',tipoDocumento:null,numeroDocumento:null},400);
  await pedir('POST','/solicitudes',{...nuevo,email:'tipo-invalido@example.com',tipoDocumento:'OTRO'},400);
