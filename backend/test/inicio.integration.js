@@ -1,3 +1,4 @@
+process.env.BIZZSTOCK_DOCUMENTO_KEY ||= require('node:crypto').randomBytes(32).toString('hex');
 const assert = require('node:assert/strict');
 const { randomBytes, createHash } = require('node:crypto');
 require('dotenv').config({ quiet: true });
@@ -12,6 +13,7 @@ async function main() {
  try {
   await db.sync(); app.locals.modelos = m; server = app.listen(0,'127.0.0.1'); await new Promise(r=>server.once('listening',r));
   async function pedir(method,ruta,datos,status,token,setup) {
+   if (method === 'POST' && ['/inicio','/solicitudes','/cuentas'].includes(ruta) && datos?.email) datos={tipoDocumento:'CC',numeroDocumento:String(9000000000000000n + BigInt('0x'+require('node:crypto').createHash('sha256').update(datos.email.toLowerCase()).digest('hex').slice(0,8))),...datos};
    const r=await fetch(`http://127.0.0.1:${server.address().port}/api${ruta}`,{method,headers:{'Content-Type':'application/json',...(token?{Authorization:`Bearer ${token}`} :{}),...(setup?{'X-Setup-Token':setup}:{})},body:datos===undefined?undefined:JSON.stringify(datos)});
    const b=await r.json();if(status)assert.equal(r.status,status,JSON.stringify(b));total++;return {status:r.status,b};
   }

@@ -5,6 +5,7 @@ const { autenticar, hashPassword, abrirSesion } = require('../auth/seguridad');
 const { propietario } = require('../auth/propietario');
 const { limitar } = require('../auth/limitar');
 const { invalido } = require('../controllers/validacion');
+const { documento, bloquearAltas, verificarDuplicado } = require('../auth/documento');
 const digest = valor => createHash('sha256').update(valor).digest('hex');
 const privado = (req, res, next) => { res.set('Cache-Control', 'no-store'); next(); };
 async function expirar(m) {
@@ -15,30 +16,30 @@ router.use(privado);
 router.post('/', limitar(new Map(), 20, 15 * 60000), async (req, res) => {
   const m = req.app.locals.modelos;
   const config = await m.ConfiguracionAcceso.findByPk(1);
-  const cuenta = config && await m.Cuenta.findByPk(config.propietarioCuentaId);
-  if (!cuenta?.activo) return res.status(503).json({ error: 'El propietario todavía debe configurar su acceso.' });
+  const propietarioCuenta = config && await m.Cuenta.findByPk(config.propietarioCuentaId);
+  if (!propietarioCuenta?.activo) return res.status(503).json({ error: 'El propietario todavía debe configurar su acceso.' });
   const { nombre, email, password, rol } = req.body || {};
   if (typeof nombre !== 'string' || !nombre.trim() || nombre.length > 255 || typeof email !== 'string' || email.length > 255 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !['cajero', 'administrador', 'comprador'].includes(rol)) invalido('Revisa nombre, correo y rol solicitado.');
   if (typeof password !== 'string' || password.length < 6 || password.length > 128) invalido('La contraseña debe tener entre 6 y 128 caracteres.');
+  const datosDocumento = documento(req.body);
   const normalizado = email.trim().toLowerCase();
+  const passwordHash = await hashPassword(password);
   await expirar(m);
-  const u = await m.Usuario.findOne({ where: { email: normalizado } });
-  if (u && await m.Cuenta.findOne({ where: { usuarioId: u.id } }) || await m.SolicitudCuenta.findOne({ where: { emailPendiente: normalizado } })) return res.status(409).json({ error: 'Este correo ya tiene una cuenta o una solicitud pendiente.' });
-  if (rol === 'comprador') {
-    const passwordHash = await hashPassword(password);
-    const nueva = await m.Usuario.sequelize.transaction(async transaction => {
-      const [usuario] = await m.Usuario.findOrCreate({ where: { email: normalizado }, defaults: { nombre: nombre.trim() }, transaction });
-      if (await m.Cuenta.findOne({ where: { usuarioId: usuario.id }, transaction })) { const e = new Error('Este correo ya tiene cuenta.'); e.status = 409; throw e; }
-      const cuenta = await m.Cuenta.create({ usuarioId: usuario.id, rol: 'comprador', passwordHash }, { transaction });
-      await require('../clientes/vinculo').asegurarCliente(m, usuario, transaction);
-      return cuenta;
-    });
-    return res.status(201).json({ token: await abrirSesion(m, nueva.id), usuario: { id: nueva.usuarioId, nombre: nombre.trim(), email: normalizado, rol: 'comprador', propietario: false } });
-  }
-  if (await m.SolicitudCuenta.count({ where: { estado: 'pendiente' } }) >= 100) return res.status(429).json({ error: 'Hay muchas solicitudes pendientes. Intenta más tarde.' });
   const seguimiento = randomBytes(32).toString('hex');
-  const solicitud = await m.SolicitudCuenta.create({ id: randomUUID(), seguimientoHash: digest(seguimiento), nombre: nombre.trim(), email: normalizado, emailPendiente: normalizado, rol, passwordHash: await hashPassword(password), expira: new Date(Date.now() + 24 * 60 * 60000) });
-  res.status(202).json({ seguimiento, estado: solicitud.estado, expira: solicitud.expira });
+  const resultado = await m.Cuenta.sequelize.transaction(async transaction => {
+    await bloquearAltas(m, transaction);
+    await verificarDuplicado(m, transaction, { email: normalizado, ...datosDocumento });
+    if (rol === 'comprador') {
+      const [usuario] = await m.Usuario.findOrCreate({ where: { email: normalizado }, defaults: { nombre: nombre.trim() }, transaction });
+      const cuenta = await m.Cuenta.create({ usuarioId: usuario.id, rol, passwordHash, ...datosDocumento }, { transaction });
+      await require('../clientes/vinculo').asegurarCliente(m, usuario, transaction);
+      return { cuenta, usuario };
+    }
+    if (await m.SolicitudCuenta.count({ where: { estado: 'pendiente' }, transaction }) >= 100) throw Object.assign(new Error('Hay muchas solicitudes pendientes. Intenta más tarde.'), { status: 429 });
+    return { solicitud: await m.SolicitudCuenta.create({ id: randomUUID(), seguimientoHash: digest(seguimiento), nombre: nombre.trim(), email: normalizado, emailPendiente: normalizado, rol, passwordHash, ...datosDocumento, expira: new Date(Date.now() + 24 * 60 * 60000) }, { transaction }) };
+  });
+  if (resultado.cuenta) return res.status(201).json({ token: await abrirSesion(m, resultado.cuenta.id), usuario: { id: resultado.usuario.id, nombre: resultado.usuario.nombre, email: resultado.usuario.email, rol, propietario: false, faltaDocumento: false } });
+  res.status(202).json({ seguimiento, estado: resultado.solicitud.estado, expira: resultado.solicitud.expira });
 });
 router.post('/estado', limitar(new Map(), 120, 60000), async (req, res) => {
   const token = req.body?.seguimiento;
@@ -63,13 +64,15 @@ router.post('/:id/decision', autenticar, propietario, async (req, res) => {
   if (!['aprobar', 'rechazar'].includes(decision) || (decision === 'aprobar' && !['administrador', 'cajero'].includes(rol))) invalido('Selecciona aprobar o rechazar y revisa el rol.');
   const m = req.app.locals.modelos; await expirar(m);
   const resultado = await m.SolicitudCuenta.sequelize.transaction(async transaction => {
+    await bloquearAltas(m, transaction);
     const s = await m.SolicitudCuenta.findByPk(req.params.id, { transaction, lock: transaction.LOCK.UPDATE });
     if (!s) return null;
     if (s.estado !== 'pendiente' || s.expira <= new Date()) { const e = new Error('La solicitud ya fue resuelta o expiró.'); e.status = 409; throw e; }
     if (decision === 'aprobar') {
+      await verificarDuplicado(m, transaction, { email: s.email, documentoHash: s.documentoHash }, false);
       const [u] = await m.Usuario.findOrCreate({ where: { email: s.email }, defaults: { nombre: s.nombre }, transaction });
       if (await m.Cuenta.findOne({ where: { usuarioId: u.id }, transaction })) { const e = new Error('Este correo ya tiene cuenta.'); e.status = 409; throw e; }
-      await m.Cuenta.create({ usuarioId: u.id, passwordHash: s.passwordHash, rol }, { transaction });
+      await m.Cuenta.create({ usuarioId: u.id, passwordHash: s.passwordHash, rol, tipoDocumento: s.tipoDocumento, documentoHash: s.documentoHash, documentoCifrado: s.documentoCifrado }, { transaction });
     }
     await s.update({ estado: decision === 'aprobar' ? 'aprobada' : 'rechazada', rol: decision === 'aprobar' ? rol : s.rol, passwordHash: null, emailPendiente: null, decididoPor: req.cuenta.id, decididoEn: new Date() }, { transaction });
     return resumen(s);

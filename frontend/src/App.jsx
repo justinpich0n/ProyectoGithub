@@ -3,6 +3,7 @@ import Solicitudes from './pages/Solicitudes';
 import Cuentas from './pages/Cuentas';
 import Cobro from './pages/Cobro';
 import Ventas from './pages/Ventas';
+import PerfilCliente from './pages/PerfilCliente';
 import Catalogo from './pages/Catalogo';
 import Navbar from './components/Navbar.jsx';
 import Home from './pages/Home.jsx';
@@ -28,6 +29,8 @@ function Contenido() {
           </span>
         </header>
         <Routes>
+          <Route path="/mi-perfil" element={<PerfilCliente />} />
+          <Route path="/clientes/:id/compras" element={<PerfilCliente administracion />} />
           <Route path="/ventas" element={usuario.rol === 'administrador' ? <Ventas /> : <p className="page">El registro de ventas es exclusivo de administración.</p>} />
           <Route path="/solicitudes" element={<Solicitudes />} />
           <Route path="/cuentas" element={<Cuentas />} />

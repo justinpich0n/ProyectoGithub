@@ -67,6 +67,7 @@ function exigirModelos(req, res, next) {
   next();
 }
 const { autenticar, administrador, personal } = require('./auth/seguridad');
+app.use('/api/mi-perfil', exigirModelos, autenticar, require('./routes/mi-perfil.routes'));
 app.use('/api/cuentas', exigirModelos, autenticar, administrador, require('./routes/cuenta.routes'));
 app.use('/api/registro-ventas', exigirModelos, autenticar, administrador, require('./routes/registro-ventas.routes'));
 app.use('/api/ventas', exigirModelos, autenticar, personal, require('./routes/venta.routes'));
@@ -95,7 +96,7 @@ app.use((error, req, res, next) => {
     return res
       .status(400)
       .json({ error: 'El cuerpo debe contener JSON válido.' });
-  if ([400, 409].includes(error.status))
+  if ([400, 409, 429].includes(error.status))
     return res.status(error.status).json({ error: error.message });
   if (error.status === 413)
     return res.status(413).json({ error: 'La petición es demasiado grande.' });

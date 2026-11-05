@@ -2,9 +2,14 @@ const { datosUsuario } = require('./validacion');
 
 async function listar(req, res) {
   const m = req.app.locals.modelos;
-  const [filas, cuentas] = await Promise.all([m.Usuario.findAll({}), m.Cuenta.findAll({ where: { rol: 'comprador' }, attributes: ['usuarioId'] })]);
-  const compradores = new Set(cuentas.map(c => c.usuarioId));
-  res.json(filas.map(fila => ({ ...fila.toJSON(), comprador: compradores.has(fila.id) })));
+  const propietario = await require('../auth/propietario').esPropietario(m, req.cuenta.id);
+  const [filas, cuentas] = await Promise.all([m.Usuario.findAll({}), m.Cuenta.findAll({ attributes: ['usuarioId', 'rol', 'tipoDocumento', ...(propietario ? ['documentoCifrado'] : [])] })]);
+  const porId = new Map(cuentas.map(c => [c.usuarioId, c]));
+  res.set('Cache-Control', 'no-store');
+  res.json(filas.map(fila => {
+    const cuenta = porId.get(fila.id);
+    return { ...fila.toJSON(), comprador: cuenta?.rol === 'comprador', tipoDocumento: cuenta?.tipoDocumento || null, numeroDocumento: propietario ? require('../auth/documento').leerNumero(cuenta?.documentoCifrado) : null };
+  }));
 }
 async function obtener(req, res) {
   const fila = await req.app.locals.modelos.Usuario.findByPk(req.params.id, {});
@@ -30,7 +35,11 @@ async function actualizar(req, res) {
   const fila = await req.app.locals.modelos.Usuario.findByPk(req.params.id);
   if (!fila) return res.status(404).json({ error: 'Usuario no encontrado.' });
   if (await protegerPropietario(req, res, fila)) return;
-  await fila.update(datosUsuario(req.body));
+  const datos = datosUsuario(req.body);
+  await fila.sequelize.transaction(async transaction => {
+    await fila.update(datos, { transaction });
+    await req.app.locals.modelos.Cliente.update({ nombre: datos.nombre }, { where: { usuarioId: fila.id }, transaction });
+  });
   res.json(fila);
 }
 async function eliminar(req, res) {

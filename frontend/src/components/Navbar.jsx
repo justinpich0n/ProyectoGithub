@@ -15,6 +15,7 @@ export default function Navbar() {
         {[
           ['/', '⌂', 'Inicio'],
           ['/productos', '▦', 'Productos'],
+          ...(usuario.rol === 'comprador' ? [['/mi-perfil', '✦', 'Mis compras y puntos']] : []),
           ...(usuario.rol === 'administrador' ? [['/usuarios', '◎', 'Usuarios'], ['/ventas', '▤', 'Registro de ventas']] : []),
           ...(usuario.propietario ? [['/solicitudes', '✓', 'Solicitudes'], ['/cuentas', '+', 'Crear cuenta']] : []),
           ...(usuario.rol !== 'comprador' ? [['/cobro', '$', 'Cobro']] : []),

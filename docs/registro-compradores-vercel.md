@@ -9,7 +9,7 @@ La URL usada por los visitantes es https://project-isy4c.vercel.app. Su producci
 ## Comportamiento
 
 - En el ingreso hay dos accesos: **Registrarme como cliente** y **Solicitar acceso como cajero o administrador**.
-- El cliente elige **Cliente / comprador · registro directo**, completa nombre, correo y contraseña y entra directamente al catálogo.
+- El cliente elige **Cliente / comprador · registro directo**, completa nombre, correo, documento y contraseña y entra directamente al catálogo.
 - Cajero y administrador conservan solicitud pendiente y autorización exclusiva del propietario.
 - Correos existentes y solicitudes pendientes no se pueden volver a registrar como comprador. El alta de Usuario y Cuenta usa una transacción; la contraseña se conserva únicamente como hash con sal.
 - Las sesiones se guardan en la base de datos, como en el resto de esta versión serverless.
@@ -21,7 +21,7 @@ La URL usada por los visitantes es https://project-isy4c.vercel.app. Su producci
 
 Se amplía únicamente el enum de `cuentas.rol` para aceptar `comprador`, sin eliminar datos ni cambiar roles anteriores. La preparación comprueba el esquema y se puede repetir. No se importan otras funcionalidades de la rama de Render ni se reemplazan los clientes o puntos existentes de la caja.
 
-El acceso de comprador permite consultar el catálogo. La corrección posterior descrita en `compradores-caja-vercel.md` añade su ficha de Cliente automáticamente, incluidas cuentas anteriores, para seleccionar al comprador en Caja y atribuirle ventas y puntos. La consulta de puntos sigue en Caja; esta entrega no añade un perfil personal de puntos.
+El acceso de comprador permite consultar el catálogo. La corrección posterior descrita en `compradores-caja-vercel.md` añade su ficha de Cliente automáticamente, incluidas cuentas anteriores, para seleccionar al comprador en Caja y atribuirle ventas y puntos. La entrega descrita en `perfil-documentos-vercel.md` añade **Mis compras y puntos**, con historial propio, comprobantes y puntos por monto de compra, además del documento persistente y la prevención de duplicados.
 
 ## Comprobaciones
 

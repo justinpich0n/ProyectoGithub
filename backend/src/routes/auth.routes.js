@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const { verificarPassword, abrirSesion, autenticar, cerrarSesion } = require('../auth/seguridad');
+const { documento, bloquearAltas, verificarDuplicado } = require('../auth/documento');
 const intentos = new Map();
-const publico = async (c, m) => ({ propietario: await require('../auth/propietario').esPropietario(m, c.id), id: c.usuarioId, nombre: c.Usuario.nombre, email: c.Usuario.email, rol: c.rol });
+const publico = async (c, m) => ({ propietario: await require('../auth/propietario').esPropietario(m, c.id), id: c.usuarioId, nombre: c.Usuario.nombre, email: c.Usuario.email, rol: c.rol, faltaDocumento: !c.documentoCifrado });
 router.post('/login', async (req, res) => {
   res.set('Cache-Control', 'no-store');
   const clave = req.ip;
@@ -20,5 +21,19 @@ router.post('/login', async (req, res) => {
   res.json({ token: await abrirSesion(req.app.locals.modelos, cuenta.id), usuario: await publico(cuenta, req.app.locals.modelos) });
 });
 router.get('/sesion', autenticar, async (req, res) => { res.set('Cache-Control', 'no-store'); res.json(await publico(req.cuenta, req.app.locals.modelos)); });
+router.post('/documento', autenticar, async (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  const datos = documento(req.body);
+  const m = req.app.locals.modelos;
+  await m.Cuenta.sequelize.transaction(async transaction => {
+    await bloquearAltas(m, transaction);
+    const cuenta = await m.Cuenta.findByPk(req.cuenta.id, { transaction, lock: transaction.LOCK.UPDATE });
+    if (cuenta.documentoHash === datos.documentoHash && cuenta.tipoDocumento === datos.tipoDocumento) return;
+    if (cuenta.documentoHash) throw Object.assign(new Error('Esta cuenta ya tiene un documento registrado. Contacta al propietario para corregirlo.'), { status: 409 });
+    await verificarDuplicado(m, transaction, datos);
+    await cuenta.update(datos, { transaction });
+  });
+  res.json({ faltaDocumento: false });
+});
 router.post('/logout', autenticar, async (req, res) => { await cerrarSesion(req); res.json({ mensaje: 'Sesión cerrada.' }); });
 module.exports = router;

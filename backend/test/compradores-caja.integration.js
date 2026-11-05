@@ -1,3 +1,4 @@
+process.env.BIZZSTOCK_DOCUMENTO_KEY ||= require('node:crypto').randomBytes(32).toString('hex');
 const assert = require('node:assert/strict');
 const { randomBytes, randomUUID } = require('node:crypto');
 const { DataTypes } = require('sequelize');
@@ -31,7 +32,7 @@ async function main(){let server,total=0;try{
  const token=await abrirSesion(m,cajeroCuenta.id),adminToken=await abrirSesion(m,adminCuenta.id);
  const producto=await m.Producto.create({nombre:'Producto ficticio',precio:'12500.00',costo:'8000.00',cantidad:20,usuarioId:administrador.id});
  app.locals.modelos=m;server=app.listen(0,'127.0.0.1');await new Promise(r=>server.once('listening',r));
- async function pedir(method,ruta,datos,status,auth){const r=await fetch(`http://127.0.0.1:${server.address().port}/api${ruta}`,{method,headers:{'Content-Type':'application/json',...(auth?{Authorization:`Bearer ${auth}`}:{})},body:datos===undefined?undefined:JSON.stringify(datos)});const b=await r.json();assert.equal(r.status,status,JSON.stringify(b));total++;return b;}
+ async function pedir(method,ruta,datos,status,auth){if(method==='POST'&&ruta==='/solicitudes')datos={tipoDocumento:'CC',numeroDocumento:'9000000000000081',...datos};const r=await fetch(`http://127.0.0.1:${server.address().port}/api${ruta}`,{method,headers:{'Content-Type':'application/json',...(auth?{Authorization:`Bearer ${auth}`}:{})},body:datos===undefined?undefined:JSON.stringify(datos)});const b=await r.json();assert.equal(r.status,status,JSON.stringify(b));total++;return b;}
  const nuevo={nombre:'Roberth de prueba',email:'nuevo@example.com',password:'abc123',rol:'comprador'};
  const registro=await pedir('POST','/solicitudes',nuevo,201);const perfil=await m.Cliente.findOne({where:{usuarioId:registro.usuario.id}});assert.ok(perfil);assert.notEqual(perfil.id,migrado.id);
  const resultados=await pedir('GET','/ventas/clientes?q=Rober',undefined,200,token);assert.equal(resultados.length,2);assert.deepEqual(new Set(resultados.map(x=>x.email)),new Set(['antiguo@example.com','nuevo@example.com']));
