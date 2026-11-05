@@ -1,8 +1,22 @@
+const { esPropietario } = require('../auth/propietario');
+const { leerNumero } = require('../auth/documento');
 const { datosUsuario } = require('./validacion');
 
 async function listar(req, res) {
-  const filas = await req.app.locals.modelos.Usuario.findAll({});
-  res.json(filas);
+  const m = req.app.locals.modelos;
+  const puedeVerNumero = await esPropietario(m, req.cuenta.id);
+  const attributes = puedeVerNumero ? ['tipoDocumento', 'documentoCifrado'] : ['tipoDocumento'];
+  const asociacion = Object.values(m.Usuario.associations).find(asoc => asoc.target === m.Cuenta);
+  const filas = await m.Usuario.findAll({ include: { association: asociacion, attributes } });
+  res.set('Cache-Control', 'no-store');
+  res.json(filas.map(fila => {
+    const { [asociacion.as]: cuenta, ...usuario } = fila.toJSON();
+    return {
+      ...usuario,
+      tipoDocumento: cuenta?.tipoDocumento ?? null,
+      numeroDocumento: puedeVerNumero ? leerNumero(cuenta?.documentoCifrado) : null,
+    };
+  }));
 }
 async function obtener(req, res) {
   const fila = await req.app.locals.modelos.Usuario.findByPk(req.params.id, {});

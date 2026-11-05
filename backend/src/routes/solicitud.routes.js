@@ -9,7 +9,7 @@ const { documento, bloquearAltas, verificarDuplicado } = require('../auth/docume
 const digest = valor => createHash('sha256').update(valor).digest('hex');
 const privado = (req, res, next) => { res.set('Cache-Control', 'no-store'); next(); };
 async function expirar(m, transaction) {
-  await m.SolicitudCuenta.update({ estado: 'expirada', passwordHash: null, emailPendiente: null, documentoHash: null, tipoDocumento: null }, { transaction, where: { estado: 'pendiente', expira: { [Op.lte]: new Date() } } });
+  await m.SolicitudCuenta.update({ estado: 'expirada', passwordHash: null, emailPendiente: null, documentoHash: null, documentoCifrado: null, tipoDocumento: null }, { transaction, where: { estado: 'pendiente', expira: { [Op.lte]: new Date() } } });
 }
 const resumen = s => ({ id: s.id, nombre: s.nombre, email: s.email, rol: s.rol, estado: s.estado, expira: s.expira, createdAt: s.createdAt, decididoEn: s.decididoEn });
 router.use(privado);
@@ -69,9 +69,9 @@ router.post('/:id/decision', autenticar, propietario, async (req, res) => {
     if (decision === 'aprobar') {
       const [u] = await m.Usuario.findOrCreate({ where: { email: s.email }, defaults: { nombre: s.nombre }, transaction });
       if (await m.Cuenta.findOne({ where: { usuarioId: u.id }, transaction })) { const e = new Error('Este correo ya tiene cuenta.'); e.status = 409; throw e; }
-      await m.Cuenta.create({ usuarioId: u.id, passwordHash: s.passwordHash, rol, tipoDocumento: s.tipoDocumento, documentoHash: s.documentoHash }, { transaction });
+      await m.Cuenta.create({ usuarioId: u.id, passwordHash: s.passwordHash, rol, tipoDocumento: s.tipoDocumento, documentoHash: s.documentoHash, documentoCifrado: s.documentoCifrado }, { transaction });
     }
-    await s.update({ estado: decision === 'aprobar' ? 'aprobada' : 'rechazada', rol: decision === 'aprobar' ? rol : s.rol, passwordHash: null, emailPendiente: null, documentoHash: null, tipoDocumento: null, decididoPor: req.cuenta.id, decididoEn: new Date() }, { transaction });
+    await s.update({ estado: decision === 'aprobar' ? 'aprobada' : 'rechazada', rol: decision === 'aprobar' ? rol : s.rol, passwordHash: null, emailPendiente: null, documentoHash: null, documentoCifrado: null, tipoDocumento: null, decididoPor: req.cuenta.id, decididoEn: new Date() }, { transaction });
     return resumen(s);
   });
   if (!resultado) return res.status(404).json({ error: 'Solicitud no encontrada.' });

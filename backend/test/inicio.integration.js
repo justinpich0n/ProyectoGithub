@@ -44,10 +44,16 @@ async function main() {
   await pedir('GET','/solicitudes',undefined,403,autorizado.token);
   assert.equal(autorizado.usuario.faltaDocumento,false);
   const cuentaAnterior = await m.Cuenta.findOne({ where: { usuarioId: autorizado.usuario.id } });
-  await cuentaAnterior.update({ documentoHash: null, tipoDocumento: null });
+  await cuentaAnterior.update({ documentoHash: null, documentoCifrado: null, tipoDocumento: null });
   assert.equal((await pedir('GET','/auth/sesion',undefined,200,autorizado.token)).b.faltaDocumento,true);
   await pedir('POST','/auth/documento',{ tipoDocumento:'CC', numeroDocumento:'10001001' },409,autorizado.token);
   await pedir('POST','/auth/documento',visita,200,autorizado.token);
+  const usuariosOwner = (await pedir('GET','/usuarios',undefined,200,owner.token)).b;
+  assert.equal(usuariosOwner.find(u => u.email === visita.email).numeroDocumento, visita.numeroDocumento);
+  assert.equal(usuariosOwner.find(u => u.email === visita.email).tipoDocumento, 'CC');
+  const usuariosAdmin = (await pedir('GET','/usuarios',undefined,200,autorizado.token)).b;
+  assert.equal(usuariosAdmin.find(u => u.email === visita.email).numeroDocumento, null);
+
   await pedir('PUT',`/usuarios/${owner.usuario.id}`,{nombre:'Intruso',email:'intruso@example.com'},403,autorizado.token);
   await pedir('DELETE',`/usuarios/${owner.usuario.id}`,undefined,409,owner.token);
   await pedir('POST','/cuentas',{...visita,email:'sinpermiso@example.com'},403,autorizado.token);

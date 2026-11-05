@@ -7,6 +7,7 @@ module.exports = async function prepararEsquema(sequelize) {
     if (!tablas.includes(tabla)) continue;
     const columnas = await qi.describeTable(tabla);
     if (!columnas.tipoDocumento) await qi.addColumn(tabla, 'tipoDocumento', { type: DataTypes.STRING(3) });
+    if (!columnas.documentoCifrado) await qi.addColumn(tabla, 'documentoCifrado', { type: DataTypes.STRING(80) });
     if (!columnas.documentoHash) await qi.addColumn(tabla, 'documentoHash', { type: DataTypes.STRING(64) });
     const indices = await qi.showIndex(tabla);
     if (!indices.some(i => i.unique && i.fields.length === 1 && i.fields[0].attribute === 'documentoHash')) {

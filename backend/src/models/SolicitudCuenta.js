@@ -7,6 +7,7 @@ module.exports = db => db.define('SolicitudCuenta', {
   emailPendiente: { type: DataTypes.STRING(255), unique: true, allowNull: true },
   rol: { type: DataTypes.ENUM('administrador', 'cajero'), allowNull: false },
   tipoDocumento: { type: DataTypes.STRING(3), allowNull: true },
+  documentoCifrado: { type: DataTypes.STRING(80), allowNull: true },
   documentoHash: { type: DataTypes.STRING(64), allowNull: true, unique: true },
   passwordHash: { type: DataTypes.STRING(255), allowNull: true },
   estado: { type: DataTypes.ENUM('pendiente', 'aprobada', 'rechazada', 'expirada'), allowNull: false, defaultValue: 'pendiente' },

@@ -295,7 +295,8 @@ export default function Gestion({ producto = false }) {
             <table className="crud-table">
               <thead>
                 <tr>
-                  <th>ID</th>
+                  <th>{producto ? 'ID' : 'Tipo'}</th>
+                  {!producto && <th>Número de documento</th>}
                   <th>Nombre</th>
                   {producto ? (
                     <>
@@ -312,7 +313,8 @@ export default function Gestion({ producto = false }) {
               <tbody>
                 {filas.map((fila) => (
                   <tr key={fila.id}>
-                    <td>#{fila.id}</td>
+                    <td>{producto ? `#${fila.id}` : fila.tipoDocumento || '—'}</td>
+                    {!producto && <td>{usuario.propietario ? fila.numeroDocumento || 'Pendiente' : 'Reservado'}</td>}
                     <td>{fila.nombre}</td>
                     {producto ? (
                       <>
