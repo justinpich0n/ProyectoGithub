@@ -1,3 +1,4 @@
+import Comprobante from '../components/Comprobante';
 import { useEffect, useRef, useState } from 'react';
 import api, { mensajeError } from '../services/api';
 import './Catalogo.css';
@@ -35,6 +36,6 @@ export default function Ventas() {
     </tbody></table></div>
     {!datos.total && <p>No hay ventas con esos filtros.</p>}
     <div className="crud-actions"><button disabled={cargando || consulta.pagina === 1} onClick={() => { setCargando(true); setConsulta({ ...consulta, pagina: consulta.pagina - 1 }); }}>Anterior</button><span>Página {consulta.pagina}</span><button disabled={cargando || consulta.pagina * 25 >= datos.total} onClick={() => { setCargando(true); setConsulta({ ...consulta, pagina: consulta.pagina + 1 }); }}>Siguiente</button></div></>}
-    <dialog ref={detalle} className="ventas-detalle" aria-label="Detalle de la venta"><form method="dialog"><button autoFocus>Cerrar</button></form>{elegida && <><h2>Comprobante #{elegida.id}</h2><p>{fecha(elegida.createdAt)} · {elegida.vendedor.nombre}</p><p>Cliente · {elegida.cliente?.nombre || 'Consumidor final'}</p><ul>{elegida.detalle.map((p, i) => <li key={i}>{p.cantidad} × {p.nombre} · {pesos.format(p.subtotal)}</li>)}</ul><p>Pago · {elegida.metodo}</p><p>Recibido · {pesos.format(elegida.recibido)}</p><p>Cambio · {pesos.format(elegida.cambio)}</p><h3>Total · {pesos.format(elegida.total)}</h3></>}</dialog>
+    <dialog ref={detalle} className="ventas-detalle" aria-label="Detalle de la venta"><form method="dialog"><button autoFocus>Cerrar</button></form>{elegida && <Comprobante key={elegida.id} venta={elegida} />}</dialog>
   </section>;
 }

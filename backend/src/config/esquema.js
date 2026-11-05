@@ -31,10 +31,11 @@ module.exports = async function prepararEsquema(sequelize) {
   if (!tablas.includes('productos')) return;
   const columnas = await qi.describeTable('productos');
   if (!columnas.imagen) await qi.addColumn('productos', 'imagen', { type: DataTypes.TEXT('medium'), allowNull: true });
-  const [sinImagen] = await sequelize.query('SELECT id, nombre FROM productos WHERE imagen IS NULL');
+  const anteriores = ['cinta','esfero','lapiz','cuaderno','marcador','resaltador','tijeras','pegante','carpeta','regalo','bolsa','pilas','llavero','regla','borrador','plastilina'].map(nombre => '/productos/' + nombre + '.svg');
+  const [sinImagen] = await sequelize.query('SELECT id, nombre, imagen FROM productos WHERE imagen IS NULL OR imagen IN (:anteriores)', { replacements: { anteriores } });
   for (const producto of sinImagen) {
-    await sequelize.query('UPDATE productos SET imagen = ? WHERE id = ? AND imagen IS NULL', {
-      replacements: [require('./imagenes-productos')(producto.nombre), producto.id],
+    await sequelize.query('UPDATE productos SET imagen = ? WHERE id = ? AND (imagen IS NULL OR imagen = ?)', {
+      replacements: [require('./imagenes-productos')(producto.nombre), producto.id, producto.imagen],
     });
   }
   for (const campo of ['costo', 'cantidad']) {

@@ -220,7 +220,7 @@ export default function Gestion({ producto = false }) {
                     onChange={(e) => campo('precio', e.target.value)}
                   />
                 </label>
-                <label>Dirección de la imagen<input type="url" maxLength={2048} placeholder="https://ejemplo.com/producto.jpg" value={/^https?:/i.test(form.imagen || '') ? form.imagen : ''} onChange={e => campo('imagen', e.target.value.trim() || null)} pattern="https://.*" /><small>Pega el enlace directo de una imagen pública HTTPS, no el de la página que la contiene.</small></label>
+                <label>Dirección de la imagen<input type="url" maxLength={2048} placeholder="https://ejemplo.com/producto.jpg" value={/^https?:/i.test(form.imagen || '') ? form.imagen : ''} onChange={e => campo('imagen', e.target.value.trim() || null)} pattern="https://.*" /><small>Pega el enlace directo de una foto pública HTTPS.</small><a href="/productos/fotos.html" target="_blank" rel="noreferrer">Ver fotos JPG de ejemplo ↗</a></label>
                 <label>O subir imagen PNG o JPG<input type="file" accept="image/png,image/jpeg" onChange={cargarImagen} /><small>Hasta 5 MB. Se optimiza al cargar.</small></label>
                 {form.imagen && <div><ImagenProducto producto={{ nombre: form.nombre, imagen: form.imagen }} /><button type="button" onClick={() => campo('imagen', null)}>Quitar imagen</button></div>}
                 <label>Precio de costo<input type="number" min="0" max="99999999.99" step="0.01" required value={form.costo} onChange={(e) => { campo('costo', e.target.value); campo('confirmarCostoCero', false); }} /></label>

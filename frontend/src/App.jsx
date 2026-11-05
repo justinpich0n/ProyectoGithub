@@ -40,7 +40,7 @@ function Contenido() {
         </Routes>
         <footer className="page-footer">
           <span>BizzStock · Arte y Belleza</span>
-          <span>Hecho para el día a día de tu negocio.</span>
+          <span>Hecho para el día a día de tu negocio. <a href="/productos/fotos.html" target="_blank" rel="noreferrer">Créditos de fotos</a></span>
         </footer>
       </main>
     </BrowserRouter>
