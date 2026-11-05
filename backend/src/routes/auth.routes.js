@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const { verificarPassword, abrirSesion, autenticar, cerrarSesion } = require('../auth/seguridad');
 const { documento, bloquearAltas, verificarDuplicado } = require('../auth/documento');
+const { fn } = require('sequelize');
 const intentos = new Map();
 const publico = async (c, m) => ({ propietario: await require('../auth/propietario').esPropietario(m, c.id), id: c.usuarioId, nombre: c.Usuario.nombre, email: c.Usuario.email, rol: c.rol, faltaDocumento: !c.documentoCifrado });
 router.post('/login', async (req, res) => {
@@ -16,6 +17,9 @@ router.post('/login', async (req, res) => {
   if (!cuenta?.activo || !await verificarPassword(password, cuenta.passwordHash)) {
     estado.cantidad += 1; intentos.set(clave, estado);
     return res.status(401).json({ error: 'Correo o contraseña incorrectos.' });
+  }
+  if (['administrador', 'cajero'].includes(cuenta.rol)) {
+    await cuenta.update({ ultimoInicioSesion: fn('NOW', 3) });
   }
   intentos.delete(clave);
   res.json({ token: abrirSesion(cuenta.id), usuario: await publico(cuenta, req.app.locals.modelos) });

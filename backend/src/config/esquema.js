@@ -5,6 +5,7 @@ module.exports = async function prepararEsquema(sequelize) {
   const tablas = await qi.showAllTables();
   if (tablas.includes('cuentas')) {
     const columnasCuenta = await qi.describeTable('cuentas');
+    if (!columnasCuenta.ultimoInicioSesion) await qi.addColumn('cuentas', 'ultimoInicioSesion', { type: DataTypes.DATE(3), allowNull: true });
     if (!columnasCuenta.rol.type.includes('comprador')) {
       await qi.changeColumn('cuentas', 'rol', { type: DataTypes.ENUM('administrador', 'cajero', 'comprador'), allowNull: false });
     }

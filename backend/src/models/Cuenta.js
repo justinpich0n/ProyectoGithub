@@ -7,5 +7,6 @@ module.exports = (sequelize) => sequelize.define('Cuenta', {
   documentoHash: { type: DataTypes.STRING(64), allowNull: true, unique: true },
   passwordHash: { type: DataTypes.STRING(255), allowNull: false },
   rol: { type: DataTypes.ENUM('administrador', 'cajero', 'comprador'), allowNull: false },
+  ultimoInicioSesion: { type: DataTypes.DATE(3), allowNull: true },
   activo: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
 }, { tableName: 'cuentas' });

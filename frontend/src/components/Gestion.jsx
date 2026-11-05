@@ -5,6 +5,9 @@ import { useSesion } from '../services/sesion';
 import ImportarCostos from './ImportarCostos';
 import api, { mensajeError } from '../services/api';
 
+const fechaInicio = new Intl.DateTimeFormat('es-CO', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'America/Bogota' });
+const roles = { administrador: 'Administrador', cajero: 'Cajero', comprador: 'Comprador' };
+
 export default function Gestion({ producto = false }) {
   const { usuario } = useSesion();
   const admin = usuario.rol === 'administrador';
@@ -178,6 +181,7 @@ export default function Gestion({ producto = false }) {
             : 'Registra el nombre y correo de las personas que asociarás a tus productos.'}
         </p>
       </div>
+      {!producto && admin && <p className="text-muted">Último inicio de sesión del equipo, en hora de Colombia. Se registra al ingresar correctamente; las cuentas anteriores comenzarán a mostrarlo en su próximo ingreso.</p>}
       {error && (
         <p role="alert" className="crud-error">
           {error}
@@ -351,6 +355,7 @@ export default function Gestion({ producto = false }) {
                   ) : (
                     <th>Correo</th>
                   )}
+                  {!producto && admin && <><th>Rol</th><th>Último inicio de sesión</th></>}
                   {admin && <th>Acciones</th>}
                 </tr>
               </thead>
@@ -374,6 +379,7 @@ export default function Gestion({ producto = false }) {
                     ) : (
                       <td>{fila.email}</td>
                     )}
+                    {!producto && admin && <><td>{roles[fila.rol] || 'Sin cuenta de acceso'}</td><td>{['administrador', 'cajero'].includes(fila.rol) ? (fila.ultimoInicioSesion ? <time dateTime={fila.ultimoInicioSesion}>{fechaInicio.format(new Date(fila.ultimoInicioSesion))}</time> : 'Sin registro desde esta actualización') : 'No aplica'}</td></>}
                     {admin && <td>
                       <div className="row-actions">
                         <button
