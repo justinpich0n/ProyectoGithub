@@ -1,7 +1,7 @@
 import './Comprobante.css';
 
 const pesos = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 2 });
-const metodos = { efectivo: 'Efectivo', tarjeta: 'Tarjeta', movil: 'Pago móvil' };
+const metodos = { efectivo: 'Efectivo', tarjeta: 'Tarjeta', movil: 'Transferencia bancaria' };
 
 export default function Comprobante({ venta, children }) {
   const unidades = venta.detalle.reduce((total, producto) => total + producto.cantidad, 0);
