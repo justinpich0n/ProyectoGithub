@@ -26,7 +26,10 @@ module.exports = async function atender(req, res) {
     }
   }
 
-  prepararCompradores ||= require('../backend/src/config/rol-comprador')(app.locals.modelos.Cuenta.sequelize).catch(error => {
+  prepararCompradores ||= (async () => {
+    await require('../backend/src/config/rol-comprador')(app.locals.modelos.Cuenta.sequelize);
+    await require('../backend/src/config/clientes-cuentas')(app.locals.modelos);
+  })().catch(error => {
     prepararCompradores = undefined;
     throw error;
   });

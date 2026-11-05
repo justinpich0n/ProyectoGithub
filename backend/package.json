@@ -14,7 +14,8 @@
     "test:ppi": "node test/ppi.integration.js",
     "test:rendimiento": "node scripts/probar-rendimiento.js",
     "test:acceso": "node test/inicio.integration.js",
-    "test:registro-ventas": "node test/registro-ventas.integration.js"
+    "test:registro-ventas": "node test/registro-ventas.integration.js",
+    "test:compradores-caja": "node test/compradores-caja.integration.js"
   },
   "dependencies": {
     "cors": "^2.8.6",

@@ -16,24 +16,30 @@ router.get('/clientes', async (req, res) => {
   const q = req.query.q;
   if (typeof q !== 'string' || q.length > 100) invalido('La búsqueda admite hasta 100 caracteres.');
   if (q.trim().length < 2) return res.json([]);
-  const nombre = q.trim().replace(/[\\%_]/g, '\\$&');
-  const clientes = await req.app.locals.modelos.Cliente.findAll({
+  const termino = q.trim().replace(/[\\%_]/g, '\\$&');
+  const m = req.app.locals.modelos;
+  const patron = `%${termino}%`;
+  const clientes = await m.Cliente.findAll({
     attributes: ['id', 'nombre', 'telefono'],
-    where: { nombre: { [Op.like]: `%${nombre}%` } },
-    order: [['nombre', 'ASC'], ['id', 'ASC']],
-    limit: 15,
+    include: { model: m.Usuario, as: 'Usuario', attributes: ['nombre', 'email'], required: false },
+    where: { [Op.or]: [{ nombre: { [Op.like]: patron } }, { telefono: { [Op.like]: patron } }, { '$Usuario.email$': { [Op.like]: patron } }, { '$Usuario.nombre$': { [Op.like]: patron } }] },
+    order: [['nombre', 'ASC'], ['id', 'ASC']], limit: 15,
   });
-  res.json(clientes);
+  res.set('Cache-Control', 'no-store');
+  res.json(clientes.map(c => ({ id: c.id, nombre: c.Usuario?.nombre || c.nombre, telefono: c.telefono, ...(c.Usuario ? { email: c.Usuario.email } : {}) })));
+
 });
 
 router.post('/clientes', crear);
 
 router.get('/mejores-compradores', async (req, res) => {
-  const { sequelize } = req.app.locals.modelos.Venta;
+  const m = req.app.locals.modelos;
+  const { sequelize } = m.Venta;
+  const quote = tabla => sequelize.getQueryInterface().queryGenerator.quoteTable(tabla);
   const compradores = await sequelize.query(
     `SELECT c.id, c.nombre, SUM(FLOOR(v.total / 1000)) AS puntos
-     FROM ventas AS v
-     INNER JOIN clientes AS c ON JSON_EXTRACT(v.cliente, '$.id') = c.id
+     FROM ${quote(m.Venta.getTableName())} AS v
+     INNER JOIN ${quote(m.Cliente.getTableName())} AS c ON JSON_EXTRACT(v.cliente, '$.id') = c.id
      GROUP BY c.id, c.nombre
      HAVING puntos > 0
      ORDER BY puntos DESC, c.nombre ASC, c.id ASC
@@ -60,10 +66,10 @@ router.post('/', async (req, res) => {
     if (anterior) { const e = new Error('Esta operación ya fue registrada.'); e.status = 409; throw e; }
     let cliente = null;
     if (clienteId != null) {
-      const registrado = await m.Cliente.findByPk(clienteId, { transaction });
+      const registrado = await m.Cliente.findByPk(clienteId, { transaction, include: { model: m.Usuario, as: 'Usuario', attributes: ['nombre', 'email'], required: false } });
       if (!registrado) invalido('El cliente seleccionado ya no existe.');
       const { id, nombre, telefono } = registrado;
-      cliente = { id, nombre, telefono };
+      cliente = { id, nombre: registrado.Usuario?.nombre || nombre, telefono, ...(registrado.Usuario ? { email: registrado.Usuario.email } : {}) };
     }
     let total = 0; const detalle = [];
     for (const p of productos) {
