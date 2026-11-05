@@ -93,6 +93,13 @@ async function main() {
   assert.equal(catalogo.productos[0].costo,undefined);
   assert.equal(catalogo.productos[0].Usuario,undefined);
   assert.equal(catalogo.productos[0].id,productoNuevo.id);
+  for (const imagen of ['http://example.com/foto.jpg', 'javascript:alert(1)', 'https://usuario:clave@example.com/foto.jpg']) {
+    await pedir('PUT',`/productos/${productoNuevo.id}`,{...productoDatos,usuarioId:owner.usuario.id,imagen},400,owner.token);
+  }
+  const enlace = 'https://example.com/foto.jpg?version=1';
+  await pedir('PUT',`/productos/${productoNuevo.id}`,{...productoDatos,usuarioId:owner.usuario.id,imagen:enlace},200,owner.token);
+  const conEnlace = (await pedir('GET','/catalogo',undefined,200,comprador.token)).b;
+  assert.equal(conEnlace.productos[0].imagen,enlace);
   await m.Cuenta.destroy({where:{}});
   assert.equal((await pedir('GET','/inicio',undefined,200)).b.configurado,true);
   await pedir('POST','/inicio',datos,409,null,clave);
