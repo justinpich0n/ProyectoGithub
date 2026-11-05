@@ -10,6 +10,14 @@ La relación usa identificadores internos únicos: no se mezclan personas por co
 
 No se inventan teléfonos ni direcciones al registrar una cuenta. Si no se han proporcionado, se muestran **Por completar**; el administrador puede completarlos en Clientes. En Caja se busca al comprador por nombre, correo o teléfono. El comprador recibe únicamente permisos de catálogo y perfil propio.
 
+## Formas de crear la cuenta
+
+En la pantalla de ingreso, **Registrarme como cliente** abre el registro con **Cliente / comprador · registro directo** seleccionado. El botón separado **Solicitar acceso como cajero o administrador** abre el flujo del personal, que conserva la aprobación del propietario.
+
+El propietario también puede elegir **Cliente / comprador** en **Crear cuenta**. Tanto ese formulario como el registro público crean la cuenta y su ficha de Clientes en una sola transacción, conservando los controles de correo/documento duplicados. Un comprador no puede crear cuentas de otras personas.
+
+Los mensajes de un intento de ingreso anterior se limpian al abrir el registro. La consulta periódica de solicitudes se ejecuta únicamente mientras se consulta su estado.
+
 ## Puntos y compras
 
 - Cada venta asignada suma **1 punto por cada COP $1.000 completos de esa compra**. Una compra de $12.500 suma 12; dos compras de $500 suman cero, porque la regla se aplica por compra.
@@ -34,6 +42,6 @@ El perfil muestra una invitación general a acumular puntos para futuros premios
 
 ## Validación
 
-- `npm run test:fidelidad`: 32 respuestas HTTP con tablas aisladas; alta automática, nombres iguales, vínculo por correo en caja, puntos por monto, idempotencia concurrente, privacidad, recuperación de vínculos antiguos y paginación.
-- Pruebas de acceso: 73; cobro: 49; PPI: 54. Total: **208 respuestas HTTP verificadas**.
+- `npm run test:fidelidad`: 37 respuestas HTTP con tablas aisladas; alta automática, nombres iguales, vínculo por correo en caja, puntos por monto, idempotencia concurrente, privacidad, recuperación de vínculos antiguos, paginación y alta de comprador por el propietario con validación de permisos y duplicados.
+- En esta actualización se repitieron las 73 pruebas de acceso y las 37 de fidelidad: **110 respuestas HTTP verificadas**. Las suites de cobro (49) y PPI (54) corresponden a la validación de la entrega anterior.
 - Lint de backend y frontend, compilación de React y revisión visual con datos ficticios.

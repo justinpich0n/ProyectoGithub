@@ -49,7 +49,7 @@ export default function Sesion({ children }) {
     }
   }
   if (verificando) return <p role="status" className="page">Comprobando sesión…</p>;
-  if (!usuario) return <Bienvenida email={email} setEmail={setEmail} password={password} setPassword={setPassword} error={error} ocupado={ocupado} entrar={entrar} completar={(data) => { sessionStorage.setItem('bizzstock-token', data.token); setUsuario(data.usuario); setPassword(''); }} />;
+  if (!usuario) return <Bienvenida limpiarError={() => setError('')} email={email} setEmail={setEmail} password={password} setPassword={setPassword} error={error} ocupado={ocupado} entrar={entrar} completar={(data) => { sessionStorage.setItem('bizzstock-token', data.token); setUsuario(data.usuario); setPassword(''); }} />;
   if (usuario.faltaDocumento) return <section className="page">
     <h1>Actualiza tus datos</h1>
     <p>Registra tu tipo y número de documento para identificar tu cuenta y evitar duplicados.</p>

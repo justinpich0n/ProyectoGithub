@@ -61,6 +61,17 @@ async function main() {
   for(let i=0;i<16;i++)await m.Venta.create({...antigua,operacion:randomUUID(),clienteId:c2.id,cliente:{id:c2.id,nombre:c2.nombre},total:'1000.00',recibido:'1000.00'});
   const pagina1=(await pedir('GET','/mi-perfil',undefined,200,dos.token)).b;const pagina2=(await pedir('GET','/mi-perfil?pagina=2',undefined,200,dos.token)).b;
   assert.equal(pagina1.compras.length,15);assert.equal(pagina2.compras.length,2);assert.equal(pagina2.resumen.puntos,17);assert.equal(pagina2.total,17);
+  const desdePanel={...registro,nombre:'Cliente creado por propietario',email:'panel@example.com',numeroDocumento:'10001005'};
+  await pedir('POST','/cuentas',desdePanel,201,owner.token);
+  const delPanel=await m.Usuario.findOne({where:{email:desdePanel.email}});
+  assert.equal(await m.Cliente.count({where:{usuarioId:delPanel.id}}),1);
+  const panelCliente=(await pedir('POST','/auth/login',{email:desdePanel.email,password:desdePanel.password},200)).b;
+  assert.equal(panelCliente.usuario.rol,'comprador');assert.equal(panelCliente.usuario.propietario,false);
+  const perfilPanel=(await pedir('GET','/mi-perfil',undefined,200,panelCliente.token)).b;
+  assert.equal(perfilPanel.cliente.email,desdePanel.email);assert.equal(perfilPanel.resumen.puntos,0);
+  await pedir('POST','/cuentas',{...desdePanel,email:'sinpermiso@example.com',numeroDocumento:'10001006'},403,panelCliente.token);
+  await pedir('POST','/cuentas',desdePanel,409,owner.token);
+  assert.equal(await m.Cliente.count({where:{usuarioId:delPanel.id}}),1);
   console.log(`${total} pruebas HTTP de fidelidad correctas: registro automático, compras, puntos por monto, concurrencia, migración, privacidad y paginación; tablas aisladas.`);
  }finally{if(server)await new Promise(r=>server.close(r));for(const modelo of Object.values(m))assert.ok(modelo.tableName.startsWith(prefijo));await db.drop();await db.close();if(previo===undefined)delete process.env.BIZZSTOCK_SETUP_TOKEN_HASH;else process.env.BIZZSTOCK_SETUP_TOKEN_HASH=previo;}
 }
