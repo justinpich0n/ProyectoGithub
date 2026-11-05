@@ -8,6 +8,8 @@ module.exports = function crearModelos(sequelize) {
   Producto.belongsTo(Usuario, { foreignKey: 'usuarioId' });
   const Cuenta = require('./Cuenta')(sequelize);
   const Cliente = require('./Cliente')(sequelize);
+  Usuario.hasOne(Cliente, { foreignKey: 'usuarioId', as: 'Cliente', onDelete: 'SET NULL' });
+  Cliente.belongsTo(Usuario, { foreignKey: 'usuarioId', as: 'Usuario' });
   Usuario.hasOne(Cuenta, { foreignKey: 'usuarioId', onDelete: 'CASCADE' });
   Cuenta.belongsTo(Usuario, { foreignKey: 'usuarioId' });
   const Venta = require('./Venta')(sequelize);

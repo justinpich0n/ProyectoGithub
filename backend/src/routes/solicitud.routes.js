@@ -29,7 +29,9 @@ router.post('/', limitar(new Map(), 20, 15 * 60000), async (req, res) => {
     const nueva = await m.Usuario.sequelize.transaction(async transaction => {
       const [usuario] = await m.Usuario.findOrCreate({ where: { email: normalizado }, defaults: { nombre: nombre.trim() }, transaction });
       if (await m.Cuenta.findOne({ where: { usuarioId: usuario.id }, transaction })) { const e = new Error('Este correo ya tiene cuenta.'); e.status = 409; throw e; }
-      return m.Cuenta.create({ usuarioId: usuario.id, rol: 'comprador', passwordHash }, { transaction });
+      const cuenta = await m.Cuenta.create({ usuarioId: usuario.id, rol: 'comprador', passwordHash }, { transaction });
+      await require('../clientes/vinculo').asegurarCliente(m, usuario, transaction);
+      return cuenta;
     });
     return res.status(201).json({ token: await abrirSesion(m, nueva.id), usuario: { id: nueva.usuarioId, nombre: nombre.trim(), email: normalizado, rol: 'comprador', propietario: false } });
   }

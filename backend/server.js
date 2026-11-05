@@ -24,7 +24,11 @@ async function iniciarServidor() {
       const modelos = crearModelos(sequelize);
       await sequelize.authenticate();
       await require('./src/config/esquema')(sequelize);
+      if ((await sequelize.getQueryInterface().showAllTables()).includes(modelos.Cliente.tableName)) {
+        await require('./src/config/clientes-cuentas')(modelos, { sincronizar: false });
+      }
       await sequelize.sync(); // Sin force ni alter: conserva las tablas existentes.
+      await require('./src/clientes/vinculo').sincronizarCompradores(modelos);
       if (process.env.BIZZSTOCK_CATALOGO_FERIA === 'true') {
         const creados = await require('./src/config/catalogo-demo')(modelos);
         console.log(`Productos de feria agregados: ${creados}.`);

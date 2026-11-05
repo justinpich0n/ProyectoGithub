@@ -21,7 +21,7 @@ La URL usada por los visitantes es https://project-isy4c.vercel.app. Su producci
 
 Se amplía únicamente el enum de `cuentas.rol` para aceptar `comprador`, sin eliminar datos ni cambiar roles anteriores. La preparación comprueba el esquema y se puede repetir. No se importan otras funcionalidades de la rama de Render ni se reemplazan los clientes o puntos existentes de la caja.
 
-El nuevo acceso de comprador permite consultar el catálogo. Esta corrección no añade un perfil de puntos vinculado a la cuenta: el sistema de clientes y puntos que ya tiene esta rama sigue en caja.
+El acceso de comprador permite consultar el catálogo. La corrección posterior descrita en `compradores-caja-vercel.md` añade su ficha de Cliente automáticamente, incluidas cuentas anteriores, para seleccionar al comprador en Caja y atribuirle ventas y puntos. La consulta de puntos sigue en Caja; esta entrega no añade un perfil personal de puntos.
 
 ## Comprobaciones
 

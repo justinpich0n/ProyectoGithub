@@ -263,20 +263,20 @@ export default function Cobro() {
         <fieldset disabled={ocupado} className="caja-pago">
           <legend>3. Registra el pago</legend>
           {cliente ? <div>
-            <p>Cliente: {cliente.nombre} · {cliente.telefono}. Esta compra suma {Math.floor(total / 100000)} puntos.</p>
+            <p>Cliente: {cliente.nombre} · {cliente.email || cliente.telefono || 'Sin teléfono'}. Esta compra suma {Math.floor(total / 100000)} puntos.</p>
             <button type="button" onClick={limpiarCliente}>Quitar cliente</button>
           </div> : <>
-            <label>Cliente habitual (opcional)
-              <input value={buscarCliente} maxLength={100} placeholder="Busca por nombre"
+            <label>Cliente para acumular puntos (opcional)
+              <input value={buscarCliente} maxLength={100} placeholder="Nombre, correo o teléfono"
                 onChange={(e) => { setBuscarCliente(e.target.value); setConsultaCliente(''); setClientes([]); }} />
             </label>
             {consultaCliente === buscarCliente && buscarCliente.trim().length >= 2 && clientes.length === 0 &&
-              <p role="status">No encontramos ese nombre. Si el cliente desea sumar puntos, invítalo a registrarse.</p>}
+              <p role="status">No encontramos un cliente con esos datos. Si acaba de crear su cuenta, vuelve a buscar por nombre o correo.</p>}
             {consultaCliente === buscarCliente && buscarCliente.trim().length >= 2 &&
               <button type="button" onClick={abrirRegistro}>Registrar cliente nuevo</button>}
             {clientes.length > 0 && <div className="caja-metodos">
               {clientes.map((item) => <button key={item.id} type="button" onClick={() => setCliente(item)}>
-                {item.nombre} · {item.telefono}
+                {item.nombre} · {item.email || item.telefono || 'Sin teléfono'}
               </button>)}
             </div>}
           </>}
