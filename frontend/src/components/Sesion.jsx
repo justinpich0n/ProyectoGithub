@@ -33,6 +33,6 @@ export default function Sesion({ children }) {
     sessionStorage.removeItem('bizzstock-token'); setUsuario(null);
   }
   if (verificando) return <p role="status" className="page">Comprobando sesión…</p>;
-  if (!usuario) return <Bienvenida email={email} setEmail={setEmail} password={password} setPassword={setPassword} error={error} ocupado={ocupado} entrar={entrar} completar={(data) => { sessionStorage.setItem('bizzstock-token', data.token); setUsuario(data.usuario); setPassword(''); }} />;
+  if (!usuario) return <Bienvenida limpiarError={() => setError('')} email={email} setEmail={setEmail} password={password} setPassword={setPassword} error={error} ocupado={ocupado} entrar={entrar} completar={(data) => { sessionStorage.setItem('bizzstock-token', data.token); setUsuario(data.usuario); setPassword(''); }} />;
   return <SesionContext.Provider value={{ usuario, salir }}>{children}</SesionContext.Provider>;
 }

@@ -1,5 +1,6 @@
 const { Op } = require('sequelize');
 const { datosProducto, moneda, idValido, invalido } = require('./validacion');
+const salidaComprador = fila => { const p = fila.toJSON(); return { id: p.id, nombre: p.nombre, precio: p.precio, descripcion: p.descripcion, cantidad: p.cantidad }; };
 const salida = (fila) => {
   const json = fila.toJSON();
   json.advertencias = json.costo !== null && Number(json.precio) < Number(json.costo)
@@ -15,23 +16,31 @@ async function listar(req, res) {
     include: { model: req.app.locals.modelos.Usuario, attributes: ['id', 'nombre', 'email'] },
     order: [['nombre', 'ASC'], ['id', 'ASC']], limit: 100,
   });
-  res.json(filas.map(salida));
+  res.json(filas.map(req.cuenta.rol === 'comprador' ? salidaComprador : salida));
 }
 async function obtener(req, res) {
   const fila = await req.app.locals.modelos.Producto.findByPk(req.params.id, {
     include: { model: req.app.locals.modelos.Usuario, attributes: ['id', 'nombre', 'email'] },
   });
   if (!fila) return res.status(404).json({ error: 'Producto no encontrado.' });
-  res.json(salida(fila));
+  res.json(req.cuenta.rol === 'comprador' ? salidaComprador(fila) : salida(fila));
+}
+async function responsable(m, usuarioId) {
+  const cuenta = await m.Cuenta.findOne({ where: { usuarioId } });
+  if (cuenta?.rol === 'comprador') invalido('El responsable del producto debe ser del equipo, no un comprador.');
 }
 async function crear(req, res) {
-  const fila = await req.app.locals.modelos.Producto.create(datosProducto(req.body));
+  const datos = datosProducto(req.body);
+  await responsable(req.app.locals.modelos, datos.usuarioId);
+  const fila = await req.app.locals.modelos.Producto.create(datos);
   res.status(201).json(salida(fila));
 }
 async function actualizar(req, res) {
   const fila = await req.app.locals.modelos.Producto.findByPk(req.params.id);
   if (!fila) return res.status(404).json({ error: 'Producto no encontrado.' });
-  await fila.update(datosProducto(req.body)); res.json(salida(fila));
+  const datos = datosProducto(req.body);
+  await responsable(req.app.locals.modelos, datos.usuarioId);
+  await fila.update(datos); res.json(salida(fila));
 }
 async function eliminar(req, res) {
   const fila = await req.app.locals.modelos.Producto.findByPk(req.params.id);

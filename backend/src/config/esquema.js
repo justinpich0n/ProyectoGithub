@@ -3,6 +3,7 @@ const { DataTypes } = require('sequelize');
 module.exports = async function prepararEsquema(sequelize) {
   const qi = sequelize.getQueryInterface();
   const tablas = await qi.showAllTables();
+  if (tablas.includes('cuentas')) await require('./rol-comprador')(sequelize);
   if (tablas.includes('ventas')) {
     const columnasVenta = await qi.describeTable('ventas');
     if (!columnasVenta.cliente) await qi.addColumn('ventas', 'cliente', {

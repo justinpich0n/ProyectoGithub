@@ -1,8 +1,10 @@
 const { datosUsuario } = require('./validacion');
 
 async function listar(req, res) {
-  const filas = await req.app.locals.modelos.Usuario.findAll({});
-  res.json(filas);
+  const m = req.app.locals.modelos;
+  const [filas, cuentas] = await Promise.all([m.Usuario.findAll({}), m.Cuenta.findAll({ where: { rol: 'comprador' }, attributes: ['usuarioId'] })]);
+  const compradores = new Set(cuentas.map(c => c.usuarioId));
+  res.json(filas.map(fila => ({ ...fila.toJSON(), comprador: compradores.has(fila.id) })));
 }
 async function obtener(req, res) {
   const fila = await req.app.locals.modelos.Usuario.findByPk(req.params.id, {});
