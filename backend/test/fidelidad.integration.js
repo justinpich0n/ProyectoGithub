@@ -1,0 +1,78 @@
+const assert = require('node:assert/strict');
+const { randomBytes, randomUUID, createHash } = require('node:crypto');
+require('dotenv').config({ quiet: true });
+process.env.BIZZSTOCK_DOCUMENTO_KEY = randomBytes(32).toString('hex');
+const db = require('../src/config/database')();
+const m = require('../src/models')(db); const app = require('../src/app');
+const { hashPassword } = require('../src/auth/seguridad');
+const { sincronizarCompradores, vincularVentasAnteriores } = require('../src/clientes/fidelidad');
+const prefijo = 'test_fid_' + randomBytes(4).toString('hex') + '_';
+const nombres = new Map(Object.values(m).map(x => [x.tableName, prefijo + x.tableName]));
+for (const x of Object.values(m)) x.tableName = nombres.get(x.tableName);
+for (const x of Object.values(m)) for (const campo of Object.values(x.rawAttributes)) if (campo.references && nombres.has(campo.references.model)) campo.references.model = nombres.get(campo.references.model);
+async function main() {
+ let server; let total = 0; const clave = randomBytes(32).toString('hex');
+ const previo = process.env.BIZZSTOCK_SETUP_TOKEN_HASH;process.env.BIZZSTOCK_SETUP_TOKEN_HASH = createHash('sha256').update(clave).digest('hex');
+ try {
+  await db.sync();app.locals.modelos=m;server=app.listen(0,'127.0.0.1');await new Promise(r=>server.once('listening',r));
+  async function pedir(method,ruta,body,status,token,setup) {
+   const r=await fetch(`http://127.0.0.1:${server.address().port}/api${ruta}`,{method,headers:{'Content-Type':'application/json',...(token?{Authorization:`Bearer ${token}`} :{}),...(setup?{'X-Setup-Token':setup}:{})},body:body===undefined?undefined:JSON.stringify(body)});
+   const b=await r.json();if(status)assert.equal(r.status,status,JSON.stringify(b));total++;return{status:r.status,b};
+  }
+  const datos={nombre:'Propietario ficticio',email:'owner@example.com',password:'abcdef',tipoDocumento:'CC',numeroDocumento:'10001001'};
+  const owner=(await pedir('POST','/inicio',datos,201,null,clave)).b;
+  const registro={nombre:'Mismo nombre',email:'comprador1@example.com',password:'abcdef',rol:'comprador',tipoDocumento:'CC',numeroDocumento:'10001002'};
+  const uno=(await pedir('POST','/solicitudes',registro,201)).b;
+  const dos=(await pedir('POST','/solicitudes',{...registro,email:'comprador2@example.com',numeroDocumento:'10001003'},201)).b;
+  assert.equal(await m.Cliente.count(),2);
+  const c1=await m.Cliente.findOne({where:{usuarioId:uno.usuario.id}});const c2=await m.Cliente.findOne({where:{usuarioId:dos.usuario.id}});
+  assert.notEqual(c1.id,c2.id);assert.equal(c1.telefono,null);assert.equal(c2.telefono,null);
+  await pedir('POST','/solicitudes',registro,409);assert.equal(await m.Cliente.count(),2);
+  await pedir('GET','/mi-perfil',undefined,401);await pedir('GET','/mi-perfil',undefined,403,owner.token);
+  await pedir('GET','/clientes',undefined,403,uno.token);await pedir('GET',`/clientes/${c2.id}/compras`,undefined,403,uno.token);await pedir('GET',`/mi-perfil/${c2.id}`,undefined,404,uno.token);
+  assert.deepEqual((await pedir('GET','/mi-perfil',undefined,200,uno.token)).b.resumen,{compras:0,totalGastado:'0.00',puntos:0});
+  const cajeroDatos={...datos,nombre:'Cajero ficticio',email:'cajero@example.com',numeroDocumento:'10001004',rol:'cajero'};
+  await pedir('POST','/cuentas',cajeroDatos,201,owner.token);const cajero=(await pedir('POST','/auth/login',cajeroDatos,200)).b;
+  const encontrados=(await pedir('GET','/ventas/clientes?q=comprador1%40example.com',undefined,200,cajero.token)).b;
+  assert.equal(encontrados.length,1);assert.equal(encontrados[0].id,c1.id);assert.equal(encontrados[0].email,registro.email);
+  const p1=await m.Producto.create({nombre:'Cuaderno ficticio',precio:'12500.00',costo:'1000',cantidad:100,usuarioId:owner.usuario.id});
+  const p2=await m.Producto.create({nombre:'Esfero ficticio',precio:'500.00',costo:'100',cantidad:100,usuarioId:owner.usuario.id});
+  const venta=(clienteId,producto=p1,cantidad=1)=>({operacion:randomUUID(),clienteId,productos:[{id:producto.id,cantidad}],metodo:'efectivo',recibido:(Number(producto.precio)*cantidad).toFixed(2),puntosGanados:999999});
+  const v1=(await pedir('POST','/ventas',venta(c1.id),201,cajero.token)).b;assert.equal(v1.puntosGanados,12);assert.equal(v1.clienteId,c1.id);
+  const repetida=venta(c1.id);const carrera=await Promise.all([pedir('POST','/ventas',repetida,null,owner.token),pedir('POST','/ventas',repetida,null,owner.token)]);assert.deepEqual(carrera.map(r=>r.status).sort(),[201,409]);
+  await pedir('POST','/ventas',venta(c1.id,p2),201,cajero.token);await pedir('POST','/ventas',venta(c2.id,p2,2),201,cajero.token);
+  assert.equal((await pedir('POST','/ventas',venta(undefined),201,cajero.token)).b.puntosGanados,0);
+  await pedir('POST','/ventas',venta(c1.id),403,uno.token);await pedir('POST','/ventas',{...venta(c1.id),recibido:'0'},400,cajero.token);
+  const perfil=(await pedir('GET',`/mi-perfil?clienteId=${c2.id}`,undefined,200,uno.token)).b;
+  assert.equal(perfil.cliente.email,registro.email);assert.equal(perfil.compras.length,3);assert.deepEqual(perfil.resumen,{compras:3,totalGastado:'25500.00',puntos:24});
+  for(const secreto of ['passwordHash','documentoCifrado','documentoHash','owner@example.com','cajero@example.com','cuentaId','vendedor'])assert.equal(JSON.stringify(perfil).includes(secreto),false);
+  const otro=(await pedir('GET','/mi-perfil',undefined,200,dos.token)).b;assert.equal(otro.compras.length,1);assert.equal(otro.resumen.puntos,1);assert.equal(otro.compras.some(v=>v.id===v1.id),false);
+  assert.equal((await pedir('GET',`/clientes/${c1.id}/compras`,undefined,200,owner.token)).b.resumen.puntos,24);
+  await pedir('GET',`/clientes/${c1.id}/compras`,undefined,403,cajero.token);await pedir('GET','/mi-perfil?pagina=0',undefined,400,uno.token);await pedir('PUT','/mi-perfil',{puntos:999999},404,uno.token);
+  const lista=(await pedir('GET','/clientes',undefined,200,owner.token)).b;assert.equal(lista.find(c=>c.id===c1.id).puntos,24);assert.equal(lista.find(c=>c.id===c2.id).puntos,1);
+  const antigua={operacion:randomUUID(),cuentaId:(await m.Cuenta.findOne({where:{usuarioId:owner.usuario.id}})).id,metodo:'efectivo',total:'2000.00',recibido:'2000.00',cambio:'0.00',detalle:[],cliente:{id:c1.id,nombre:c1.nombre,telefono:null}};
+  await m.Venta.create(antigua);await m.Venta.create({...antigua,operacion:randomUUID(),cliente:{id:2147483647,nombre:'Otra persona'}});
+  await vincularVentasAnteriores(m);await vincularVentasAnteriores(m);
+  const migrado=(await pedir('GET','/mi-perfil',undefined,200,uno.token)).b;assert.equal(migrado.resumen.puntos,26);assert.equal(migrado.total,4);
+  const manual=await m.Cliente.create({nombre:'Mismo nombre',telefono:'3001234567',direccion:'Prueba'});
+  const viejo=await m.Usuario.create({nombre:'Mismo nombre',email:'antiguo@example.com'});await m.Cuenta.create({usuarioId:viejo.id,rol:'comprador',passwordHash:await hashPassword('abcdef')});
+  await sincronizarCompradores(m);await sincronizarCompradores(m);assert.equal(await m.Cliente.count({where:{usuarioId:viejo.id}}),1);await manual.reload();assert.equal(manual.usuarioId,null);
+  await pedir('PUT',`/usuarios/${uno.usuario.id}`,{nombre:'Nombre actualizado',email:registro.email},200,owner.token);await c1.reload();assert.equal(c1.nombre,'Nombre actualizado');
+  for(let i=0;i<16;i++)await m.Venta.create({...antigua,operacion:randomUUID(),clienteId:c2.id,cliente:{id:c2.id,nombre:c2.nombre},total:'1000.00',recibido:'1000.00'});
+  const pagina1=(await pedir('GET','/mi-perfil',undefined,200,dos.token)).b;const pagina2=(await pedir('GET','/mi-perfil?pagina=2',undefined,200,dos.token)).b;
+  assert.equal(pagina1.compras.length,15);assert.equal(pagina2.compras.length,2);assert.equal(pagina2.resumen.puntos,17);assert.equal(pagina2.total,17);
+  const desdePanel={...registro,nombre:'Cliente creado por propietario',email:'panel@example.com',numeroDocumento:'10001005'};
+  await pedir('POST','/cuentas',desdePanel,201,owner.token);
+  const delPanel=await m.Usuario.findOne({where:{email:desdePanel.email}});
+  assert.equal(await m.Cliente.count({where:{usuarioId:delPanel.id}}),1);
+  const panelCliente=(await pedir('POST','/auth/login',{email:desdePanel.email,password:desdePanel.password},200)).b;
+  assert.equal(panelCliente.usuario.rol,'comprador');assert.equal(panelCliente.usuario.propietario,false);
+  const perfilPanel=(await pedir('GET','/mi-perfil',undefined,200,panelCliente.token)).b;
+  assert.equal(perfilPanel.cliente.email,desdePanel.email);assert.equal(perfilPanel.resumen.puntos,0);
+  await pedir('POST','/cuentas',{...desdePanel,email:'sinpermiso@example.com',numeroDocumento:'10001006'},403,panelCliente.token);
+  await pedir('POST','/cuentas',desdePanel,409,owner.token);
+  assert.equal(await m.Cliente.count({where:{usuarioId:delPanel.id}}),1);
+  console.log(`${total} pruebas HTTP de fidelidad correctas: registro automático, compras, puntos por monto, concurrencia, migración, privacidad y paginación; tablas aisladas.`);
+ }finally{if(server)await new Promise(r=>server.close(r));for(const modelo of Object.values(m))assert.ok(modelo.tableName.startsWith(prefijo));await db.drop();await db.close();if(previo===undefined)delete process.env.BIZZSTOCK_SETUP_TOKEN_HASH;else process.env.BIZZSTOCK_SETUP_TOKEN_HASH=previo;}
+}
+main().catch(e=>{console.error(e);process.exitCode=1;});

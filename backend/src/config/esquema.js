@@ -3,8 +3,53 @@ const { DataTypes } = require('sequelize');
 module.exports = async function prepararEsquema(sequelize) {
   const qi = sequelize.getQueryInterface();
   const tablas = await qi.showAllTables();
+  if (tablas.includes('cuentas')) {
+    const columnasCuenta = await qi.describeTable('cuentas');
+    if (!columnasCuenta.ultimoInicioSesion) await qi.addColumn('cuentas', 'ultimoInicioSesion', { type: DataTypes.DATE(3), allowNull: true });
+    if (!columnasCuenta.rol.type.includes('comprador')) {
+      await qi.changeColumn('cuentas', 'rol', { type: DataTypes.ENUM('administrador', 'cajero', 'comprador'), allowNull: false });
+    }
+  }
+  for (const tabla of ['cuentas', 'solicitudes_cuenta']) {
+    if (!tablas.includes(tabla)) continue;
+    const columnas = await qi.describeTable(tabla);
+    if (!columnas.tipoDocumento) await qi.addColumn(tabla, 'tipoDocumento', { type: DataTypes.STRING(3) });
+    if (!columnas.documentoCifrado) await qi.addColumn(tabla, 'documentoCifrado', { type: DataTypes.STRING(80) });
+    if (!columnas.documentoHash) await qi.addColumn(tabla, 'documentoHash', { type: DataTypes.STRING(64) });
+    const indices = await qi.showIndex(tabla);
+    if (!indices.some(i => i.unique && i.fields.length === 1 && i.fields[0].attribute === 'documentoHash')) {
+      await qi.addIndex(tabla, ['documentoHash'], { unique: true, name: tabla + '_documento_unico' });
+    }
+  }
+  if (tablas.includes('clientes')) {
+    const columnasCliente = await qi.describeTable('clientes');
+    if (!columnasCliente.usuarioId) await qi.addColumn('clientes', 'usuarioId', { type: DataTypes.INTEGER, allowNull: true, references: { model: 'usuarios', key: 'id' }, onDelete: 'SET NULL', onUpdate: 'CASCADE' });
+    if (!columnasCliente.telefono.allowNull) await qi.changeColumn('clientes', 'telefono', { type: DataTypes.STRING(20), allowNull: true });
+    if (!columnasCliente.direccion.allowNull) await qi.changeColumn('clientes', 'direccion', { type: DataTypes.STRING, allowNull: true });
+    const indicesCliente = await qi.showIndex('clientes');
+    if (!indicesCliente.some(i => i.unique && i.fields.length === 1 && i.fields[0].attribute === 'usuarioId')) await qi.addIndex('clientes', ['usuarioId'], { unique: true, name: 'clientes_usuario_unico' });
+  }
+  if (tablas.includes('ventas')) {
+    const columnasVenta = await qi.describeTable('ventas');
+    if (!columnasVenta.clienteId) await qi.addColumn('ventas', 'clienteId', { type: DataTypes.INTEGER, allowNull: true, references: { model: 'clientes', key: 'id' }, onDelete: 'RESTRICT', onUpdate: 'CASCADE' });
+    const indicesVenta = await qi.showIndex('ventas');
+    if (!indicesVenta.some(i => i.name === 'ventas_cliente_recientes')) await qi.addIndex('ventas', ['clienteId', 'id'], { name: 'ventas_cliente_recientes' });
+    if (!columnasVenta.vendedor) await qi.addColumn('ventas', 'vendedor', { type: DataTypes.JSON, allowNull: true });
+    if (!columnasVenta.cliente) await qi.addColumn('ventas', 'cliente', {
+      type: DataTypes.JSON,
+      allowNull: true,
+    });
+  }
   if (!tablas.includes('productos')) return;
   const columnas = await qi.describeTable('productos');
+  if (!columnas.imagen) await qi.addColumn('productos', 'imagen', { type: DataTypes.TEXT('medium'), allowNull: true });
+  const anteriores = ['cinta','esfero','lapiz','cuaderno','marcador','resaltador','tijeras','pegante','carpeta','regalo','bolsa','pilas','llavero','regla','borrador','plastilina'].map(nombre => '/productos/' + nombre + '.svg');
+  const [sinImagen] = await sequelize.query('SELECT id, nombre, imagen FROM productos WHERE imagen IS NULL OR imagen IN (:anteriores)', { replacements: { anteriores } });
+  for (const producto of sinImagen) {
+    await sequelize.query('UPDATE productos SET imagen = ? WHERE id = ? AND (imagen IS NULL OR imagen = ?)', {
+      replacements: [require('./imagenes-productos')(producto.nombre), producto.id, producto.imagen],
+    });
+  }
   for (const campo of ['costo', 'cantidad']) {
     if (!columnas[campo]) await qi.addColumn('productos', campo, {
       type: campo === 'costo' ? DataTypes.DECIMAL(10, 2) : DataTypes.INTEGER,

@@ -25,9 +25,23 @@ async function iniciarServidor() {
       await sequelize.authenticate();
       await require('./src/config/esquema')(sequelize);
       await sequelize.sync(); // Sin force ni alter: conserva las tablas existentes.
+      await require('./src/clientes/fidelidad').sincronizarCompradores(modelos);
+      await require('./src/clientes/fidelidad').vincularVentasAnteriores(modelos);
+      if (process.env.BIZZSTOCK_CATALOGO_FERIA === 'true') {
+        const creados = await require('./src/config/catalogo-demo')(modelos);
+        console.log(`Productos de feria agregados: ${creados}.`);
+      }
       app.locals.modelos = modelos;
       console.log('Modelos de Usuarios y Productos preparados.');
-    } catch {
+    } catch (error) {
+      if (process.env.NODE_ENV === 'production') {
+        const codigo = error.original?.code ?? error.code;
+        if (typeof codigo === 'string' && /^[A-Z0-9_]+$/.test(codigo)) {
+          console.error('Código de conexión MySQL:', codigo);
+        }
+        await cerrarPool();
+        throw new Error('No se pudo preparar MySQL o sus tablas para el despliegue.', { cause: error });
+      }
       // HTTP sigue disponible para informar del fallo y volver a comprobar.
       console.error(
         'No se pudo preparar MySQL o sus tablas. Comprueba /api/health y reinicia para habilitar el CRUD.',
@@ -35,7 +49,8 @@ async function iniciarServidor() {
     }
   }
 
-  const server = app.listen(port, '127.0.0.1', () => {
+  const host = process.env.HOST || (process.env.NODE_ENV === 'production' ? '0.0.0.0' : '127.0.0.1');
+  const server = app.listen(port, host, () => {
     console.log(`BizzStock: http://127.0.0.1:${port}/api/health`);
   });
   server.on('error', async () => {

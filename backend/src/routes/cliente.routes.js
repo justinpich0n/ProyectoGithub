@@ -6,6 +6,7 @@ router.param('id', (req, res, next, id) => {
   next();
 });
 router.get('/', c.listar);
+router.get('/:id/compras', c.compras);
 router.get('/:id', c.obtener);
 router.post('/', c.crear);
 router.put('/:id', c.actualizar);

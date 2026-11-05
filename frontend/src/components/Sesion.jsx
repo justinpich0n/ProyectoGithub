@@ -1,3 +1,4 @@
+import CamposDocumento from './CamposDocumento';
 import { useEffect, useState } from 'react';
 import api, { mensajeError } from '../services/api';
 import Bienvenida from './Bienvenida';
@@ -8,6 +9,7 @@ export default function Sesion({ children }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [documento, setDocumento] = useState({});
   const [ocupado, setOcupado] = useState(false);
   useEffect(() => {
     const controller = new AbortController();
@@ -32,7 +34,31 @@ export default function Sesion({ children }) {
     catch (e) { setError(mensajeError(e)); return; }
     sessionStorage.removeItem('bizzstock-token'); setUsuario(null);
   }
+  async function guardarDocumento(e) {
+    e.preventDefault();
+    setOcupado(true);
+    setError('');
+    try {
+      await api.post('/auth/documento', documento);
+      setUsuario(actual => actual && { ...actual, faltaDocumento: false });
+      setDocumento({});
+    } catch (e) {
+      setError(mensajeError(e));
+    } finally {
+      setOcupado(false);
+    }
+  }
   if (verificando) return <p role="status" className="page">Comprobando sesión…</p>;
-  if (!usuario) return <Bienvenida email={email} setEmail={setEmail} password={password} setPassword={setPassword} error={error} ocupado={ocupado} entrar={entrar} completar={(data) => { sessionStorage.setItem('bizzstock-token', data.token); setUsuario(data.usuario); setPassword(''); }} />;
+  if (!usuario) return <Bienvenida limpiarError={() => setError('')} email={email} setEmail={setEmail} password={password} setPassword={setPassword} error={error} ocupado={ocupado} entrar={entrar} completar={(data) => { sessionStorage.setItem('bizzstock-token', data.token); setUsuario(data.usuario); setPassword(''); }} />;
+  if (usuario.faltaDocumento) return <section className="page">
+    <h1>Actualiza tus datos</h1>
+    <p>Registra tu tipo y número de documento para identificar tu cuenta y evitar duplicados.</p>
+    {error && <p className="crud-error" role="alert">{error}</p>}
+    <form className="crud-panel crud-fields" onSubmit={guardarDocumento}>
+      <CamposDocumento datos={documento} cambiar={(campo, valor) => setDocumento(actual => ({ ...actual, [campo]: valor }))} />
+      <button className="crud-primary" disabled={ocupado}>Guardar documento</button>
+      <button type="button" onClick={salir}>Cerrar sesión</button>
+    </form>
+  </section>;
   return <SesionContext.Provider value={{ usuario, salir }}>{children}</SesionContext.Provider>;
 }

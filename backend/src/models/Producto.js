@@ -14,6 +14,7 @@ module.exports = (sequelize) =>
         allowNull: false,
         defaultValue: 0,
       },
+      imagen: { type: DataTypes.TEXT('medium'), allowNull: true },
       costo: { type: DataTypes.DECIMAL(10, 2), allowNull: true },
       cantidad: { type: DataTypes.INTEGER, allowNull: true },
       descripcion: { type: DataTypes.TEXT, allowNull: true },

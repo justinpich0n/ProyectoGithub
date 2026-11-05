@@ -24,14 +24,24 @@ async function obtener(req, res) {
   if (!fila) return res.status(404).json({ error: 'Producto no encontrado.' });
   res.json(salida(fila));
 }
+async function validarResponsable(m, usuarioId) {
+  const cuenta = await m.Cuenta.findOne({ where: { usuarioId } });
+  if (cuenta?.rol === 'comprador') invalido('Selecciona un responsable del equipo de la tienda.');
+}
 async function crear(req, res) {
-  const fila = await req.app.locals.modelos.Producto.create(datosProducto(req.body));
+  const datos = datosProducto(req.body);
+  await validarResponsable(req.app.locals.modelos, datos.usuarioId);
+  const fila = await req.app.locals.modelos.Producto.create({
+    ...datos, imagen: datos.imagen || require('../config/imagenes-productos')(datos.nombre),
+  });
   res.status(201).json(salida(fila));
 }
 async function actualizar(req, res) {
   const fila = await req.app.locals.modelos.Producto.findByPk(req.params.id);
   if (!fila) return res.status(404).json({ error: 'Producto no encontrado.' });
-  await fila.update(datosProducto(req.body)); res.json(salida(fila));
+  const datos = datosProducto(req.body);
+  await validarResponsable(req.app.locals.modelos, datos.usuarioId);
+  await fila.update(datos); res.json(salida(fila));
 }
 async function eliminar(req, res) {
   const fila = await req.app.locals.modelos.Producto.findByPk(req.params.id);

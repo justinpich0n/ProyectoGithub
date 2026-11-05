@@ -1,0 +1,16 @@
+.catalogo-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(205px,1fr)); gap:1rem; margin:1.25rem 0; }
+.producto-tarjeta { background:white; border:1px solid #d0ddd4; border-radius:1rem; overflow:hidden; }
+.producto-tarjeta > div { padding:1rem; }
+.producto-tarjeta h2 { font-size:1.1rem; margin:.2rem 0 .65rem; }
+.producto-tarjeta strong { color:#285442; font-size:1.25rem; }
+.producto-tarjeta small { color:#526d60; }
+.producto-imagen { display:block; width:100%; height:185px; object-fit:contain; background:#fff; }
+.crud-table .producto-imagen { width:62px; height:62px; border-radius:.5rem; }
+.caja-productos .producto-imagen { height:95px; grid-column:1/-1; border-radius:.5rem; }
+.tienda-info { margin:1rem 0; background:#eaf0df; }
+.ventas-resumen { display:flex; flex-wrap:wrap; gap:1rem; margin:1rem 0; }
+.ventas-resumen article { padding:1rem 1.5rem; border:1px solid #d0ddd4; border-radius:.75rem; background:white; flex:1; }
+.ventas-resumen strong { display:block; font-size:1.6rem; color:#285442; }
+.ventas-filtros { display:flex; flex-wrap:wrap; gap:1rem; align-items:end; }
+.ventas-detalle { width:min(92vw,700px); border:1px solid #d0ddd4; border-radius:1rem; padding:1.5rem; color:#203f36; }
+.ventas-detalle::backdrop { background:#173c2ec4; }

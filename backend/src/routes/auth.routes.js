@@ -1,7 +1,9 @@
 const router = require('express').Router();
 const { verificarPassword, abrirSesion, autenticar, cerrarSesion } = require('../auth/seguridad');
+const { documento, bloquearAltas, verificarDuplicado } = require('../auth/documento');
+const { fn } = require('sequelize');
 const intentos = new Map();
-const publico = async (c, m) => ({ propietario: await require('../auth/propietario').esPropietario(m, c.id), id: c.usuarioId, nombre: c.Usuario.nombre, email: c.Usuario.email, rol: c.rol });
+const publico = async (c, m) => ({ propietario: await require('../auth/propietario').esPropietario(m, c.id), id: c.usuarioId, nombre: c.Usuario.nombre, email: c.Usuario.email, rol: c.rol, faltaDocumento: !c.documentoCifrado });
 router.post('/login', async (req, res) => {
   res.set('Cache-Control', 'no-store');
   const clave = req.ip;
@@ -16,9 +18,29 @@ router.post('/login', async (req, res) => {
     estado.cantidad += 1; intentos.set(clave, estado);
     return res.status(401).json({ error: 'Correo o contraseña incorrectos.' });
   }
+  if (['administrador', 'cajero'].includes(cuenta.rol)) {
+    await cuenta.update({ ultimoInicioSesion: fn('NOW', 3) });
+  }
   intentos.delete(clave);
   res.json({ token: abrirSesion(cuenta.id), usuario: await publico(cuenta, req.app.locals.modelos) });
 });
 router.get('/sesion', autenticar, async (req, res) => { res.set('Cache-Control', 'no-store'); res.json(await publico(req.cuenta, req.app.locals.modelos)); });
+router.post('/documento', autenticar, async (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  const datos = documento(req.body);
+  const m = req.app.locals.modelos;
+  await m.Cuenta.sequelize.transaction(async transaction => {
+    await bloquearAltas(m, transaction);
+    const cuenta = await m.Cuenta.findByPk(req.cuenta.id, { transaction, lock: transaction.LOCK.UPDATE });
+    if (cuenta.documentoHash === datos.documentoHash) {
+      if (!cuenta.documentoCifrado) await cuenta.update({ documentoCifrado: datos.documentoCifrado }, { transaction });
+      return;
+    }
+    if (cuenta.documentoHash) throw Object.assign(new Error('Esta cuenta ya tiene un documento registrado.'), { status: 409 });
+    await verificarDuplicado(m, transaction, datos, false);
+    await cuenta.update(datos, { transaction });
+  });
+  res.json({ faltaDocumento: false });
+});
 router.post('/logout', autenticar, (req, res) => { cerrarSesion(req); res.json({ mensaje: 'Sesión cerrada.' }); });
 module.exports = router;

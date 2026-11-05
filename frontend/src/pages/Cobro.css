@@ -1,0 +1,39 @@
+.caja { max-width: 1500px; margin-inline: auto; }
+.caja-cabecera { display: flex; justify-content: space-between; gap: 1rem; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.caja-cabecera h1 { margin: .2rem 0; font-size: clamp(2rem, 4vw, 3.5rem); }
+.caja-cabecera p { margin: 0; }
+.caja-marca { color: #426650; font-weight: 800; letter-spacing: .13em; font-size: .75rem; }
+.caja-acciones, .caja-metodos { display: flex; gap: .5rem; flex-wrap: wrap; }
+.caja-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 1rem; align-items: start; }
+.caja-panel { min-width: 0; padding: 1.25rem; border: 1px solid #cad8cf; border-radius: 1.15rem; background: #fff; }
+.caja-panel h2 { margin: 0 0 1rem; }
+.caja-panel label { display: grid; gap: .35rem; }
+.caja-panel input { width: 100%; padding: .7rem; border: 1px solid #adc4b5; border-radius: .55rem; font: inherit; }
+.caja button:not(.crud-primary) { padding: .55rem .8rem; color: #203f36; background: #f2f6ed; border: 1px solid #adc4b5; border-radius: .6rem; font: inherit; cursor: pointer; }
+.caja button:disabled { opacity: .55; cursor: default; }
+.caja button[aria-pressed="true"] { color: white; background: #285442; }
+.caja-productos { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: .55rem; margin-top: .9rem; max-height: 62vh; overflow: auto; }
+.caja .caja-productos button { text-align: left; min-height: 85px; display: grid; grid-template-columns: 1fr auto; align-content: center; gap: .3rem; }
+.caja-productos button span:first-child { grid-column: 1 / -1; font-weight: 600; }
+.caja-lineas, .caja-recibo ul { padding: 0; list-style: none; }
+.caja-lineas li, .caja-recibo li, .caja-recibo dl div { display: flex; align-items: center; justify-content: space-between; gap: .5rem; border-bottom: 1px solid #e1e9e2; padding: .55rem 0; }
+.caja-lineas small { display: block; }
+.caja-cantidad { display: flex; align-items: center; gap: .4rem; }
+.caja-total { display: flex; align-items: center; justify-content: space-between; gap: .5rem; background: #203f36; color: white; border-radius: .7rem; padding: .9rem; }
+.caja-total strong { font-size: clamp(1.2rem, 2vw, 2rem); }
+.caja-pago { border: 0; padding: 0; margin: 1rem 0; display: grid; gap: .7rem; }
+.caja-pago legend { font-weight: 750; margin-bottom: .65rem; }
+.caja-panel .crud-primary { width: 100%; padding: .85rem; }
+.caja-qr { width: min(92vw, 630px); border: 1px solid #cad8cf; border-radius: 1.25rem; padding: 1.5rem; color: #203f36; text-align: center; }
+.caja-qr::backdrop { background: #102d24c9; }
+.caja-qr img { display: block; width: min(100%, 360px); height: auto; margin: .65rem auto; image-rendering: pixelated; }
+.caja-qr a { overflow-wrap: anywhere; }
+@media (max-width: 800px) { .caja-grid { grid-template-columns: 1fr; } }
+
+.caja-historial {
+  display: grid;
+  gap: .5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}

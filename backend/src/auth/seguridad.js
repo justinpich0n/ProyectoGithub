@@ -34,6 +34,10 @@ async function autenticar(req, res, next) {
   req.cuenta = cuenta;
   next();
 }
+function personal(req, res, next) {
+  if (!['administrador', 'cajero'].includes(req.cuenta.rol)) return res.status(403).json({ error: 'Esta sección requiere una cuenta del equipo de la tienda.' });
+  next();
+}
 function administrador(req, res, next) {
   if (req.cuenta.rol !== 'administrador') return res.status(403).json({ error: 'Esta operación requiere permisos de administrador.' });
   next();
@@ -42,4 +46,4 @@ function cerrarSesion(req) {
   const token = req.headers.authorization?.slice(7);
   if (token) sesiones.delete(digest(token));
 }
-module.exports = { hashPassword, verificarPassword, abrirSesion, autenticar, administrador, cerrarSesion };
+module.exports = { hashPassword, verificarPassword, abrirSesion, autenticar, administrador, personal, cerrarSesion };
