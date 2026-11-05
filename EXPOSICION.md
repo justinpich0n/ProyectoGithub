@@ -1,45 +1,31 @@
-# Sustentación de la entrega actual
+# BizzStock: guion para la feria
 
-Para la entrega del 29 de octubre, consulta [cinco requisitos implementados](docs/entrega-cinco-requisitos.md): REQ-03 búsqueda, REQ-08/09 clientes, REQ-12 costo y REQ-13 precio. El acceso de administrador protege las operaciones; no hay credenciales predeterminadas. La rama está probada y se presenta mediante PR, todavía sin integrar a master. Las instrucciones anteriores de CRUD sin sesión son históricas.
+Actualizado: 5 de noviembre de 2026. Duración aproximada: 3 a 3½ minutos, sin la demostración. Las notas posteriores no se leen en voz alta.
 
-Explicación: el frontend React envía solicitudes con la sesión al backend Express. El backend valida permisos y datos; Sequelize consulta MySQL. La búsqueda usa un índice por nombre; la importación de costos usa una transacción que confirma todas las filas o ninguna. La interfaz muestra resultados y errores, y avisa si el precio de venta es menor al costo. Las pruebas usan datos ficticios y conservan los registros anteriores.
+Buenos días, tardes o noches. Mi nombre es Justin Enrique Mena Córdoba y hoy les presento BizzStock, una aplicación web para organizar una papelería y tienda de variedades. Su idea principal es sencilla: reunir los productos, los clientes y la caja en un mismo lugar, para registrar lo que se vende y quién lo vende.
 
-## Material anterior
+Para desarrollarla utilizamos JavaScript, HTML, CSS y SQL. El frontend está hecho con React y se compila con Vite. El backend funciona con Node.js, que ejecuta JavaScript en el servidor, y Express, que recibe las solicitudes. La base de datos es relacional y compatible con MySQL. Usamos Sequelize como ORM para trabajar con sus tablas y relaciones. La aplicación está desplegada en Render, así que podemos abrirla desde un computador o celular sin iniciar el proyecto en nuestra terminal.
 
-# BizzStock: guion de sustentación
+Organizamos el trabajo con la metodología Scrum y un backlog en GitHub Projects. Allí relacionamos las tareas con los requisitos funcionales y no funcionales del PPI. Git conserva el historial; las ramas permiten separar los cambios y los pull requests permiten revisarlos antes de integrarlos. No son lo mismo: Scrum organiza el trabajo y GitHub nos ayuda a seguirlo.
 
-## Qué se construyó
+La aplicación permite crear, consultar, actualizar y eliminar registros: ese es el CRUD. El catálogo muestra fotografías, precios y disponibilidad registrada. La caja permite elegir productos, asociar un cliente, registrar el medio de pago y calcular el cambio. Después genera un comprobante con el detalle y una confirmación visual. El registro de ventas permite a los administradores consultar las ventas de todos los cajeros, con filtros de fecha y medio de pago.
 
-BizzStock es un sistema en desarrollo para la papelería y variedades Arte y Belleza. Se completaron las partes 1 a 4 de la guía técnica: Node.js, Express, MySQL, Sequelize, React, React Router y axios. La metodología del equipo es Scrum y el tablero elegido es GitHub Projects. El tablero organiza el trabajo; Git guarda las versiones del código.
+También diferenciamos los permisos. Un comprador puede registrarse para consultar el catálogo; para trabajar como cajero o administrador se necesita la autorización del propietario. El QR abre la página de acceso: no concede permisos por sí solo.
 
-## Demostración de la primera prueba
+En seguridad, no guardamos las contraseñas tal como se escriben. Usamos scrypt con una sal aleatoria para generar una huella que permite verificarlas. Los documentos de identidad de las cuentas se almacenan cifrados, y su número completo solo se muestra al propietario. La página utiliza HTTPS, el servidor valida los permisos y los datos, limita intentos fallidos de acceso y evita cuentas duplicadas por correo o documento. Las credenciales de conexión no se publican en GitHub.
 
-1. Iniciar MySQL. En backend ejecutar `npm ci` si cambiaron dependencias y `npm run dev`; en otra terminal, desde frontend, `npm ci` y `npm run dev -- --host 127.0.0.1 --strictPort`. Para detener cada proceso usar Ctrl+C en su terminal. Si un puerto está ocupado, revisar la instancia existente antes de iniciar otra.
-2. Abrir http://127.0.0.1:3000/api/health. El 200 con base conectada demuestra que Express puede consultar MySQL en ese momento.
-3. Abrir http://127.0.0.1:5173/usuarios. Crear «Equipo de demostración» con un correo ficticio único terminado en @example.com.
-4. En Productos crear «Cuaderno de demostración», precio 4500.50 y seleccionar ese usuario. La tabla muestra el usuario gracias a la relación entre las tablas.
-5. Editar el precio a 5000.25, guardar y recargar. El cambio permanece porque está almacenado en MySQL.
-6. Mostrar la opción de cancelar una edición. Para demostrar borrado, usar exclusivamente los registros ficticios creados para la prueba. Eliminar un usuario borra también sus productos; la confirmación lo advierte.
-7. Mostrar `.env.example`, nunca `.env`. Las credenciales, node_modules, dist y datos de MySQL no se publican.
+Estas medidas reducen los riesgos, pero no hacen que la aplicación sea imposible de hackear. Todavía es un prototipo que requiere mejoras y revisión continua para un uso real. Los cobros son simulados: no cargamos dinero a tarjetas ni emitimos facturas electrónicas.
 
-## Cómo viaja una operación
+Ahora voy a mostrarles cómo se realiza una venta en BizzStock. Muchas gracias.
 
-React muestra el formulario y guarda sus valores con useState. Axios envía una petición HTTP. Express encuentra la ruta y llama al controlador. El controlador valida los datos y usa el modelo de Sequelize. Sequelize genera la consulta que MySQL ejecuta. La respuesta JSON vuelve a React y se actualiza la tabla.
+## Notas para sustentar
 
-GET consulta, POST crea, PUT actualiza y DELETE elimina. Un ID es la llave primaria del registro; usuarioId es la llave foránea que relaciona cada producto con un usuario. Un usuario puede tener varios productos. El correo es único y el precio usa DECIMAL(10,2).
-
-`authenticate()` comprueba el acceso y `sync()` crea las tablas faltantes. No se usa force ni alter, por lo que no se borran ni reconstruyen tablas al arrancar. El pool mysql2 existente se conserva para health y Sequelize administra las operaciones CRUD.
-
-## Qué se comprobó
-
-- `npm run lint` en ambas carpetas: revisión estática aprobada.
-- `npm test` en backend: salud simulada, incluyendo fallo y recuperación.
-- `npm run test:integration` en backend con el servidor local iniciado: CRUD real, validaciones, correo único, relación, 404 y cascada. Limpia únicamente sus registros ficticios.
-- `npm run build` en frontend: compilación aprobada.
-- Navegador: creación de usuario y producto, edición del precio y persistencia al recargar.
-
-La guía actual corresponde al commit d2ad193 del profesor, del 13 de octubre de 2026. Las pruebas no constituyen una medición de rendimiento ni una validación de todos los requisitos del PPI.
-
-## Límites actuales
-
-Un registro de usuario todavía no es una cuenta con contraseña: login y permisos están pendientes. También siguen pendientes stock, caja, ventas, clientes, crédito, comprobantes y respaldos. La cascada responde al ejercicio; debe acordarse cómo conservar el inventario cuando se retire un empleado antes del uso real. Hay avisos de dependencias documentados en el README del backend.
+- JavaScript y SQL son lenguajes; HTML es marcado y CSS define estilos. Node.js es un entorno de ejecución, React una biblioteca, Express un framework, Vite una herramienta de desarrollo y compilación, y Sequelize el ORM.
+- El proyecto sigue una arquitectura cliente-servidor, con rutas, controladores y modelos en el backend. React muestra la interfaz; Express valida; Sequelize consulta la base de datos.
+- Se comprobó la aplicación pública en Render. El endpoint de salud confirma una conexión compatible con MySQL; no identifica por sí solo al proveedor de alojamiento de la base de datos. No afirmar Aiven o TiDB sin comprobar la configuración privada actual.
+- «Disponibilidad registrada» no significa que se haya implementado el descuento automático de existencias en cada cobro.
+- No afirmar que todas las tareas o todos los requisitos del PPI están terminados.
+- Si preguntan por seguridad, explicar la diferencia entre el hash de una contraseña y el cifrado reversible de un documento. No mostrar credenciales ni documentos reales durante la demostración.
+- Las sesiones duran como máximo ocho horas y se invalidan al cerrar sesión. Actualmente se guardan en memoria del servidor: un reinicio obliga a entrar nuevamente.
+- Las fotos iniciales son referencias; su marca o presentación puede variar. Los créditos están en `/productos/fotos.html`.
+- Consulta el [detalle verificado de seguridad y sus límites](docs/seguridad-feria.md). El [guion anterior](docs/exposicion-historica.md) se conserva como archivo histórico.
