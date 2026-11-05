@@ -18,6 +18,8 @@ La versión de producción de Vercel vinculaba al comprador con Cliente y guarda
 
 `BIZZSTOCK_DOCUMENTO_KEY` es una variable privada estable de al menos 32 caracteres. Se configura en el entorno que sirve la API; en Vercel, en Production antes del despliegue. Conservar una copia privada. No guardarla en Git ni regenerarla en cada despliegue: cambiarla impediría leer documentos anteriores y detectar sus duplicados correctamente.
 
+Si la base procede de otro alojamiento y ya contiene documentos, trasladar **la misma clave de la instalación anterior**, sin crear una nueva. En esta publicación se conserva la clave original configurada en Render para los documentos de la base existente. La prueba de migración incluye una clave incorrecta y confirma que restaurar la original permite volver a leer los datos sin modificarlos.
+
 La preparación añade columnas nulas e índice único sin `force` ni `alter`. No borra cuentas ni adjudica ventas por nombre. Comprueba que un documento existente pueda descifrarse con la clave configurada y falla si la clave es incorrecta. Las cuentas anteriores comienzan sin documento hasta que su titular lo complete.
 
 ## Verificación
