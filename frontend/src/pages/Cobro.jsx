@@ -1,3 +1,4 @@
+import Comprobante from '../components/Comprobante';
 import ImagenProducto from '../components/ImagenProducto';
 import { Link } from 'react-router-dom';
 import './Catalogo.css';
@@ -186,18 +187,11 @@ export default function Cobro() {
           {!opciones.length && <p>No hay productos para mostrar.</p>}
         </div>
       </section>
-      {comprobante ? <section className="caja-panel caja-recibo">
-        <span className="caja-marca" role="status">PAGO REGISTRADO</span>
-        <h2>Comprobante #{comprobante.id}</h2>
-        <p>{new Date(comprobante.createdAt).toLocaleString('es-CO')}</p>
-        {comprobante.cliente && <p>Cliente: {comprobante.cliente.nombre} · {comprobante.cliente.telefono}</p>}
-        <p>{metodos[comprobante.metodo]} · Simulación de caja</p>
-        <ul>{comprobante.detalle.map((p) => <li key={p.productoId}><span>{p.cantidad} × {p.nombre}</span><strong>{pesos.format(p.subtotal)}</strong></li>)}</ul>
-        <dl><div><dt>Total pagado</dt><dd>{pesos.format(comprobante.total)}</dd></div><div><dt>Recibido</dt><dd>{pesos.format(comprobante.recibido)}</dd></div><div><dt>Cambio</dt><dd>{pesos.format(comprobante.cambio)}</dd></div></dl>
+      {comprobante ? <Comprobante key={comprobante.id} venta={comprobante}>
         {ventaAnterior
           ? <button type="button" onClick={() => setVentaAnterior(null)}>Volver a caja</button>
           : <button type="button" className="crud-primary" onClick={nuevoCobro}>Nuevo cobro</button>}
-      </section> : <form className="caja-panel" onSubmit={guardar}>
+      </Comprobante> : <form className="caja-panel" onSubmit={guardar}>
         <h2>2. Revisa la compra</h2>
         {carrito.length ? <ul className="caja-lineas">{carrito.map((p) => <li key={p.id}>
           <span>{p.nombre}<small>{pesos.format(p.precio)} c/u</small></span>

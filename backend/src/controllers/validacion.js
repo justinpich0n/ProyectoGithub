@@ -65,7 +65,7 @@ function datosProducto(body = {}) {
         let url;
         try { url = new URL(imagen); } catch { invalido('Pega una dirección HTTPS válida para la imagen.'); }
         if (imagen.length > 2048 || !url.hostname || url.username || url.password) invalido('La dirección de la imagen no es válida.');
-      } else if (!/^\/productos\/[a-z]+\.svg$/.test(imagen)) {
+      } else if (!/^\/productos\/[a-z]+\.(svg|jpg|png)$/.test(imagen)) {
         const partes = /^data:image\/(png|jpeg);base64,([A-Za-z0-9+/]+={0,2})$/.exec(imagen);
         if (!partes) invalido('Pega una dirección HTTPS de imagen o adjunta un PNG/JPG.');
         const bytes = Buffer.from(partes[2], 'base64');

@@ -8,5 +8,6 @@ module.exports = function imagenProducto(nombre) {
     ['llavero', 'llavero'], ['regla', 'regla'], ['borrador', 'borrador'],
     ['plastilina', 'plastilina'],
   ];
-  return '/productos/' + (categorias.find(([patron]) => new RegExp(patron).test(texto))?.[1] || 'producto') + '.svg';
+  const categoria = categorias.find(([patron]) => new RegExp(patron).test(texto))?.[1];
+  return categoria ? `/productos/${categoria}.jpg` : '/productos/producto.svg';
 };

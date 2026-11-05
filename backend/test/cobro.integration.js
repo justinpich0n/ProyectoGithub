@@ -22,6 +22,12 @@ async function main() {
   usuarios.push((await m.Usuario.findOne({where:{email:cuenta.email}})).id);
   await pedir('/cuentas',cuenta,409,admin);await pedir('/auth/login',{email:cuenta.email,password:cuenta.password},200);
   const producto=await m.Producto.create({nombre:'Producto ficticio',precio:'10.25',costo:'5.00',cantidad:10,usuarioId:usuarios[0]});productos.push(producto.id);
+  const fotoAnterior = await m.Producto.create({nombre:'Cinta de prueba',precio:'1000',costo:'500',cantidad:2,usuarioId:usuarios[0],imagen:'/productos/cinta.svg'});productos.push(fotoAnterior.id);
+  const fotoPropia = await m.Producto.create({nombre:'Cuaderno personalizado',precio:'1000',costo:'500',cantidad:2,usuarioId:usuarios[0],imagen:'https://example.com/mi-foto.jpg'});productos.push(fotoPropia.id);
+  await require('../src/config/esquema')(db);
+  await fotoAnterior.reload();await fotoPropia.reload();
+  assert.equal(fotoAnterior.imagen,'/productos/cinta.jpg');
+  assert.equal(fotoPropia.imagen,'https://example.com/mi-foto.jpg');
   const datos=()=>({operacion:randomUUID(),productos:[{id:producto.id,cantidad:2}],metodo:'efectivo',recibido:'25.00'});
   await pedir('/ventas',datos(),401);
   for(const alterar of [x=>{x.recibido='1';},x=>{x.recibido='-1';},x=>{x.recibido='20.501';},x=>{x.metodo='';},x=>{x.productos[0].cantidad=0;},x=>{x.productos=[];},x=>{x.productos.push(x.productos[0]);},x=>{x.productos[0].id=2147483647;},x=>{x.total='0';x.recibido='0';}]){const d=datos();alterar(d);await pedir('/ventas',d,400,cajero);}
