@@ -68,6 +68,7 @@ function exigirModelos(req, res, next) {
 }
 const { autenticar, administrador, personal } = require('./auth/seguridad');
 app.use('/api/cuentas', exigirModelos, autenticar, administrador, require('./routes/cuenta.routes'));
+app.use('/api/registro-ventas', exigirModelos, autenticar, administrador, require('./routes/registro-ventas.routes'));
 app.use('/api/ventas', exigirModelos, autenticar, personal, require('./routes/venta.routes'));
 app.use('/api/solicitudes', exigirModelos, require('./routes/solicitud.routes'));
 app.use('/api/inicio', exigirModelos, require('./routes/inicio.routes'));
