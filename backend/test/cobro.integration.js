@@ -46,6 +46,15 @@ async function main() {
   await pedir('/ventas', undefined, 401);
   await pedir('/ventas',{...datos(),metodo:'tarjeta'},400,admin);
   assert.equal((await m.Producto.findByPk(producto.id)).cantidad,10);
+  await pedir('/registro-ventas', undefined, 401);
+  await pedir('/registro-ventas', undefined, 403, cajero);
+  const registro = await pedir('/registro-ventas', undefined, 200, admin);
+  assert.ok(ventas.every(id => registro.ventas.some(v => v.id === id)));
+  assert.equal(registro.ventas.find(v => v.id === ventas[0]).vendedor.rol,'cajero');
+  assert.equal(registro.ventas.find(v => v.id === ventas[1]).vendedor.rol,'administrador');
+  await pedir('/registro-ventas?desde=2026-02-31', undefined, 400, admin);
+  const tarjetas = await pedir('/registro-ventas?metodo=tarjeta', undefined, 200, admin);
+  assert.ok(tarjetas.ventas.every(v => v.metodo === 'tarjeta'));
   console.log(`${total} pruebas HTTP correctas: cuentas, permisos, montos, cambio, métodos, duplicados y persistencia.`);
  } finally {if(server) await new Promise(r=>server.close(r));await m.Venta.destroy({where:{id:ventas}});await m.Cliente.destroy({where:{id:clientes}});await m.Producto.destroy({where:{id:productos}});await m.Cuenta.destroy({where:{usuarioId:usuarios}});await m.Usuario.destroy({where:{id:usuarios}});await config.drop();await db.close();}
 }

@@ -1,3 +1,6 @@
+import ImagenProducto from '../components/ImagenProducto';
+import { Link } from 'react-router-dom';
+import './Catalogo.css';
 import { useEffect, useRef, useState } from 'react';
 import api, { mensajeError } from '../services/api';
 import { useSesion } from '../services/sesion';
@@ -145,7 +148,7 @@ export default function Cobro() {
     <header className="caja-cabecera">
       <div><span className="caja-marca">BIZZSTOCK · PUNTO DE VENTA</span><h1>Caja de feria</h1><p>Elige productos, registra el pago y muestra el comprobante.</p></div>
       <div className="caja-acciones">
-        <button type="button" disabled={ocupado} onClick={abrirHistorial}>Últimos comprobantes</button>
+        <button type="button" disabled={ocupado} onClick={abrirHistorial}>Mis últimos comprobantes</button>{usuario.rol === 'administrador' && <Link to="/ventas">Ver todas las ventas →</Link>}
         {usuario.propietario && <>
         <button type="button" onClick={() => qr.current.showModal()}>Mostrar QR de acceso</button>
         <button type="button" disabled={cargandoDemo} onClick={cargarDemo}>{cargandoDemo ? 'Cargando…' : 'Cargar productos de feria'}</button>
@@ -178,7 +181,7 @@ export default function Cobro() {
         <label>Buscar por nombre<input ref={busqueda} value={q} onChange={(e) => setQ(e.target.value)} maxLength={100} placeholder="Ej. Cuaderno" /></label>
         <div className="caja-productos">
           {opciones.map((p) => <button key={p.id} type="button" disabled={ocupado || !!comprobante} onClick={() => sumar(p)}>
-            <span>{p.nombre}</span><strong>{pesos.format(p.precio)}</strong><span aria-hidden="true">＋</span>
+            <ImagenProducto producto={p} /><span>{p.nombre}</span><strong>{pesos.format(p.precio)}</strong><span aria-hidden="true">＋</span>
           </button>)}
           {!opciones.length && <p>No hay productos para mostrar.</p>}
         </div>

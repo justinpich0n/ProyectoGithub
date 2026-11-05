@@ -19,7 +19,7 @@ router.post('/', limitar(new Map(), 20, 15 * 60000), async (req, res) => {
   const cuenta = config && await m.Cuenta.findByPk(config.propietarioCuentaId);
   if (!cuenta?.activo) return res.status(503).json({ error: 'El propietario todavía debe configurar su acceso.' });
   const { nombre, email, password, rol } = req.body || {};
-  if (typeof nombre !== 'string' || !nombre.trim() || nombre.length > 255 || typeof email !== 'string' || email.length > 255 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !['cajero', 'administrador'].includes(rol)) invalido('Revisa nombre, correo y rol solicitado.');
+  if (typeof nombre !== 'string' || !nombre.trim() || nombre.length > 255 || typeof email !== 'string' || email.length > 255 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !['cajero', 'administrador', 'comprador'].includes(rol)) invalido('Revisa nombre, correo y rol solicitado.');
   if (typeof password !== 'string' || password.length < 6 || password.length > 128) invalido('La contraseña debe tener entre 6 y 128 caracteres.');
   const normalizado = email.trim().toLowerCase();
   const datosDocumento = documento(req.body);
@@ -32,11 +32,23 @@ router.post('/', limitar(new Map(), 20, 15 * 60000), async (req, res) => {
     if (await m.SolicitudCuenta.count({ where: { estado: 'pendiente' }, transaction }) >= 100) {
       throw Object.assign(new Error('Hay muchas solicitudes pendientes. Intenta más tarde.'), { status: 429 });
     }
+    if (rol === 'comprador') {
+      const [usuario] = await m.Usuario.findOrCreate({ where: { email: normalizado }, defaults: { nombre: nombre.trim() }, transaction });
+      const creada = await m.Cuenta.create({ usuarioId: usuario.id, rol: 'comprador', passwordHash, ...datosDocumento }, { transaction });
+      return { comprador: true, cuentaId: creada.id };
+    }
     return m.SolicitudCuenta.create({
       id: randomUUID(), seguimientoHash: digest(seguimiento), nombre: nombre.trim(), email: normalizado,
       emailPendiente: normalizado, rol, passwordHash, ...datosDocumento, expira: new Date(Date.now() + 24 * 60 * 60000),
     }, { transaction });
   });
+  if (solicitud.comprador) {
+    const cuentaComprador = await m.Cuenta.findByPk(solicitud.cuentaId, { include: 'Usuario' });
+    return res.status(201).json({
+      token: require('../auth/seguridad').abrirSesion(cuentaComprador.id),
+      usuario: { id: cuentaComprador.usuarioId, nombre: cuentaComprador.Usuario.nombre, email: cuentaComprador.Usuario.email, rol: 'comprador', propietario: false, faltaDocumento: false },
+    });
+  }
   res.status(202).json({ seguimiento, estado: solicitud.estado, expira: solicitud.expira });
 });
 router.post('/estado', limitar(new Map(), 120, 60000), async (req, res) => {

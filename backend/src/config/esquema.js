@@ -3,6 +3,12 @@ const { DataTypes } = require('sequelize');
 module.exports = async function prepararEsquema(sequelize) {
   const qi = sequelize.getQueryInterface();
   const tablas = await qi.showAllTables();
+  if (tablas.includes('cuentas')) {
+    const columnasCuenta = await qi.describeTable('cuentas');
+    if (!columnasCuenta.rol.type.includes('comprador')) {
+      await qi.changeColumn('cuentas', 'rol', { type: DataTypes.ENUM('administrador', 'cajero', 'comprador'), allowNull: false });
+    }
+  }
   for (const tabla of ['cuentas', 'solicitudes_cuenta']) {
     if (!tablas.includes(tabla)) continue;
     const columnas = await qi.describeTable(tabla);
@@ -16,6 +22,7 @@ module.exports = async function prepararEsquema(sequelize) {
   }
   if (tablas.includes('ventas')) {
     const columnasVenta = await qi.describeTable('ventas');
+    if (!columnasVenta.vendedor) await qi.addColumn('ventas', 'vendedor', { type: DataTypes.JSON, allowNull: true });
     if (!columnasVenta.cliente) await qi.addColumn('ventas', 'cliente', {
       type: DataTypes.JSON,
       allowNull: true,
@@ -23,6 +30,13 @@ module.exports = async function prepararEsquema(sequelize) {
   }
   if (!tablas.includes('productos')) return;
   const columnas = await qi.describeTable('productos');
+  if (!columnas.imagen) await qi.addColumn('productos', 'imagen', { type: DataTypes.TEXT('medium'), allowNull: true });
+  const [sinImagen] = await sequelize.query('SELECT id, nombre FROM productos WHERE imagen IS NULL');
+  for (const producto of sinImagen) {
+    await sequelize.query('UPDATE productos SET imagen = ? WHERE id = ? AND imagen IS NULL', {
+      replacements: [require('./imagenes-productos')(producto.nombre), producto.id],
+    });
+  }
   for (const campo of ['costo', 'cantidad']) {
     if (!columnas[campo]) await qi.addColumn('productos', campo, {
       type: campo === 'costo' ? DataTypes.DECIMAL(10, 2) : DataTypes.INTEGER,

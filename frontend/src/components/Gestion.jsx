@@ -1,3 +1,5 @@
+import ImagenProducto from './ImagenProducto';
+import '../pages/Catalogo.css';
 import { useCallback, useEffect, useState } from 'react';
 import { useSesion } from '../services/sesion';
 import ImportarCostos from './ImportarCostos';
@@ -11,7 +13,7 @@ export default function Gestion({ producto = false }) {
   const singular = producto ? 'producto' : 'usuario';
   const titulo = producto ? 'Productos' : 'Usuarios';
   const vacio = producto
-    ? { nombre: '', precio: '', costo: '', cantidad: '', descripcion: '', usuarioId: '', confirmarCostoCero: false }
+    ? { nombre: '', precio: '', costo: '', cantidad: '', descripcion: '', usuarioId: '', imagen: null, confirmarCostoCero: false }
     : { nombre: '', email: '' };
   const [filas, setFilas] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
@@ -19,6 +21,7 @@ export default function Gestion({ producto = false }) {
   const [editandoId, setEditandoId] = useState(null);
   const [cargando, setCargando] = useState(true);
   const [ocupado, setOcupado] = useState(false);
+  const [cargandoImagen, setCargandoImagen] = useState(false);
   const [error, setError] = useState('');
   const [aviso, setAviso] = useState('');
   const cargar = useCallback(
@@ -33,7 +36,7 @@ export default function Gestion({ producto = false }) {
   );
   function mostrar({ lista, equipo }) {
     setFilas(lista.data);
-    if (equipo) setUsuarios(equipo.data);
+    if (equipo) setUsuarios(equipo.data.filter(u => u.rol !== 'comprador'));
   }
   useEffect(() => {
     const controller = new AbortController();
@@ -71,6 +74,30 @@ export default function Gestion({ producto = false }) {
       setCargando(false);
     }
   }
+  async function cargarImagen(e) {
+    const archivo = e.target.files?.[0];
+    if (!archivo) return;
+    setCargandoImagen(true);
+    try {
+      if (!['image/png', 'image/jpeg'].includes(archivo.type) || archivo.size > 5 * 1024 * 1024) throw new Error('Adjunta un PNG/JPG de hasta 5 MB.');
+      const bitmap = await createImageBitmap(archivo);
+      const escala = Math.min(1, 1000 / Math.max(bitmap.width, bitmap.height));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.max(1, Math.round(bitmap.width * escala));
+      canvas.height = Math.max(1, Math.round(bitmap.height * escala));
+      const context = canvas.getContext('2d');
+      context.fillStyle = '#ffffff';
+      context.fillRect(0, 0, canvas.width, canvas.height);
+      context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+      bitmap.close();
+      const imagen = canvas.toDataURL('image/jpeg', .78);
+      if (imagen.length > 660000) throw new Error('La imagen contiene demasiado detalle. Usa una imagen más pequeña.');
+      campo('imagen', imagen);
+      setError('');
+    } catch (error) { setError(error.message || 'No se pudo leer la imagen.'); }
+    setCargandoImagen(false);
+    e.target.value = '';
+  }
   async function guardar(e) {
     e.preventDefault();
     setOcupado(true);
@@ -93,6 +120,7 @@ export default function Gestion({ producto = false }) {
     setForm(
       producto
         ? {
+            imagen: fila.imagen,
             nombre: fila.nombre,
             precio: fila.precio,
             costo: fila.costo ?? '',
@@ -168,7 +196,7 @@ export default function Gestion({ producto = false }) {
           </span>
         </div>
         <form id={`form-${recurso}`} onSubmit={guardar}>
-          <fieldset disabled={ocupado || cargando} className="crud-fields">
+          <fieldset disabled={ocupado || cargando || cargandoImagen} className="crud-fields">
             <label>
               Nombre
               <input
@@ -192,6 +220,8 @@ export default function Gestion({ producto = false }) {
                     onChange={(e) => campo('precio', e.target.value)}
                   />
                 </label>
+                <label>Imagen PNG o JPG<input type="file" accept="image/png,image/jpeg" onChange={cargarImagen} /><small>Hasta 5 MB. Se optimiza al cargar.</small></label>
+                {form.imagen && <div><ImagenProducto producto={{ nombre: form.nombre, imagen: form.imagen }} /><button type="button" onClick={() => campo('imagen', null)}>Quitar imagen</button></div>}
                 <label>Precio de costo<input type="number" min="0" max="99999999.99" step="0.01" required value={form.costo} onChange={(e) => { campo('costo', e.target.value); campo('confirmarCostoCero', false); }} /></label>
                 <label>Cantidad disponible<input type="number" min="0" max="2147483647" step="1" required value={form.cantidad} onChange={(e) => campo('cantidad', e.target.value)} /></label>
                 {form.costo !== '' && Number(form.costo) === 0 && <label className="check-line"><input type="checkbox" required checked={form.confirmarCostoCero} onChange={(e) => campo('confirmarCostoCero', e.target.checked)} />Confirmo guardar el costo en cero</label>}
@@ -237,7 +267,7 @@ export default function Gestion({ producto = false }) {
               <button
                 className="crud-primary"
                 type="submit"
-                disabled={producto && !usuarios.length}
+                disabled={cargandoImagen || (producto && !usuarios.length)}
               >
                 {ocupado
                   ? 'Guardando…'
@@ -285,6 +315,19 @@ export default function Gestion({ producto = false }) {
               ? 'No se pudo cargar la lista.'
               : `No se encontraron ${recurso}${q ? " con ese nombre" : ""}.`}
           </p>
+        ) : producto ? (
+          <div className="catalogo-grid">{filas.map(fila => <article className="producto-tarjeta" key={fila.id}>
+            <ImagenProducto producto={fila} /><div>
+              <h2>{fila.nombre}</h2><strong>{Number(fila.precio).toLocaleString('es-CO', { style:'currency', currency:'COP' })}</strong>
+              <p>Existencias · {fila.cantidad ?? 'Por completar'}</p>
+              <p>{fila.descripcion || 'Sin descripción'}</p>
+              <small>Responsable · {fila.Usuario?.nombre || 'Por asignar'}</small>
+              {admin && <><p>Costo · {fila.costo ?? 'Por completar'}</p><div className="row-actions">
+                <button disabled={ocupado} onClick={() => editar(fila)}>Editar</button>
+                <button className="crud-danger" disabled={ocupado} onClick={() => eliminar(fila)}>Eliminar</button>
+              </div></>}
+            </div>
+          </article>)}</div>
         ) : (
           <div
             className="table-scroll"
@@ -295,7 +338,7 @@ export default function Gestion({ producto = false }) {
             <table className="crud-table">
               <thead>
                 <tr>
-                  <th>{producto ? 'ID' : 'Tipo'}</th>
+                  <th>{producto ? 'Imagen' : 'Tipo'}</th>
                   {!producto && <th>Número de documento</th>}
                   <th>Nombre</th>
                   {producto ? (
@@ -313,7 +356,7 @@ export default function Gestion({ producto = false }) {
               <tbody>
                 {filas.map((fila) => (
                   <tr key={fila.id}>
-                    <td>{producto ? `#${fila.id}` : fila.tipoDocumento || '—'}</td>
+                    <td>{producto ? <ImagenProducto producto={fila} /> : fila.tipoDocumento || '—'}</td>
                     {!producto && <td>{usuario.propietario ? fila.numeroDocumento || 'Pendiente' : 'Reservado'}</td>}
                     <td>{fila.nombre}</td>
                     {producto ? (
