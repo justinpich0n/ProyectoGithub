@@ -20,6 +20,10 @@ async function crear(req, res) {
 async function actualizar(req, res) {
   const fila = await req.app.locals.modelos.Cliente.findByPk(req.params.id);
   if (!fila) return res.status(404).json({ error: 'Cliente no encontrado.' });
-  await fila.update(datosCliente(req.body)); res.json(fila);
+  const datos = datosCliente(req.body);
+  await fila.sequelize.transaction(async transaction => {
+    await fila.update(datos, { transaction });
+    if (fila.usuarioId) await req.app.locals.modelos.Usuario.update({ nombre: datos.nombre }, { where: { id: fila.usuarioId }, transaction });
+  }); res.json(fila);
 }
 module.exports = { listar, obtener, crear, actualizar };

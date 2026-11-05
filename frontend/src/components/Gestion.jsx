@@ -295,7 +295,7 @@ export default function Gestion({ producto = false }) {
             <table className="crud-table">
               <thead>
                 <tr>
-                  <th>ID</th>
+                  <th>{producto ? 'ID' : 'Tipo documento'}</th>
                   <th>Nombre</th>
                   {producto ? (
                     <>
@@ -304,7 +304,7 @@ export default function Gestion({ producto = false }) {
                       <th>Usuario</th>
                     </>
                   ) : (
-                    <th>Correo</th>
+                    <><th>Correo</th><th>Número documento</th></>
                   )}
                   {admin && <th>Acciones</th>}
                 </tr>
@@ -312,7 +312,7 @@ export default function Gestion({ producto = false }) {
               <tbody>
                 {filas.map((fila) => (
                   <tr key={fila.id}>
-                    <td>#{fila.id}</td>
+                    <td>{producto ? `#${fila.id}` : fila.tipoDocumento || 'Por completar'}</td>
                     <td>{fila.nombre}</td>
                     {producto ? (
                       <>
@@ -326,7 +326,7 @@ export default function Gestion({ producto = false }) {
                         <td>{fila.Usuario?.nombre || '—'}</td>
                       </>
                     ) : (
-                      <td>{fila.email}</td>
+                      <><td>{fila.email}</td><td>{fila.numeroDocumento || (fila.tipoDocumento ? 'Reservado al propietario' : 'Por completar')}</td></>
                     )}
                     {admin && <td>
                       <div className="row-actions">

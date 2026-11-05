@@ -27,6 +27,10 @@ async function iniciarServidor() {
       if ((await sequelize.getQueryInterface().showAllTables()).includes(modelos.Cliente.tableName)) {
         await require('./src/config/clientes-cuentas')(modelos, { sincronizar: false });
       }
+      // Las columnas nuevas deben existir antes de sincronizar índices.
+      if ((await sequelize.getQueryInterface().showAllTables()).includes(modelos.Cuenta.tableName)) {
+        await require('./src/config/documentos')(modelos);
+      }
       await sequelize.sync(); // Sin force ni alter: conserva las tablas existentes.
       await require('./src/clientes/vinculo').sincronizarCompradores(modelos);
       if (process.env.BIZZSTOCK_CATALOGO_FERIA === 'true') {

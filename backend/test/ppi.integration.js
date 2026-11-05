@@ -8,11 +8,16 @@ const app = require('../src/app');
 async function probar() {
   const sequelize = crearSequelize();
   const m = crearModelos(sequelize);
+
+  const prefijoTablas = 'test_regresion_' + require('node:crypto').randomBytes(4).toString('hex') + '_';
+  const nombresTablas = new Map(Object.values(m).map(x => [x.tableName, prefijoTablas + x.tableName]));
+  for (const x of Object.values(m)) x.tableName = nombresTablas.get(x.tableName);
+  for (const x of Object.values(m)) for (const a of Object.values(x.rawAttributes)) if (a.references && nombresTablas.has(a.references.model)) a.references.model = nombresTablas.get(a.references.model);
   const usuariosPropios = []; const clientesPropios = []; let server;
   let total = 0;
   const marca = randomUUID().replace(/-/g, '').slice(0, 12);
   try {
-    await sequelize.authenticate(); await require('../src/config/esquema')(sequelize); await sequelize.sync();
+    await sequelize.authenticate(); await sequelize.sync();
     app.locals.modelos = m;
     const iniciales = await m.Producto.findAll({ attributes: ['id', 'nombre', 'precio'], raw: true });
     const password = randomUUID() + randomUUID();
@@ -98,6 +103,8 @@ async function probar() {
     if (server) await new Promise((r) => server.close(r));
     for (const id of clientesPropios) await m.Cliente.destroy({ where: { id } });
     for (const id of usuariosPropios) await m.Usuario.destroy({ where: { id } });
+    for (const x of Object.values(m)) assert.ok(x.tableName.startsWith(prefijoTablas));
+    await sequelize.drop();
     await sequelize.close();
   }
 }
