@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Solicitudes from './pages/Solicitudes';
 import Cuentas from './pages/Cuentas';
 import Cobro from './pages/Cobro';
+import Catalogo from './pages/Catalogo';
 import Navbar from './components/Navbar.jsx';
 import Home from './pages/Home.jsx';
 import Usuarios from './pages/Usuarios.jsx';
@@ -28,11 +29,11 @@ function Contenido() {
         <Routes>
           <Route path="/solicitudes" element={<Solicitudes />} />
           <Route path="/cuentas" element={<Cuentas />} />
-          <Route path="/cobro" element={<Cobro />} />
-          <Route path="/" element={<Home />} />
+          <Route path="/cobro" element={usuario.rol === 'comprador' ? <Catalogo /> : <Cobro />} />
+          <Route path="/" element={usuario.rol === 'comprador' ? <Catalogo /> : <Home />} />
           <Route path="/usuarios" element={usuario.rol === 'administrador' ? <Usuarios /> : <p className="page">Esta sección requiere administrador.</p>} />
           <Route path="/clientes" element={<Clientes />} />
-          <Route path="/productos" element={<Productos />} />
+          <Route path="/productos" element={usuario.rol === 'comprador' ? <Catalogo /> : <Productos />} />
         </Routes>
         <footer className="page-footer">
           <span>BizzStock · Arte y Belleza</span>

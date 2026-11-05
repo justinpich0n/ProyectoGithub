@@ -4,6 +4,7 @@ const crearModelos = require('../backend/src/models');
 const crearSequelize = require('../backend/src/config/database');
 
 let prepararSesiones;
+let prepararCompradores;
 
 module.exports = async function atender(req, res) {
   if (!app.locals.modelos) {
@@ -25,13 +26,23 @@ module.exports = async function atender(req, res) {
     }
   }
 
+  prepararCompradores ||= require('../backend/src/config/rol-comprador')(app.locals.modelos.Cuenta.sequelize).catch(error => {
+    prepararCompradores = undefined;
+    throw error;
+  });
+  try { await prepararCompradores; }
+  catch (error) {
+    console.error('No se pudo preparar el rol de comprador', error.original?.code || error.name);
+    return res.status(503).json({ error: 'No se pudo preparar el registro. Intenta nuevamente.' });
+  }
+
   const url = new URL(req.url, 'http://localhost');
   if (url.pathname === '/api/express') {
     const ruta = url.searchParams.getAll('__bizzstock_ruta').at(-1) || '';
     url.searchParams.delete('__bizzstock_ruta');
     req.url = '/api/' + ruta + url.search;
   }
-  if (req.url.startsWith('/api/auth/') || req.headers.authorization || (req.method === 'POST' && req.url.split('?')[0] === '/api/inicio')) {
+  if (req.url.startsWith('/api/auth/') || req.headers.authorization || (req.method === 'POST' && ['/api/inicio', '/api/solicitudes'].includes(req.url.split('?')[0]))) {
     prepararSesiones ||= app.locals.modelos.Sesion.sync().catch((error) => {
       prepararSesiones = undefined;
       throw error;

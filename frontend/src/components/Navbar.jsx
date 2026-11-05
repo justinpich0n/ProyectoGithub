@@ -15,10 +15,10 @@ export default function Navbar() {
         {[
           ['/', '⌂', 'Inicio'],
           ['/productos', '▦', 'Productos'],
-          ['/usuarios', '◎', 'Usuarios'],
+          ...(usuario.rol === 'administrador' ? [['/usuarios', '◎', 'Usuarios']] : []),
           ...(usuario.propietario ? [['/solicitudes', '✓', 'Solicitudes'], ['/cuentas', '+', 'Crear cuenta']] : []),
-          ['/cobro', '$', 'Cobro'],
-          ['/clientes', '◇', 'Clientes'],
+          ...(usuario.rol !== 'comprador' ? [['/cobro', '$', 'Cobro']] : []),
+          ...(usuario.rol === 'administrador' ? [['/clientes', '◇', 'Clientes']] : []),
         ].map(([path, icon, label]) => (
           <li key={path}>
             <NavLink to={path} end>

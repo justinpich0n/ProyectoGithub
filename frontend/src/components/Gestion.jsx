@@ -33,7 +33,7 @@ export default function Gestion({ producto = false }) {
   );
   function mostrar({ lista, equipo }) {
     setFilas(lista.data);
-    if (equipo) setUsuarios(equipo.data);
+    if (equipo) setUsuarios(equipo.data.filter(u => !u.comprador));
   }
   useEffect(() => {
     const controller = new AbortController();

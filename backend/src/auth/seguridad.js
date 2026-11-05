@@ -43,8 +43,12 @@ function administrador(req, res, next) {
   if (req.cuenta.rol !== 'administrador') return res.status(403).json({ error: 'Esta operación requiere permisos de administrador.' });
   next();
 }
+function personal(req, res, next) {
+  if (!['administrador', 'cajero'].includes(req.cuenta.rol)) return res.status(403).json({ error: 'Esta sección es exclusiva del personal del negocio.' });
+  next();
+}
 async function cerrarSesion(req) {
   const token = req.headers.authorization?.slice(7);
   if (token) await req.app.locals.modelos.Sesion.destroy({ where: { tokenHash: digest(token) } });
 }
-module.exports = { hashPassword, verificarPassword, abrirSesion, autenticar, administrador, cerrarSesion };
+module.exports = { hashPassword, verificarPassword, abrirSesion, autenticar, administrador, personal, cerrarSesion };
