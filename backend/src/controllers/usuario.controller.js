@@ -5,7 +5,7 @@ const { datosUsuario } = require('./validacion');
 async function listar(req, res) {
   const m = req.app.locals.modelos;
   const puedeVerNumero = await esPropietario(m, req.cuenta.id);
-  const attributes = puedeVerNumero ? ['tipoDocumento', 'documentoCifrado'] : ['tipoDocumento'];
+  const attributes = puedeVerNumero ? ['tipoDocumento', 'documentoCifrado', 'rol'] : ['tipoDocumento', 'rol'];
   const asociacion = Object.values(m.Usuario.associations).find(asoc => asoc.target === m.Cuenta);
   const filas = await m.Usuario.findAll({ include: { association: asociacion, attributes } });
   res.set('Cache-Control', 'no-store');
@@ -13,6 +13,7 @@ async function listar(req, res) {
     const { [asociacion.as]: cuenta, ...usuario } = fila.toJSON();
     return {
       ...usuario,
+      rol: cuenta?.rol ?? null,
       tipoDocumento: cuenta?.tipoDocumento ?? null,
       numeroDocumento: puedeVerNumero ? leerNumero(cuenta?.documentoCifrado) : null,
     };

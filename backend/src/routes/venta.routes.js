@@ -58,7 +58,7 @@ router.post('/', async (req, res) => {
     const monto = centavos(recibido);
     if (monto < total) invalido('El monto recibido es insuficiente.');
     if (metodo !== 'efectivo' && monto !== total) invalido('En medios electrónicos ingresa el monto exacto.');
-    return m.Venta.create({ operacion, cuentaId: req.cuenta.id, cliente, metodo, total: (total / 100).toFixed(2), recibido: (monto / 100).toFixed(2), cambio: ((monto - total) / 100).toFixed(2), detalle }, { transaction });
+    return m.Venta.create({ operacion, cuentaId: req.cuenta.id, vendedor: { nombre: req.cuenta.Usuario.nombre, email: req.cuenta.Usuario.email, rol: req.cuenta.rol }, cliente, metodo, total: (total / 100).toFixed(2), recibido: (monto / 100).toFixed(2), cambio: ((monto - total) / 100).toFixed(2), detalle }, { transaction });
   });
   res.status(201).json(venta);
 });

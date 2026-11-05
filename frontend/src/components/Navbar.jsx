@@ -14,11 +14,10 @@ export default function Navbar() {
       <ul>
         {[
           ['/', '⌂', 'Inicio'],
-          ['/productos', '▦', 'Productos'],
-          ['/usuarios', '◎', 'Usuarios'],
+          ['/catalogo', '▦', 'Catálogo'],
+          ...(usuario.rol !== 'comprador' ? [['/productos', '▦', 'Productos'], ['/cobro', '$', 'Caja de ventas']] : []),
+          ...(usuario.rol === 'administrador' ? [['/usuarios', '◎', 'Usuarios'], ['/ventas', '▤', 'Registro de ventas'], ['/clientes', '◇', 'Clientes']] : []),
           ...(usuario.propietario ? [['/solicitudes', '✓', 'Solicitudes'], ['/cuentas', '+', 'Crear cuenta']] : []),
-          ['/cobro', '$', 'Cobro'],
-          ['/clientes', '◇', 'Clientes'],
         ].map(([path, icon, label]) => (
           <li key={path}>
             <NavLink to={path} end>

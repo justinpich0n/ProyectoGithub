@@ -56,7 +56,27 @@ function datosProducto(body = {}) {
   ) {
     invalido('La descripción debe ser un texto de hasta 65535 bytes.');
   }
+  let imagen;
+  if (Object.hasOwn(body, 'imagen')) {
+    imagen = body.imagen;
+    if (imagen !== null) {
+      if (typeof imagen !== 'string' || imagen.length > 700000) invalido('La imagen supera el tamaño permitido.');
+      if (/^https:\/\//i.test(imagen)) {
+        let url;
+        try { url = new URL(imagen); } catch { invalido('Pega una dirección HTTPS válida para la imagen.'); }
+        if (imagen.length > 2048 || !url.hostname || url.username || url.password) invalido('La dirección de la imagen no es válida.');
+      } else if (!/^\/productos\/[a-z]+\.svg$/.test(imagen)) {
+        const partes = /^data:image\/(png|jpeg);base64,([A-Za-z0-9+/]+={0,2})$/.exec(imagen);
+        if (!partes) invalido('Pega una dirección HTTPS de imagen o adjunta un PNG/JPG.');
+        const bytes = Buffer.from(partes[2], 'base64');
+        const png = bytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]));
+        const jpg = bytes[0] === 255 && bytes[1] === 216 && bytes[2] === 255;
+        if (bytes.length > 500000 || (partes[1] === 'png' ? !png : !jpg)) invalido('La imagen no es un PNG/JPG válido de hasta 500 KB.');
+      }
+    }
+  }
   return {
+    ...(imagen !== undefined ? { imagen } : {}),
     nombre,
     precio,
     costo,

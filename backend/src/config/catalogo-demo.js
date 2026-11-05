@@ -1,3 +1,4 @@
+const imagenProducto = require('./imagenes-productos');
 const productos = [
   ['Cuaderno cuadriculado', 6500, 4200, 30],
   ['Esfero azul', 1500, 800, 80],
@@ -34,7 +35,7 @@ module.exports = async function cargarCatalogoDemo({ Usuario, Producto }) {
     const nombres = new Set(existentes.map((producto) => producto.nombre));
     const nuevos = productos.filter(([nombre]) => !nombres.has(nombre));
     await Producto.bulkCreate(nuevos.map(([nombre, precio, costo, cantidad]) => ({
-      nombre, precio, costo, cantidad, usuarioId: responsable.id,
+      nombre, precio, costo, cantidad, imagen: imagenProducto(nombre), usuarioId: responsable.id,
       descripcion: 'Producto ficticio de la feria BizzStock',
     })), { transaction });
     return nuevos.length;

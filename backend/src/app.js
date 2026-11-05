@@ -13,6 +13,7 @@ if (['http://127.0.0.1:5173', 'http://localhost:5173'].includes(origenFrontend))
   origenesPermitidos.add('http://localhost:5173');
 }
 app.use(cors({ origin: (origen, callback) => callback(null, !origen || origenesPermitidos.has(origen)) }));
+app.use('/api/productos', express.json({ limit: '800kb' }));
 app.use(express.json());
 
 // El estado se consulta en MySQL en cada petición; no se guarda como una bandera.
@@ -66,15 +67,17 @@ function exigirModelos(req, res, next) {
       });
   next();
 }
-const { autenticar, administrador } = require('./auth/seguridad');
+const { autenticar, administrador, personal } = require('./auth/seguridad');
 app.use('/api/cuentas', exigirModelos, autenticar, administrador, require('./routes/cuenta.routes'));
-app.use('/api/ventas', exigirModelos, autenticar, require('./routes/venta.routes'));
+app.use('/api/registro-ventas', exigirModelos, autenticar, administrador, require('./routes/registro-ventas.routes'));
+app.use('/api/catalogo', exigirModelos, autenticar, require('./routes/catalogo.routes'));
+app.use('/api/ventas', exigirModelos, autenticar, personal, require('./routes/venta.routes'));
 app.use('/api/solicitudes', exigirModelos, require('./routes/solicitud.routes'));
 app.use('/api/inicio', exigirModelos, require('./routes/inicio.routes'));
 app.use('/api/auth', exigirModelos, require('./routes/auth.routes'));
 app.use('/api/clientes', exigirModelos, autenticar, administrador, require('./routes/cliente.routes'));
 app.use('/api/usuarios', exigirModelos, autenticar, administrador, require('./routes/usuario.routes'));
-app.use('/api/productos', exigirModelos, autenticar, require('./routes/producto.routes'));
+app.use('/api/productos', exigirModelos, autenticar, personal, require('./routes/producto.routes'));
 app.use('/api', (req, res) => res.status(404).json({ error: 'Ruta API no encontrada.' }));
 app.use((error, req, res, next) => {
   if (res.headersSent) return next(error);

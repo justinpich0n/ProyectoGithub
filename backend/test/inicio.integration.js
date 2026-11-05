@@ -70,6 +70,36 @@ async function main() {
   const vence=await m.SolicitudCuenta.findOne({where:{emailPendiente:'vence@example.com'}});await vence.update({expira:new Date(Date.now()-1000)});
   await pedir('POST',`/solicitudes/${vence.id}/decision`,{decision:'aprobar',rol:'cajero'},409,owner.token);
   await vence.reload();assert.equal(vence.estado,'expirada');assert.equal(vence.passwordHash,null);
+  const compradorDatos = { ...visita, email:'comprador@example.com', rol:'comprador', numeroDocumento:'10002001' };
+  const comprador = (await pedir('POST','/solicitudes',compradorDatos,201)).b;
+  assert.equal(comprador.usuario.rol, 'comprador');
+  assert.equal(comprador.usuario.propietario, false);
+  await pedir('POST','/solicitudes',{...compradorDatos,email:'otrocomprador@example.com'},409);
+  await pedir('GET','/catalogo',undefined,200,comprador.token);
+  await pedir('GET','/productos',undefined,403,comprador.token);
+  await pedir('POST','/productos',{},403,comprador.token);
+  await pedir('GET','/usuarios',undefined,403,comprador.token);
+  await pedir('GET','/clientes',undefined,403,comprador.token);
+  await pedir('GET','/ventas',undefined,403,comprador.token);
+  await pedir('POST','/ventas',{},403,comprador.token);
+  await pedir('GET','/registro-ventas',undefined,403,comprador.token);
+  const productoDatos = { nombre:'Cuaderno ficticio', precio:'5000', costo:'3000',cantidad:10,usuarioId:comprador.usuario.id };
+  await pedir('POST','/productos',productoDatos,400,owner.token);
+  await pedir('POST','/productos',{...productoDatos, usuarioId:owner.usuario.id, imagen:'data:image/svg+xml;base64,AAAA'},400,owner.token);
+  const png = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=';
+  const productoNuevo = (await pedir('POST','/productos',{...productoDatos, usuarioId:owner.usuario.id, imagen:png},201,owner.token)).b;
+  const catalogo = (await pedir('GET','/catalogo',undefined,200,comprador.token)).b;
+  assert.equal(catalogo.productos[0].imagen,png);
+  assert.equal(catalogo.productos[0].costo,undefined);
+  assert.equal(catalogo.productos[0].Usuario,undefined);
+  assert.equal(catalogo.productos[0].id,productoNuevo.id);
+  for (const imagen of ['http://example.com/foto.jpg', 'javascript:alert(1)', 'https://usuario:clave@example.com/foto.jpg']) {
+    await pedir('PUT',`/productos/${productoNuevo.id}`,{...productoDatos,usuarioId:owner.usuario.id,imagen},400,owner.token);
+  }
+  const enlace = 'https://example.com/foto.jpg?version=1';
+  await pedir('PUT',`/productos/${productoNuevo.id}`,{...productoDatos,usuarioId:owner.usuario.id,imagen:enlace},200,owner.token);
+  const conEnlace = (await pedir('GET','/catalogo',undefined,200,comprador.token)).b;
+  assert.equal(conEnlace.productos[0].imagen,enlace);
   await m.Cuenta.destroy({where:{}});
   assert.equal((await pedir('GET','/inicio',undefined,200)).b.configurado,true);
   await pedir('POST','/inicio',datos,409,null,clave);
